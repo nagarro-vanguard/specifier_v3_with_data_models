@@ -1,0 +1,783 @@
+<title>Specifier Workflow Swimlane</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one vertical swimlane figure for the whole workflow: Phases 1 to 4, the side entrance, change management.
+   Lanes are columns, phases and stages are horizontal bands, the flow reads top to bottom.
+   A right margin carries the long links between the phases and change management. */
+:root{
+  --bg:#F1F4F5; --surface:#FFFFFF; --band:#DCE3E8; --band-cm:#E9DFD3; --band-side:#DDE7DC;
+  --ink:#16202A; --muted:#566370; --line:#C6CFD5; --soft:#DDE4E8;
+  --accent:#1C5A85; --feedback:#C2560A; --input:#6150A3; --dec:#E1ECF5; --ext:#D9E4EB; --art:#FAFBFC; --rec:#EEE9DD;
+  --lane-a:#F7F9FA; --lane-b:#EEF2F4;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F151A; --surface:#162029; --band:#22303B; --band-cm:#352B22; --band-side:#22312A;
+    --ink:#E2E8ED; --muted:#93A1AD; --line:#2D3944; --soft:#22303B;
+    --accent:#74B3E2; --feedback:#F0A157; --input:#AE9EEB; --dec:#1B2C3A; --ext:#1D2A35; --art:#121A21; --rec:#2A2720;
+    --lane-a:#131B22; --lane-b:#17212A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F151A; --surface:#162029; --band:#22303B; --band-cm:#352B22; --band-side:#22312A;
+  --ink:#E2E8ED; --muted:#93A1AD; --line:#2D3944; --soft:#22303B;
+  --accent:#74B3E2; --feedback:#F0A157; --input:#AE9EEB; --dec:#1B2C3A; --ext:#1D2A35; --art:#121A21; --rec:#2A2720;
+  --lane-a:#131B22; --lane-b:#17212A;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1380px;margin:0 auto;padding-inline:20px;padding-block:28px 64px;display:grid;gap:18px}
+h1{font-family:var(--f-display);font-size:clamp(28px,4vw,38px);font-weight:700;margin:0;line-height:1.15;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:22px;font-weight:600;margin:14px 0 0}
+p{margin:0;max-width:80ch}
+.lede{color:var(--muted);font-size:16px}
+.lede a{color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13px;color:var(--muted);align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.legend span{display:inline-flex;gap:8px;align-items:center}
+.legend svg{display:block;flex:none}
+.legend .grp{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);flex-basis:100%;margin-top:4px}
+.legend .grp:first-child{margin-top:0}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:14px}
+.controls label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.controls input{accent-color:var(--accent);width:16px;height:16px}
+.controls .hint{color:var(--muted);font-size:13px}
+.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn:focus-visible,.controls input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chartbox{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+#chart{display:block;width:100%;min-width:1100px;height:auto}
+figure{margin:0;display:grid;gap:10px}
+figcaption{font-size:14px;color:var(--muted);max-width:90ch;display:grid;gap:6px}
+figcaption b{color:var(--ink)}
+figcaption ul{margin:0;padding-left:18px;display:grid;gap:3px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tbl-wrap.narrow{max-width:760px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--soft)}
+th{font-family:var(--f-display);font-weight:600;background:var(--art)}
+tr:last-child td{border-bottom:0}
+td ul,td ol{margin:0;padding-left:18px;display:grid;gap:2px}
+code{font-family:var(--f-mono);font-size:.9em}
+.res{display:inline-block;font-family:var(--f-mono);font-size:11.5px;border-radius:4px;padding:1px 7px}
+.res.ok{border:1px solid var(--input);color:var(--input)}
+.res.gap{background:var(--feedback);color:var(--surface)}
+
+#chart .lane-bg.a{fill:var(--lane-a)} #chart .lane-bg.b{fill:var(--lane-b)}
+#chart .lane-sep{stroke:var(--line);stroke-width:1}
+#chart .lane-title{font-family:var(--f-display);font-size:16px;font-weight:700;fill:var(--ink)}
+#chart .lane-sub{font-family:var(--f-body);font-size:11.5px;fill:var(--muted)}
+#chart .band{fill:var(--band)}
+#chart .band.cm{fill:var(--band-cm)}
+#chart .band.side{fill:var(--band-side)}
+#chart .band-id{font-family:var(--f-mono);font-size:12px;fill:var(--muted)}
+#chart .band-name{font-family:var(--f-display);font-size:16px;font-weight:700;fill:var(--ink)}
+#chart .band-runs{font-family:var(--f-body);font-size:12px;fill:var(--muted)}
+#chart .nd{cursor:pointer}
+#chart .nd:focus{outline:none}
+#chart .nd:focus-visible > :first-child{stroke:var(--accent);stroke-width:2.6}
+#chart .skill rect{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+#chart .diamond polygon{fill:var(--dec);stroke:var(--accent);stroke-width:1.4}
+#chart .diamond.prog polygon{fill:var(--surface);stroke:var(--muted)}
+#chart .action rect{fill:var(--dec);stroke:var(--accent);stroke-width:1.4}
+#chart .program rect{fill:var(--surface);stroke:var(--muted);stroke-width:1.3}
+#chart .program line{stroke:var(--muted);stroke-width:1.3}
+#chart .pill rect{fill:var(--ext);stroke:var(--muted);stroke-width:1}
+#chart .note rect{fill:var(--surface);stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3}
+#chart .doc path{fill:var(--art);stroke:var(--muted);stroke-width:1}
+#chart .doc.record path{fill:var(--rec)}
+#chart .doc.generated path{stroke-dasharray:4 3}
+#chart .doc.external path{fill:var(--ext)}
+#chart .conn circle{fill:var(--surface);stroke-width:1.6}
+#chart .conn.back circle{stroke:var(--feedback)} #chart .conn.back text{fill:var(--feedback)}
+#chart .conn.fwd circle{stroke:var(--ink)} #chart .conn.fwd text{fill:var(--ink)}
+#chart .conn text{font-family:var(--f-mono);font-size:11px;font-weight:500}
+#chart .t-id{font-family:var(--f-mono);font-size:11.5px;fill:var(--muted)}
+#chart .t-name{font-family:var(--f-display);font-size:14.5px;font-weight:600;fill:var(--ink)}
+#chart .t-tag{font-family:var(--f-body);font-size:10.5px;font-style:italic;fill:var(--muted)}
+#chart .t-body{font-family:var(--f-body);font-size:12px;fill:var(--ink)}
+#chart .t-dec{font-family:var(--f-body);font-size:11.5px;font-weight:500;fill:var(--ink)}
+#chart .t-sub{font-family:var(--f-body);font-size:10.5px;fill:var(--muted)}
+#chart .e{fill:none;stroke-linejoin:round}
+#chart .e.flow{stroke:var(--ink);stroke-width:1.5}
+#chart .e.back{stroke:var(--feedback);stroke-width:1.5}
+#chart .e.loop{stroke:var(--accent);stroke-width:1.7}
+#chart .e.write{stroke:var(--muted);stroke-width:1.1;stroke-dasharray:2 3}
+#chart .e.rail{stroke:var(--input);stroke-width:1.6;opacity:.55}
+#chart .e.read{stroke:var(--input);stroke-width:1.3}
+#chart .e.look{stroke:var(--input);stroke-width:1.3;stroke-dasharray:1.5 3}
+#chart .e.link{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:8 4}
+#chart .e.bus{stroke:var(--feedback);stroke-width:1.5}
+#chart .e.rerun{stroke:var(--accent);stroke-width:1.7;stroke-dasharray:8 4}
+#chart .tap{fill:var(--input)}
+#chart .m-flow{fill:var(--ink)} #chart .m-back{fill:var(--feedback)} #chart .m-loop{fill:var(--accent)} #chart .m-write{fill:var(--muted)} #chart .m-read{fill:var(--input)} #chart .m-sb{fill:var(--feedback)}
+#chart .elabel{font-family:var(--f-body);font-size:11px;font-weight:500;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+#chart .elabel.back{fill:var(--feedback)}
+#chart .elabel.loop{fill:var(--accent)}
+#chart .flabel{font-family:var(--f-body);font-size:10px;font-weight:500;fill:var(--input);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+
+#chart.no-feeds .lyr-feed{display:none}
+#chart.no-writes .lyr-write{display:none}
+#chart.no-links .lyr-link{display:none}
+#chart.no-sb .e.read,#chart.no-sb .e.look{marker-start:none}
+#chart.has-sel .e,#chart.has-sel .tap,#chart.has-sel .elabel,#chart.has-sel .flabel{opacity:.07}
+#chart.has-sel .on{opacity:1!important}
+#chart.has-sel .e.rail.on{opacity:.9!important}
+#chart.has-sel .nd{opacity:.25}
+#chart.has-sel .nd.on{opacity:1}
+#chart.has-sel .nd.sel > :first-child{stroke:var(--accent);stroke-width:2.8}
+@media (prefers-reduced-motion:no-preference){ #chart .e,#chart .nd{transition:opacity .15s} }
+</style>
+
+<div class="wrap">
+  <h1>Specifier Workflow Swimlane</h1>
+  <p class="lede">The whole workflow in one figure: Phases 1 to 4, the side entrance for artifacts that skipped steps, then change management, all connected. Read it from top to bottom. Each lane shows who does the work. Each document has a rail running down to every step it feeds.</p>
+
+  <div class="legend" aria-label="Legend">
+    <span class="grp">Shapes</span>
+    <span><svg width="40" height="22" aria-hidden="true"><rect x="1" y="1" width="38" height="20" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.4"/></svg>a step done by a skill</span>
+    <span><svg width="34" height="24" aria-hidden="true"><polygon points="17,1 33,12 17,23 1,12" fill="var(--dec)" stroke="var(--accent)" stroke-width="1.4"/></svg>a stop: the specifiers decide</span>
+    <span><svg width="34" height="24" aria-hidden="true"><polygon points="17,1 33,12 17,23 1,12" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.4"/></svg>a program check or route (no stop)</span>
+    <span><svg width="40" height="22" aria-hidden="true"><rect x="1" y="1" width="38" height="20" rx="2" fill="var(--dec)" stroke="var(--accent)" stroke-width="1.4"/></svg>an action by the specifiers</span>
+    <span><svg width="40" height="22" aria-hidden="true"><rect x="1" y="1" width="38" height="20" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.3"/><line x1="6" y1="1" x2="6" y2="21" stroke="var(--muted)" stroke-width="1.3"/><line x1="34" y1="1" x2="34" y2="21" stroke="var(--muted)" stroke-width="1.3"/></svg>a program</span>
+    <span><svg width="40" height="24" aria-hidden="true"><path d="M1 1 H39 V18 Q29 26 20 20 T1 18 Z" fill="var(--art)" stroke="var(--muted)"/></svg>living document</span>
+    <span><svg width="40" height="24" aria-hidden="true"><path d="M1 1 H39 V18 Q29 26 20 20 T1 18 Z" fill="var(--rec)" stroke="var(--muted)"/></svg>record</span>
+    <span><svg width="40" height="24" aria-hidden="true"><path d="M1 1 H39 V18 Q29 26 20 20 T1 18 Z" fill="var(--art)" stroke="var(--muted)" stroke-dasharray="4 3"/></svg>generated file</span>
+    <span><svg width="40" height="24" aria-hidden="true"><path d="M1 1 H39 V18 Q29 26 20 20 T1 18 Z" fill="var(--ext)" stroke="var(--muted)"/></svg>from outside</span>
+    <span><svg width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6"/><text x="12" y="16" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--ink)">C</text></svg>continues at the circle with the same letter</span>
+    <span class="grp">Lines</span>
+    <span><svg width="34" height="10" aria-hidden="true"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--ink)" stroke-width="1.6"/></svg>next</span>
+    <span><svg width="34" height="10" aria-hidden="true"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--feedback)" stroke-width="1.6"/></svg>no: back for another pass</span>
+    <span><svg width="34" height="10" aria-hidden="true"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--accent)" stroke-width="1.8"/></svg>next EPIC</span>
+    <span><svg width="34" height="10" aria-hidden="true"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="2 3"/></svg>writes</span>
+    <span><svg width="14" height="34" aria-hidden="true"><line x1="7" y1="0" x2="7" y2="34" stroke="var(--input)" stroke-width="1.8" opacity=".55"/></svg>a document's rail</span>
+    <span><svg width="44" height="12" aria-hidden="true"><line x1="40" y1="6" x2="6" y2="6" stroke="var(--input)" stroke-width="1.4"/><path d="M0 6 L7 2.5 L7 9.5 Z" fill="var(--input)"/></svg>the step reads it</span>
+    <span><svg width="44" height="12" aria-hidden="true"><line x1="40" y1="6" x2="6" y2="6" stroke="var(--input)" stroke-width="1.4" stroke-dasharray="1.5 3"/><path d="M0 6 L7 2.5 L7 9.5 Z" fill="var(--input)"/></svg>the step looks up items in it by ID</span>
+    <span><svg width="44" height="12" aria-hidden="true"><line x1="4" y1="6" x2="38" y2="6" stroke="var(--input)" stroke-width="1.4"/><path d="M44 6 L37 2.5 L37 9.5 Z" fill="var(--feedback)"/></svg>the step can send a gap back to it</span>
+    <span class="grp">Links to change management</span>
+    <span><svg width="40" height="10" aria-hidden="true"><line x1="0" y1="5" x2="40" y2="5" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="8 4"/></svg>a new version of a source</span>
+    <span><svg width="40" height="10" aria-hidden="true"><line x1="0" y1="5" x2="40" y2="5" stroke="var(--feedback)" stroke-width="1.6"/></svg>send-backs to accepted documents</span>
+    <span><svg width="40" height="10" aria-hidden="true"><line x1="0" y1="5" x2="40" y2="5" stroke="var(--accent)" stroke-width="1.8" stroke-dasharray="8 4"/></svg>change management re-runs the linked steps above</span>
+  </div>
+
+  <div class="controls">
+    <label><input type="checkbox" id="t-feeds" checked> Reads and look-ups</label>
+    <label><input type="checkbox" id="t-sb" checked> Send-backs</label>
+    <label><input type="checkbox" id="t-writes" checked> Writes</label>
+    <label><input type="checkbox" id="t-links" checked> Links to change management</label>
+    <button class="btn" id="clear" type="button">Clear selection</button>
+    <span class="hint">Select any step or document to trace its connections.</span>
+  </div>
+
+  <figure>
+    <div class="chartbox">
+      <svg id="chart" viewBox="0 0 1330 6000" role="group" aria-label="One swimlane figure of the whole specifier workflow: Phases 1 to 4, the side entrance for artifacts that skipped steps, and change management. Lanes: the specifiers, the skills, programs, reads and send-backs, files."></svg>
+    </div>
+    <figcaption>
+      <span><b>Rules that apply everywhere, not drawn as steps:</b></span>
+      <ul>
+        <li>Every time the specifiers accept a document, a program snapshots it in the Version log and rebuilds the Traceability map.</li>
+        <li>Every document's own check program scans for retired glossary words, outside quoted text, before its stop.</li>
+        <li>Every fix to an accepted document goes through change management, from the first pass. The orange arrowheads on the rails mark where a step can send a gap back. The orange bus carries those gaps into change management.</li>
+        <li>The Glossary gate log is the only place glossary decisions are written. The decision register and the section decisions files are generated from it.</li>
+      </ul>
+      <span><b>The circles:</b> A, a re-run that finds a gap higher up raises it as a new change. B, a failed check goes back to the re-run. C, a wording-only change goes straight to the re-copy.</span>
+    </figcaption>
+  </figure>
+
+  <h2>Scenario walkthroughs</h2>
+  <p class="lede" style="font-size:15px">Six real situations, walked through the figure above. A stop is a diamond or action in the specifiers' lane. The examples use the MCP files.</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Scenario</th><th>Path through the figure</th><th>Stops for the specifiers</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td><b>1. One requirement to a ready story</b><br>REQ-3.1 "Name the team and their roles", first pass</td>
+          <td><ol>
+            <li>probe-requirements, write-brd, write-prd</li>
+            <li>harvest (both gates), define-features writes F-15</li>
+            <li>cluster-features, then generate-epics copies the pick into the EPIC Register (copy check, no stop)</li>
+            <li>EPIC-003 comes up; not on the EPIC detail list</li>
+            <li>frd-author writes the Team &amp; roles FRD whole</li>
+            <li>draft-stories cuts; groom-stories and write-acceptance-criteria fill; coverage gate checks EPIC-003's rules</li>
+          </ol></td>
+          <td><ul>
+            <li>Phase 1: questions, BRD, PRD (3)</li>
+            <li>Phase 2: Gate 1, Gate 2, Feature catalog (3)</li>
+            <li>Phase 3: pick an option and confirm the EPIC detail list (1)</li>
+            <li>Phase 4: the new FRD, the cut, mark ready (3)</li>
+          </ul>10 in all. Phases 1 to 3 happen once per product; each later EPIC costs 2, plus 1 per new FRD, plus 1 if it is on the EPIC detail list.</td>
+          <td><span class="res ok">clean</span></td></tr>
+        <tr><td><b>2. A gap found in Phase 2</b><br>define-features finds REQ-3.1's "named with an email" unclear</td>
+          <td><ol>
+            <li>define-features sends it back up the PRD's rail and waits</li>
+            <li>change management records it in the PRD's decision record; write-prd drafts; change-impact suggests a meaning change</li>
+            <li>the traceability map finds the Glossary terms linked to that part of the PRD; blast-radius recommends updating one</li>
+            <li>disposition, the Glossary's own skill, updates the term</li>
+            <li>the change closes; define-features carries on</li>
+          </ol></td>
+          <td><ul>
+            <li>accept the update, meaning changes (1)</li>
+            <li>accept the Glossary update (1)</li>
+            <li>close the change (1)</li>
+          </ul>3</td>
+          <td><span class="res ok">clean</span></td></tr>
+        <tr><td><b>3. The client changes a requirement during Phase 4</b><br>REQ-3.1 must also hold each member's phone number</td>
+          <td><ol>
+            <li>probe-requirements lists the new version of the source; it enters change management</li>
+            <li>write-prd drafts; change-impact suggests a meaning change</li>
+            <li>the traceability map finds F-15, the Team &amp; roles FRD and two stories; blast-radius recommends an update for each</li>
+            <li>define-features, frd-author, then the stories re-run, each with its own stop; a story already handed to the team gets a new story for the difference</li>
+            <li>the coverage gate checks the touched stories; the change closes</li>
+          </ol></td>
+          <td><ul>
+            <li>accept the PRD update (1)</li>
+            <li>Feature catalog, FRD, mark the stories ready (3)</li>
+            <li>close (1)</li>
+          </ul>5, plus 1 if the cut changes</td>
+          <td><span class="res ok">clean</span></td></tr>
+        <tr><td><b>4. A wording-only change</b><br>the client rewords REQ-3.1 without changing what it asks</td>
+          <td><ol>
+            <li>write-prd drafts; change-impact suggests wording only</li>
+            <li>a program re-copies the new wording wherever it is quoted, for example the FRD's quote of REQ-3.1; the checks re-run</li>
+            <li>the change closes</li>
+          </ol></td>
+          <td><ul>
+            <li>accept, wording only (1)</li>
+            <li>close (1)</li>
+          </ul>2</td>
+          <td><span class="res ok">clean</span></td></tr>
+        <tr><td><b>5. A capability that spans two EPICs</b><br>Target: F-31 in EPIC-005 (MVP), F-32 in EPIC-013 (Later)</td>
+          <td><ol>
+            <li>EPIC-005's slice: frd-author writes the Target FRD whole, F-32, F-37 and F-40 included</li>
+            <li>the coverage gate checks only EPIC-005's rules, so the rules for F-32 do not fail it</li>
+            <li>EPIC-013's slice: the FRD already exists, so there is no FRD stop; the cut uses its rules for F-32</li>
+          </ol></td>
+          <td><ul>
+            <li>EPIC-005: FRD, cut, mark ready (3)</li>
+            <li>EPIC-013: cut, mark ready (2)</li>
+          </ul></td>
+          <td><span class="res ok">clean</span></td></tr>
+        <tr><td><b>6. An artifact that skipped steps</b><br>the client's existing tracker stories for EPIC-003 arrive before the Team &amp; roles FRD exists</td>
+          <td><ol>
+            <li>the side entrance keeps them exactly as they arrived; check compares their words with the Glossary; the story structure check runs</li>
+            <li>the findings include "no FRD rules cited"</li>
+            <li>the figure sends that as a missing piece into change management, but there is no accepted FRD to change: it has not been written yet</li>
+          </ol></td>
+          <td><ul>
+            <li>settle the findings (1)</li>
+            <li>then nothing defined</li>
+          </ul></td>
+          <td><span class="res gap">gap found</span><br>A missing piece that has never been written is not a change. The workflow does not say where the arrived stories wait, or how they feed frd-author when EPIC-003 comes up.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Which skill updates which document</h2>
+  <p class="lede" style="font-size:15px">In change management, the landing document's own skill drafts the update, and each linked step re-runs its own skill, with that skill's own stop. Records are never rewritten: a change adds a new entry instead.</p>
+  <div class="tbl-wrap narrow">
+    <table>
+      <thead><tr><th>Document</th><th>Its own skill</th></tr></thead>
+      <tbody>
+        <tr><td>BRD</td><td><code>write-brd</code></td></tr>
+        <tr><td>PRD</td><td><code>write-prd</code></td></tr>
+        <tr><td>Glossary</td><td><code>disposition</code></td></tr>
+        <tr><td>Feature catalog</td><td><code>define-features</code></td></tr>
+        <tr><td>EPIC Register</td><td><ul><li><code>cluster-features</code></li><li>then <code>generate-epics</code></li></ul></td></tr>
+        <tr><td>EPIC detail</td><td><code>generate-epics</code></td></tr>
+        <tr><td>FRD</td><td><code>frd-author</code></td></tr>
+        <tr><td>Story files</td><td><ul><li><code>draft-stories</code>, for the cut</li><li>then <code>groom-stories</code> and <code>write-acceptance-criteria</code></li></ul></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var NS = "http://www.w3.org/2000/svg", svg = document.getElementById("chart");
+function el(tag, attrs, parent, text){
+  var x = document.createElementNS(NS, tag);
+  for (var k in attrs) x.setAttribute(k, attrs[k]);
+  if (text != null) x.textContent = text;
+  if (parent) parent.appendChild(x);
+  return x;
+}
+var W = 1330;
+var LANES = [
+  {id:"spec", x0:20, x1:300, cx:160, title:"The specifiers", sub:"BA and PO: every decision"},
+  {id:"skill", x0:300, x1:600, cx:450, title:"The skills", sub:"read, draft and record"},
+  {id:"prog", x0:600, x1:820, cx:710, title:"Programs", sub:"checks and generated files"},
+  {id:"rail", x0:820, x1:1000, cx:910, title:"Reads and send-backs", sub:"one rail per document"},
+  {id:"file", x0:1000, x1:1250, cx:1125, title:"Files", sub:"what each step produces"}
+];
+var CX = {}; LANES.forEach(function(l){ CX[l.id] = l.cx; });
+
+var SEQ = [
+  {band:"Phase 1", name:"Requirements", runs:"once"},
+  {row:"start"}, {row:"1.1"}, {row:"1.2"}, {row:"1.3"},
+  {band:"Phase 2", name:"Features", runs:"once, then kept current"},
+  {row:"2.1a"}, {row:"2.1b"}, {row:"2.2"},
+  {band:"Phase 3", name:"EPICs", runs:"once, then kept current"},
+  {row:"3.1"}, {row:"3.2"}, {row:"3.2c"}, {row:"3.2g"},
+  {band:"Phase 4", name:"Stories", runs:"once per EPIC, in Register order"},
+  {row:"4n"}, {row:"4w"}, {row:"4.1"}, {row:"4.2"}, {row:"4.3"}, {row:"4.4"}, {row:"4.5"}, {row:"4.5d"}, {row:"4r"},
+  {band:"", name:"Side entrance", runs:"an artifact that skipped steps: tracker stories, a hand-edited FRD, a client backlog", side:true},
+  {row:"s1"}, {row:"s2"}, {row:"s3"}, {row:"s4"}, {row:"s5"}, {row:"s6"},
+  {band:"Change", name:"Raise", runs:"a change comes in from one of three places", cm:true},
+  {row:"e1"}, {row:"e2"}, {row:"k1"},
+  {band:"Change", name:"Decide at the landing document", runs:"draft first, decide once", cm:true},
+  {row:"k2"}, {row:"k3"}, {row:"k4"},
+  {band:"Change", name:"Find and judge the ripple", runs:"only when the meaning changes", cm:true},
+  {row:"k5"}, {row:"k6"},
+  {band:"Change", name:"Redo below", runs:"each linked step re-runs, in phase order, with its own stop", cm:true},
+  {row:"k7"}, {row:"k8"}, {row:"k9"}, {row:"k9d"},
+  {band:"Change", name:"Close", runs:"the closing entry goes into the landing document's decision record", cm:true},
+  {row:"k10"}, {row:"kend"}
+];
+var Y = {}, BANDS = [], last = 0, cur = 0, first = true;
+SEQ.forEach(function(s){
+  if (s.band !== undefined) { var top = first ? 66 : last + 66; BANDS.push({top:top, id:s.band, name:s.name, runs:s.runs, cm:!!s.cm, side:!!s.side}); cur = top + 100; first = false; }
+  else { Y[s.row] = cur; last = cur; cur += 124; }
+});
+var H = last + 76;
+svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+
+var N = {};
+function node(id, lane, row, shape, o){ o = o || {}; o.id = id; o.lane = lane; o.shape = shape; o.x = o.x || CX[lane]; o.y = Y[row] + (o.dy || 0);
+  var S = {skill:[230,54], diamond:[170,68], action:[250,50], program:[210,50], doc:[200,46], pill:[220,44], note:[200,62]}[shape];
+  o.w = o.w || S[0]; o.h = o.h || S[1]; N[id] = o; return o; }
+
+/* Phases 1 to 4 */
+node("S0","skill","start","pill",{lines:["Start"], w:140});
+node("NOTE","prog","start","note",{lines:["At every acceptance, a program:","snapshots it in the Version log,","rebuilds the Traceability map"], w:206, h:62});
+node("FSRC","file","start","doc",{name:"Sources", sub:"client documents or an idea", kind:"external"});
+node("N11","skill","1.1","skill",{num:"1.1", name:["probe-requirements"], tag:"lists the sources, and which one wins"});
+node("D11","spec","1.1","diamond",{lines:["Blocking question","still open?"]});
+node("F11","file","1.1","doc",{name:"Discovery Brief", kind:"record"});
+node("N12","skill","1.2","skill",{num:"1.2", name:["write-brd"]});
+node("D12","spec","1.2","diamond",{lines:["Accept","the BRD?"]});
+node("F12","file","1.2","doc",{name:"BRD"});
+node("N13","skill","1.3","skill",{num:"1.3", name:["write-prd"], tag:"requirements word for word"});
+node("D13","spec","1.3","diamond",{lines:["Accept","the PRD?"]});
+node("F13","file","1.3","doc",{name:"PRD"});
+node("N21a","skill","2.1a","skill",{num:"2.1", name:["harvest"], tag:"agree the words"});
+node("D21a","spec","2.1a","diamond",{lines:["Gate 1:","words settled?"]});
+node("F21a","file","2.1a","doc",{name:"Glossary gate log", sub:"its only decision record", kind:"record"});
+node("N21b","skill","2.1b","skill",{num:"2.1", name:["harvest"], tag:"write the definitions"});
+node("D21b","spec","2.1b","diamond",{lines:["Gate 2:","definitions","settled?"]});
+node("F21b","file","2.1b","doc",{name:"Glossary", sub:"seven files"});
+node("N22","skill","2.2","skill",{num:"2.2", name:["define-features"], tag:"in the agreed words"});
+node("D22","spec","2.2","diamond",{lines:["Accept the","Feature catalog?"]});
+node("F22","file","2.2","doc",{name:"Feature catalog"});
+node("N31","skill","3.1","skill",{num:"3.1", name:["cluster-features"], tag:"also proposes the EPIC detail list"});
+node("D31","spec","3.1","diamond",{lines:["Pick an option;","confirm the EPIC","detail list"]});
+node("F31","file","3.1","doc",{name:"Clustering", sub:"options, pick, EPIC detail list", kind:"record"});
+node("N32","skill","3.2","skill",{num:"3.2", name:["generate-epics"], tag:"EPIC Register"});
+node("F32","file","3.2","doc",{name:"EPIC Register"});
+node("P32c","prog","3.2c","diamond",{lines:["Copy check","passes?"], prog:true});
+node("P32g","prog","3.2g","program",{lines:["Generate EPIC","sequencing and mapping"], w:200});
+node("F32s","file","3.2g","doc",{name:"EPIC sequencing", kind:"generated", dy:-27});
+node("F32m","file","3.2g","doc",{name:"EPIC mapping", kind:"generated", dy:27});
+node("P4n","prog","4n","diamond",{lines:["Next EPIC","in the Register?"], prog:true});
+node("END4","skill","4n","pill",{lines:["End","every EPIC's stories ready"]});
+node("P4w","prog","4w","diamond",{lines:["On the EPIC","detail list?"], prog:true});
+node("FDS","file","4w","doc",{name:"Design", sub:"if any", kind:"external"});
+node("N41","skill","4.1","skill",{num:"4.1", name:["generate-epics"], tag:"EPIC detail"});
+node("D41","spec","4.1","diamond",{lines:["Accept","EPIC detail?"]});
+node("F41","file","4.1","doc",{name:"EPIC detail"});
+node("N42","skill","4.2","skill",{num:"4.2", name:["frd-author"], tag:"a new FRD is written whole"});
+node("D42","spec","4.2","diamond",{lines:["Each new FRD","accepted?"]});
+node("F42","file","4.2","doc",{name:"FRDs", sub:"one per capability"});
+node("N43","skill","4.3","skill",{num:"4.3", name:["draft-stories"]});
+node("D43","spec","4.3","diamond",{lines:["Approve","the cut?"]});
+node("F43","file","4.3","doc",{name:"Story index", sub:"and story shells"});
+node("N44","skill","4.4","skill",{num:"4.4", name:["groom-stories +","write-acceptance-criteria"], tag:"assemble, no stop", h:72});
+node("F44","file","4.4","doc",{name:"Story files", sub:"filled"});
+node("P45","prog","4.5","program",{lines:["4.5 coverage gate","this EPIC's rules only"], w:200, h:54});
+node("P45d","prog","4.5d","diamond",{lines:["Every check","passes?"], prog:true});
+node("A4r","spec","4r","action",{lines:["Mark the stories ready"], w:220, h:46});
+node("F4r","file","4r","doc",{name:"Story index", sub:"ready marks"});
+
+/* side entrance */
+node("XA","skill","s1","pill",{lines:["An artifact that","skipped steps arrives"], h:48});
+node("XK","prog","s1","program",{lines:["Keep it exactly","as it arrived"]});
+node("XF","file","s1","doc",{name:"Arrived artifact", sub:"kept as it arrived", kind:"record"});
+node("XC","skill","s2","skill",{num:"", name:["check"], tag:"glossary words; skips quotes"});
+node("XN","file","s2","doc",{name:"Check findings", kind:"record"});
+node("XS","prog","s3","program",{lines:["Its own structure check,","for example check-frd.cjs"], h:54});
+node("XD","spec","s4","diamond",{lines:["Settle each","finding"]});
+node("XJ","prog","s5","program",{lines:["Join the flow at its stage:","snapshot it, map it"], h:54});
+node("XE","skill","s6","pill",{lines:["Joins the flow"], w:160, h:40});
+
+/* change management */
+node("KSP","spec","e1","pill",{lines:["The specifiers ask","for a change"], h:48});
+node("KNSV","skill","e1","pill",{lines:["A new version of a source,","listed by 1.1 probe-requirements"], w:230, h:48});
+node("KLIV","file","e1","doc",{name:"Living documents", sub:"every document above"});
+node("KSB","rail","e2","pill",{lines:["A send-back","reaches an accepted","document"], w:136, h:56, x:890});
+node("KVL","file","e2","doc",{name:"Version log", sub:"every accepted version", kind:"record"});
+node("KC1","spec","k1","action",{lines:["Record the change in the","landing document's decision record"]});
+node("KDR","file","k1","doc",{name:"Decision record", sub:"of the landing document"});
+node("KC2","skill","k2","skill",{num:"", name:["landing document's","own skill"], tag:"drafts the update", h:70});
+node("KLD","file","k2","doc",{name:"Landing document", sub:"update drafted"});
+node("KC3","skill","k3","skill",{num:"", name:["change-impact"], tag:"suggests: does the meaning change?"});
+node("KD3","spec","k3","diamond",{lines:["Accept this update?","Does the meaning","change?"], w:180, h:76});
+node("KDECL","spec","k4","pill",{lines:["Declined and recorded;","whoever raised it carries on"], w:220, h:48});
+node("KR4","prog","k4","diamond",{lines:["Marked as a","meaning change?"], prog:true});
+node("KC5","prog","k5","program",{lines:["Traceability map","finds what is linked"], h:54});
+node("KTM","file","k5","doc",{name:"Traceability map", sub:"rebuilt at every acceptance", kind:"generated"});
+node("KC6","skill","k6","skill",{num:"", name:["blast-radius"], tag:"recommends, per linked item"});
+node("KCIR","file","k6","doc",{name:"Change Impact Report", kind:"record"});
+node("KC7","skill","k7","skill",{num:"", name:["re-run"], tag:"each linked step, its own stop"});
+node("KD7","spec","k7","diamond",{lines:["Each linked step","accepted?"]});
+node("KTD","file","k7","doc",{name:"Touched documents", sub:"updated"});
+node("KC8","prog","k8","program",{lines:["Re-copy the new wording","wherever it is quoted"], h:54});
+node("KC9","prog","k9","program",{lines:["Coverage gate","touched stories only"], h:54});
+node("KP9d","prog","k9d","diamond",{lines:["Every check","passes?"], prog:true});
+node("KC10","spec","k10","action",{lines:["Close the change: list every","place it was applied"]});
+node("KEND","skill","kend","pill",{lines:["Change applied"], w:160, h:40});
+
+var WRITES = {N11:["F11"], N12:["F12"], N13:["F13"], N21a:["F21a"], N21b:["F21b"], N22:["F22"], N31:["F31"], N32:["F32"], P32g:["F32s","F32m"],
+  N41:["F41"], N42:["F42"], N43:["F43"], N44:["F44"], A4r:["F4r"],
+  XK:["XF"], XC:["XN"], XS:["XN"],
+  KC1:["KDR"], KC2:["KLD"], KC5:["KCIR"], KC6:["KCIR"], KC7:["KTD"], KC8:["KTD"], KC10:["KDR"]};
+var FEEDS = [
+  ["N11","FSRC","read"],
+  ["N12","FSRC","read"], ["N12","F11","read","back"],
+  ["N13","FSRC","read"], ["N13","F11","read"], ["N13","F12","read","back"],
+  ["N21a","F12","read"], ["N21a","F13","read","back"],
+  ["N22","F13","read","back"], ["N22","F21b","look","back"], ["N22","F12","look"],
+  ["N31","F22","read","back"],
+  ["N32","F31","read"], ["N32","F22","look"],
+  ["N41","F32","read"], ["N41","F12","look","back"], ["N41","F13","look"], ["N41","F22","look"],
+  ["N42","F22","read","back"], ["N42","F13","look","back"], ["N42","F21b","look","back"],
+  ["N43","F32","read"], ["N43","F42","read","back"], ["N43","FDS","read"], ["N43","F21b","look"], ["N43","F12","look"],
+  ["N44","F43","read","back"], ["N44","F42","look","back"], ["N44","F22","look","back"], ["N44","F12","look","back"], ["N44","F41","look"], ["N44","F21b","look","back"],
+  ["P45","F44","read"], ["P45","F42","read"],
+  ["XC","XF","read"], ["XC","F21b","look"],
+  ["XS","XF","read"],
+  ["KC1","F11","look"],
+  ["KC2","KDR","look","back"], ["KC2","KLIV","look"],
+  ["KC3","KLD","read"], ["KC3","KVL","look"],
+  ["KC5","KTM","read"],
+  ["KC6","KLIV","look"], ["KC6","KVL","look"],
+  ["KC7","KCIR","read"], ["KC7","KLIV","look"],
+  ["KC8","KLD","read"],
+  ["KC9","KTD","read"]
+];
+var RAIL_MAIN = ["FSRC","F11","F12","F13","F21b","F22","F31","F32","FDS","F41","F42","F43","F44"];
+var RX = {};
+RAIL_MAIN.forEach(function(d, i){ RX[d] = 990 - i * 13; });
+RX.XF = 990;
+RX.KLIV = 990; RX.KVL = 964; RX.KDR = 951; RX.KLD = 938; RX.KTM = 925; RX.KCIR = 912; RX.KTD = 899;
+var RAIL_ALL = RAIL_MAIN.concat(["XF","KLIV","KVL","KDR","KLD","KTM","KCIR","KTD"]);
+var JOG = {KDR:1008, KCIR:1014, KTD:1018, XN:1016};
+var SB_TARGETS = ["F11","F12","F13","F21b","F22","F42","F43"];
+
+Object.keys(N).forEach(function(id){
+  var n = N[id]; if (n.shape === "diamond" || n.shape === "doc" || n.shape === "pill" || n.shape === "note") return;
+  var k = (WRITES[id] || []).length + FEEDS.filter(function(f){ return f[0] === id; }).length;
+  var minH = 16 + (k - 1) * 13;
+  if (k > 1 && n.h < minH) n.h = minH;
+});
+
+function A(id, side){
+  var n = N[id];
+  if (side === "t") return [n.x, n.y - n.h/2];
+  if (side === "b") return [n.x, n.y + n.h/2];
+  if (side === "l") return [n.x - n.w/2, n.y];
+  return [n.x + n.w/2, n.y];
+}
+
+var E = [];
+function edge(type, pts, ids, label, lx, ly, anchor, layer){ E.push({type:type, pts:pts, ids:ids, label:label, lx:lx, ly:ly, anchor:anchor || "middle", layer:layer}); return E[E.length - 1]; }
+function gated(nid, did, nextId, back, fwd){
+  var n = N[nid], nx = N[nextId];
+  edge("flow", [A(nid,"l"), A(did,"r")], [nid, did]);
+  var dt = A(did,"t"), db = A(did,"b");
+  edge("back", [dt, [dt[0], dt[1] - 16], [410, dt[1] - 16], [410, n.y - n.h/2]], [did, nid], back || "No", 285, dt[1] - 20);
+  if (nextId) edge("flow", [db, [db[0], db[1] + 16], [nx.x, db[1] + 16], A(nextId,"t")], [did, nextId], fwd || "Yes", db[0] + 8, db[1] + 12, "start");
+}
+function down(a, b){ var p = A(a,"b"), q = A(b,"t"); edge("flow", [p, [p[0], p[1] + 20], [q[0], p[1] + 20], q], [a, b]); }
+var CONN = [];
+function conn(x, y, letter, kind){ CONN.push({x:x, y:y, letter:letter, kind:kind}); }
+
+/* Phases 1 to 4 */
+edge("flow", [A("S0","b"), A("N11","t")], ["S0","N11"]);
+gated("N11","D11","N12","Yes: ask and record","No");
+gated("N12","D12","N13");
+gated("N13","D13","N21a");
+gated("N21a","D21a","N21b");
+gated("N21b","D21b","N22");
+gated("N22","D22","N31");
+gated("N31","D31","N32","None fits","Picked");
+(function(){
+  var b = A("N32","b"), l = A("P32c","l"), t = A("P32c","t");
+  edge("flow", [[470, b[1]], [470, l[1]], l], ["N32","P32c"]);
+  edge("back", [t, [t[0], b[1] + 33], [530, b[1] + 33], [530, b[1]]], ["P32c","N32"], "No", 620, b[1] + 27);
+  edge("flow", [A("P32c","b"), A("P32g","t")], ["P32c","P32g"], "Yes", N.P32c.x + 8, N.P32c.y + N.P32c.h/2 + 14, "start");
+  edge("flow", [A("P32g","b"), A("P4n","t")], ["P32g","P4n"]);
+  var n = N.P4n;
+  edge("flow", [A("P4n","l"), A("END4","r")], ["P4n","END4"], "No", (n.x - n.w/2 + N.END4.x + N.END4.w/2) / 2, n.y - 8);
+  edge("flow", [A("P4n","b"), A("P4w","t")], ["P4n","P4w"], "Yes", N.P4n.x + 8, N.P4n.y + N.P4n.h/2 + 14, "start");
+  var wl = A("P4w","l");
+  edge("flow", [wl, [450, wl[1]], A("N41","t")], ["P4w","N41"], "Yes", 540, wl[1] - 7);
+  var wr = A("P4w","r"), d41b = N.D41.y + N.D41.h/2 + 16;
+  edge("flow", [wr, [812, wr[1]], [812, d41b], [450, d41b], A("N42","t")], ["P4w","N42"], "No: skip to 4.2", 806, wr[1] + 30, "end");
+})();
+gated("N41","D41","N42");
+gated("N42","D42","N43");
+gated("N43","D43","N44");
+(function(){
+  var b = A("N44","b");
+  edge("flow", [b, [450, b[1] + 17], [710, b[1] + 17], A("P45","t")], ["N44","P45"]);
+  edge("flow", [A("P45","b"), A("P45d","t")], ["P45","P45d"]);
+  var l = A("P45d","l");
+  edge("back", [l, [380, l[1]], [380, b[1]]], ["P45d","N44"], "No: back to 4.4 (or 4.3)", 500, l[1] - 8);
+  var db = A("P45d","b");
+  edge("flow", [db, [db[0], db[1] + 16], [160, db[1] + 16], A("A4r","t")], ["P45d","A4r"], "Yes", db[0] + 8, db[1] + 12, "start");
+  var ab = A("A4r","b"), pr = A("P4n","r");
+  edge("loop", [ab, [ab[0], ab[1] + 21], [1262, ab[1] + 21], [1262, pr[1]], pr], ["A4r","P4n"], "next EPIC", 1196, ab[1] + 15);
+})();
+
+/* side entrance */
+(function(){
+  edge("flow", [A("XA","r"), A("XK","l")], ["XA","XK"]);
+  down("XK","XC"); down("XC","XS"); down("XS","XD");
+  var dl = A("XD","l"), cl = A("XC","l");
+  edge("back", [dl, [40, dl[1]], [40, cl[1]], cl], ["XD","XC"], "Fix it with its own skill; check again", 46, dl[1] - 46, "start");
+  var dr = A("XD","r");
+  edge("bus", [dr, [1240, dr[1]]], ["XD","KSB"], "A glossary change, or a missing piece: change management", 640, dr[1] - 7, "middle", "link");
+  var db = A("XD","b");
+  edge("flow", [db, [160, db[1] + 16], [710, db[1] + 16], A("XJ","t")], ["XD","XJ"], "Settled", 168, db[1] + 12, "start");
+  down("XJ","XE");
+})();
+
+/* change management */
+(function(){
+  var c1t = A("KC1","t");
+  edge("flow", [A("KSP","b"), c1t], ["KSP","KC1"]);
+  var nb = A("KNSV","b"); edge("flow", [nb, [nb[0], nb[1] + 22], [160, nb[1] + 22], [160, c1t[1]]], ["KNSV","KC1"]);
+  var sl = A("KSB","l"); edge("flow", [sl, [160, sl[1]], [160, c1t[1]]], ["KSB","KC1"]);
+  conn(N.KSB.x, N.KSB.y - 54, "A", "back");
+  edge("back", [[N.KSB.x, N.KSB.y - 44], A("KSB","t")], ["KSB"]);
+  down("KC1","KC2");
+  edge("flow", [A("KC2","b"), A("KC3","t")], ["KC2","KC3"]);
+  edge("flow", [A("KC3","l"), A("KD3","r")], ["KC3","KD3"]);
+  var dt = A("KD3","t"), c2l = A("KC2","l");
+  edge("back", [dt, [dt[0], dt[1] - 16], [318, dt[1] - 16], [318, c2l[1]], c2l], ["KD3","KC2"], "Change the draft first", 236, dt[1] - 22);
+  var dl = A("KD3","l"), xl = A("KDECL","l");
+  edge("flow", [dl, [36, dl[1]], [36, xl[1]], xl], ["KD3","KDECL"], "Decline", 40, dl[1] - 8, "start");
+  var db = A("KD3","b");
+  edge("flow", [db, [db[0], db[1] + 14], [710, db[1] + 14], A("KR4","t")], ["KD3","KR4"], "Accept", db[0] + 8, db[1] + 11, "start");
+  edge("flow", [A("KR4","b"), A("KC5","t")], ["KR4","KC5"], "Yes", N.KR4.x + 8, N.KR4.y + N.KR4.h/2 + 14, "start");
+  var rr = A("KR4","r");
+  conn(812, N.KR4.y, "C", "fwd");
+  edge("flow", [rr, [802, rr[1]]], ["KR4"], "No: wording only", 800, rr[1] + 30, "end");
+  down("KC5","KC6");
+  edge("flow", [A("KC6","b"), A("KC7","t")], ["KC6","KC7"]);
+  gated("KC7","KD7", null, "No: next pass");
+  var d7b = A("KD7","b"), c9 = N.KC9;
+  edge("flow", [d7b, [160, d7b[1] + 30], [594, d7b[1] + 30], [594, c9.y], A("KC9","l")], ["KD7","KC9"], "Yes", 168, d7b[1] + 26, "start");
+  var c7b = A("KC7","b");
+  conn(512, c7b[1] + 17, "A", "back");
+  edge("back", [[512, c7b[1]], [512, c7b[1] + 7]], ["KC7"], "a gap higher up", 474, c7b[1] + 33, "end");
+  conn(660, N.KC8.y - 58, "C", "fwd");
+  edge("flow", [[660, N.KC8.y - 48], [660, N.KC8.y - N.KC8.h/2]], ["KC8"]);
+  edge("flow", [A("KC8","b"), A("KC9","t")], ["KC8","KC9"]);
+  edge("flow", [A("KC9","b"), A("KP9d","t")], ["KC9","KP9d"]);
+  var pl = A("KP9d","l");
+  conn(598, N.KP9d.y, "B", "back");
+  edge("back", [pl, [608, pl[1]]], ["KP9d"], "No", 616, pl[1] - 8);
+  conn(540, N.KC7.y - 54, "B", "back");
+  edge("back", [[540, N.KC7.y - 44], [540, N.KC7.y - N.KC7.h/2]], ["KC7"]);
+  var pdb = A("KP9d","b");
+  edge("flow", [pdb, [710, pdb[1] + 16], [160, pdb[1] + 16], A("KC10","t")], ["KP9d","KC10"], "Yes", pdb[0] + 8, pdb[1] + 12, "start");
+  down("KC10","KEND");
+})();
+
+/* links between the phases and change management */
+(function(){
+  var n11 = N.N11, y0 = n11.y + n11.h/2, nt = A("KNSV","t");
+  edge("link", [[530, y0], [530, y0 + 13], [1278, y0 + 13], [1278, nt[1] - 16], [nt[0], nt[1] - 16], nt], ["N11","KNSV"], "a new version of a source, once Phase 1 is done", 760, y0 + 9, "middle", "link");
+  var top = null;
+  SB_TARGETS.forEach(function(d){
+    var doc = N[d], x = doc.x + doc.w/2;
+    edge("bus", [[x, doc.y], [1240, doc.y]], [d, "KSB"], null, 0, 0, null, "link");
+    if (top === null || doc.y < top) top = doc.y;
+  });
+  var sr = A("KSB","r");
+  edge("bus", [[1240, top], [1240, sr[1]], sr], ["KSB"].concat(SB_TARGETS), null, 0, 0, null, "link");
+  var c7 = N.KC7, c2 = N.KC2, busX = 1310;
+  var y7 = c7.y + c7.h/2 + 13, y2 = c2.y + c2.h/2 + 11;
+  var ticksY = BANDS.filter(function(b){ return !b.cm && !b.side; }).map(function(b){ return b.top + 18; });
+  var main = edge("rerun", [[560, c7.y + c7.h/2], [560, y7], [busX, y7], [busX, ticksY[0]]], ["KC7","KC2"], null, 0, 0, null, "link"); main.noArrow = true;
+  edge("rerun", [[560, c2.y + c2.h/2], [560, y2], [busX, y2]], ["KC2","KC7"], null, 0, 0, null, "link").noArrow = true;
+  ticksY.forEach(function(ty){ edge("rerun", [[busX, ty], [1254, ty]], ["KC7","KC2"], null, 0, 0, null, "link"); });
+})();
+
+/* right-edge slots */
+var SLOT = {};
+Object.keys(N).forEach(function(id){
+  var n = N[id]; if (n.shape === "diamond" || n.shape === "doc" || n.shape === "note") return;
+  var outs = (WRITES[id] || []).map(function(f){ return {kind:"write", doc:f}; });
+  var ins = FEEDS.filter(function(f){ return f[0] === id; }).sort(function(a, b){ return RX[b[1]] - RX[a[1]]; }).map(function(f){ return {kind:f[2], doc:f[1], back:f[3] === "back"}; });
+  var all = outs.concat(ins); if (!all.length) return;
+  var top = n.y - n.h/2 + 8, bot = n.y + n.h/2 - 8;
+  all.forEach(function(c, i){ c.y = all.length === 1 ? n.y : top + i * (bot - top) / (all.length - 1); });
+  SLOT[id] = all;
+});
+var RAIL_END = {};
+Object.keys(SLOT).forEach(function(id){
+  SLOT[id].forEach(function(c){
+    var n = N[id], x = n.x + n.w/2;
+    if (c.kind === "write") {
+      var d = N[c.doc], ty = d.y - 8, jx = JOG[c.doc] || 1012;
+      edge("write", [[x, c.y], [jx, c.y], [jx, ty], [d.x - d.w/2, ty]], [id, c.doc], null, 0, 0, null, "write");
+    } else {
+      var rx = RX[c.doc];
+      var e = edge(c.kind, [[rx, c.y], [x, c.y]], [id, c.doc], null, 0, 0, null, "feed");
+      e.back = c.back; e.tapAt = [rx, c.y]; e.flabel = {x:x + 9, y:c.y - 2.5, text:N[c.doc].name};
+      RAIL_END[c.doc] = Math.max(RAIL_END[c.doc] || 0, c.y);
+    }
+  });
+});
+RAIL_ALL.forEach(function(d){
+  if (!RAIL_END[d]) return;
+  var doc = N[d], y0 = doc.y + 10, rx = RX[d];
+  var readers = FEEDS.filter(function(f){ return f[1] === d; }).map(function(f){ return f[0]; });
+  edge("rail", [[doc.x - doc.w/2, y0], [rx, y0], [rx, Math.max(RAIL_END[d], y0)]], [d].concat(readers), null, 0, 0, null, "feed");
+});
+
+/* render */
+var defs = el("defs", {}, svg);
+[["flow","m-flow"],["back","m-back"],["loop","m-loop"],["write","m-write"],["read","m-read"],["sb","m-sb"]].forEach(function(m){
+  var mk = el("marker", {id:"ar-" + m[0], viewBox:"0 0 10 10", refX:"9", refY:"5", markerWidth:m[0] === "sb" ? "8" : "7", markerHeight:m[0] === "sb" ? "8" : "7", orient:"auto-start-reverse"}, defs);
+  el("path", {d:"M0 0 L10 5 L0 10 z", "class":m[1]}, mk);
+});
+var MARK = {flow:"flow", back:"back", loop:"loop", write:"write", read:"read", look:"read", link:"flow", bus:"back", rerun:"loop"};
+
+var gBg = el("g", {}, svg), gBand = el("g", {}, svg), gEdge = el("g", {}, svg), gNode = el("g", {}, svg), gLbl = el("g", {}, svg);
+LANES.forEach(function(l, i){
+  el("rect", {x:l.x0, y:0, width:l.x1 - l.x0, height:H, "class":"lane-bg " + (i % 2 ? "b" : "a")}, gBg);
+  if (i > 0) el("line", {x1:l.x0, y1:0, x2:l.x0, y2:H, "class":"lane-sep"}, gBg);
+  el("text", {x:l.cx, y:26, "text-anchor":"middle", "class":"lane-title"}, gBg, l.title);
+  el("text", {x:l.cx, y:44, "text-anchor":"middle", "class":"lane-sub"}, gBg, l.sub);
+});
+el("rect", {x:1250, y:0, width:W - 1250, height:H, "class":"lane-bg a"}, gBg);
+el("line", {x1:1250, y1:0, x2:1250, y2:H, "class":"lane-sep"}, gBg);
+el("line", {x1:20, y1:56, x2:1250, y2:56, "class":"lane-sep"}, gBg);
+BANDS.forEach(function(b){
+  el("rect", {x:20, y:b.top, width:1230, height:36, rx:6, "class":"band" + (b.cm ? " cm" : b.side ? " side" : "")}, gBand);
+  var x = 34;
+  if (b.id) { el("text", {x:x, y:b.top + 23, "class":"band-id"}, gBand, b.id); x += b.id.length * 7.4 + 16; }
+  el("text", {x:x, y:b.top + 23, "class":"band-name"}, gBand, b.name);
+  el("text", {x:x + b.name.length * 8.9 + 14, y:b.top + 23, "class":"band-runs"}, gBand, b.runs);
+});
+var EDGE_ELS = [];
+["rail","read","look","write","bus","link","rerun","flow","back","loop"].forEach(function(t){
+  E.filter(function(e){ return e.type === t; }).forEach(function(e){
+    var d = "M" + e.pts.map(function(p){ return p[0] + " " + p[1]; }).join(" L");
+    var attrs = {d:d, "class":"e " + e.type + (e.layer ? " lyr-" + e.layer : "")};
+    var tick = e.type === "bus" && e.ids.length === 2 && e.ids[0] !== "XD";
+    if (e.type !== "rail" && !e.noArrow && !tick) attrs["marker-end"] = "url(#ar-" + MARK[e.type] + ")";
+    if (e.back) attrs["marker-start"] = "url(#ar-sb)";
+    e.el = el("path", attrs, gEdge); EDGE_ELS.push(e);
+    if (e.tapAt) e.tap = el("circle", {cx:e.tapAt[0], cy:e.tapAt[1], r:2.4, "class":"tap lyr-feed"}, gEdge);
+    if (e.flabel) e.lel = el("text", {x:e.flabel.x, y:e.flabel.y, "class":"flabel lyr-feed"}, gLbl, e.flabel.text);
+    if (e.label) e.lel = el("text", {x:e.lx, y:e.ly, "text-anchor":e.anchor, "class":"elabel" + (e.type === "back" || e.type === "bus" ? " back" : e.type === "loop" ? " loop" : "") + (e.layer === "link" ? " lyr-link" : "")}, gLbl, e.label);
+  });
+});
+(function(){
+  var busMid = (N.F11.y + N.F42.y) / 2, reMid = (BANDS[0].top + N.KC7.y) / 2;
+  el("text", {x:0, y:0, "text-anchor":"middle", transform:"translate(1252 " + busMid + ") rotate(-90)", "class":"elabel back lyr-link"}, gLbl, "send-backs to accepted documents");
+  el("text", {x:0, y:0, "text-anchor":"middle", transform:"translate(1322 " + reMid + ") rotate(-90)", "class":"elabel loop lyr-link"}, gLbl, "change management re-runs the linked steps above");
+})();
+function lines(g, x, cy, arr, cls, lh){
+  var y0 = cy - (arr.length - 1) * lh / 2 + 4;
+  arr.forEach(function(s, i){ el("text", {x:x, y:y0 + i * lh, "text-anchor":"middle", "class":cls}, g, s); });
+}
+var NODE_ELS = {};
+Object.keys(N).forEach(function(id){
+  var n = N[id], x0 = n.x - n.w/2, y0 = n.y - n.h/2, g, label;
+  if (n.shape === "skill") {
+    g = el("g", {"class":"nd skill"}, gNode);
+    el("rect", {x:x0, y:y0, width:n.w, height:n.h, rx:8}, g);
+    var rows = n.name.length + (n.tag ? 1 : 0), lh = 16, yy = n.y - (rows - 1) * lh / 2 + 5;
+    var t = el("text", {x:n.x, y:yy, "text-anchor":"middle"}, g);
+    if (n.num) el("tspan", {"class":"t-id"}, t, n.num + "  ");
+    el("tspan", {"class":"t-name"}, t, n.name[0]);
+    for (var i = 1; i < n.name.length; i++) el("text", {x:n.x, y:yy + i * lh, "text-anchor":"middle", "class":"t-name"}, g, n.name[i]);
+    if (n.tag) el("text", {x:n.x, y:yy + n.name.length * lh - 1, "text-anchor":"middle", "class":"t-tag"}, g, n.tag);
+    label = (n.num ? n.num + " " : "") + n.name.join(" ");
+  } else if (n.shape === "diamond") {
+    g = el("g", {"class":"nd diamond" + (n.prog ? " prog" : "")}, gNode);
+    el("polygon", {points:[n.x, y0, x0 + n.w, n.y, n.x, y0 + n.h, x0, n.y].join(" ")}, g);
+    lines(g, n.x, n.y, n.lines, "t-dec", 13); label = n.lines.join(" ");
+  } else if (n.shape === "action") {
+    g = el("g", {"class":"nd action"}, gNode);
+    el("rect", {x:x0, y:y0, width:n.w, height:n.h, rx:3}, g);
+    lines(g, n.x, n.y, n.lines, "t-dec", 14); label = n.lines.join(" ");
+  } else if (n.shape === "program") {
+    g = el("g", {"class":"nd program"}, gNode);
+    el("rect", {x:x0, y:y0, width:n.w, height:n.h}, g);
+    el("line", {x1:x0 + 9, y1:y0, x2:x0 + 9, y2:y0 + n.h}, g);
+    el("line", {x1:x0 + n.w - 9, y1:y0, x2:x0 + n.w - 9, y2:y0 + n.h}, g);
+    lines(g, n.x, n.y, n.lines, "t-body", 15); label = n.lines.join(" ");
+  } else if (n.shape === "pill" || n.shape === "note") {
+    g = el("g", {"class":"nd " + n.shape}, gNode);
+    el("rect", {x:x0, y:y0, width:n.w, height:n.h, rx:n.shape === "pill" ? n.h/2 : 6}, g);
+    lines(g, n.x, n.y, n.lines, "t-body", 14); label = n.lines.join(" ");
+  } else {
+    g = el("g", {"class":"nd doc " + (n.kind || "living")}, gNode);
+    var y1 = y0 + n.h;
+    el("path", {d:"M" + x0 + " " + y0 + " H" + (x0 + n.w) + " V" + (y1 - 7) + " Q" + (x0 + n.w * 0.75) + " " + (y1 + 5) + " " + (x0 + n.w / 2) + " " + (y1 - 3) + " T" + x0 + " " + (y1 - 7) + " Z"}, g);
+    if (n.sub) { el("text", {x:n.x, y:n.y - 3, "text-anchor":"middle", "class":"t-dec"}, g, n.name); el("text", {x:n.x, y:n.y + 11, "text-anchor":"middle", "class":"t-sub"}, g, n.sub); }
+    else el("text", {x:n.x, y:n.y + 2, "text-anchor":"middle", "class":"t-dec"}, g, n.name);
+    label = n.name + (n.sub ? " " + n.sub : "");
+  }
+  g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", label);
+  NODE_ELS[id] = g;
+  g.addEventListener("click", function(ev){ ev.stopPropagation(); select(id); });
+  g.addEventListener("keydown", function(ev){ if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(id); } });
+});
+CONN.forEach(function(c){
+  var g = el("g", {"class":"conn " + c.kind}, gNode);
+  el("circle", {cx:c.x, cy:c.y, r:10}, g);
+  el("text", {x:c.x, y:c.y + 4, "text-anchor":"middle"}, g, c.letter);
+});
+
+function select(id){
+  svg.classList.add("has-sel");
+  Object.keys(NODE_ELS).forEach(function(k){ NODE_ELS[k].classList.remove("on", "sel"); });
+  NODE_ELS[id].classList.add("on", "sel");
+  EDGE_ELS.forEach(function(e){
+    var hit = e.ids.indexOf(id) >= 0;
+    e.el.classList.toggle("on", hit);
+    if (e.tap) e.tap.classList.toggle("on", hit);
+    if (e.lel) e.lel.classList.toggle("on", hit);
+    if (hit && (e.type !== "rail" || e.ids[0] === id)) e.ids.forEach(function(x){ if (NODE_ELS[x]) NODE_ELS[x].classList.add("on"); });
+  });
+}
+function clearSel(){
+  svg.classList.remove("has-sel");
+  Object.keys(NODE_ELS).forEach(function(k){ NODE_ELS[k].classList.remove("on", "sel"); });
+  EDGE_ELS.forEach(function(e){ e.el.classList.remove("on"); if (e.tap) e.tap.classList.remove("on"); if (e.lel) e.lel.classList.remove("on"); });
+}
+svg.addEventListener("click", clearSel);
+document.getElementById("clear").addEventListener("click", clearSel);
+function bindToggle(id, cls){
+  var box = document.getElementById(id);
+  function apply(){ svg.classList.toggle(cls, !box.checked); try { localStorage.setItem("sws-" + id, box.checked ? "1" : "0"); } catch (e) {} }
+  try { var v = localStorage.getItem("sws-" + id); if (v !== null) box.checked = v === "1"; } catch (e) {}
+  box.addEventListener("change", apply); apply();
+}
+bindToggle("t-feeds", "no-feeds");
+bindToggle("t-sb", "no-sb");
+bindToggle("t-writes", "no-writes");
+bindToggle("t-links", "no-links");
+})();
+</script>

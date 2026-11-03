@@ -1,0 +1,6 @@
+# A real client's material stays on this machine and never goes to the public repo.
+Output/continuum/
+fixtures/mcp-slice/
+_archive/Output-2026-10-23/control-plane/
+_archive/Output-2026-10-23/mcp-slice/
+_data_model/_data_model_archive/continuum-run-1/

@@ -1,0 +1,1018 @@
+<title>Specifier Workflow Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one wide column. A swimlane map (one band per phase) with a trace panel under it,
+   then reference sections rendered from the same data. */
+:root{
+  --bg:#F1F4F5; --surface:#FFFFFF; --band:#E5EBEE; --band-alt:#EAEFF2;
+  --ink:#16202A; --muted:#566370; --line:#C6CFD5; --soft:#DDE4E8;
+  --accent:#1C5A85; --input:#6150A3; --feedback:#AD4F07; --ext:#D9E4EB; --art:#FAFBFC; --rec:#EEE9DD;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F151A; --surface:#162029; --band:#141C24; --band-alt:#17202A;
+    --ink:#E2E8ED; --muted:#93A1AD; --line:#2D3944; --soft:#22303B;
+    --accent:#74B3E2; --input:#AE9EEB; --feedback:#EFA057; --ext:#1D2A35; --art:#121A21; --rec:#2A2720;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F151A; --surface:#162029; --band:#141C24; --band-alt:#17202A;
+  --ink:#E2E8ED; --muted:#93A1AD; --line:#2D3944; --soft:#22303B;
+  --accent:#74B3E2; --input:#AE9EEB; --feedback:#EFA057; --ext:#1D2A35; --art:#121A21; --rec:#2A2720;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1300px;margin:0 auto;padding-inline:20px;padding-block:28px 64px;display:grid;gap:44px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,4vw,40px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:600}
+h3{font-size:18px;font-weight:600}
+p{margin:0;max-width:72ch}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted);font-size:16px}
+section{display:grid;gap:16px;min-width:0}
+.sec-head{display:grid;gap:6px}
+ul.plain{margin:0;padding-left:18px;display:grid;gap:3px}
+ul.plain ul{margin:2px 0 0;padding-left:18px}
+.note{font-size:14px;color:var(--muted)}
+.top{display:grid;gap:18px}
+.intro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.panel h3{margin-bottom:8px}
+.who{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;align-items:start}
+.who dt{font-weight:600}
+.who dd{margin:0}
+.who ul{margin:0;padding-left:18px}
+.kinds{display:grid;gap:10px}
+.kinds > div{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start}
+.kinds b{display:block}
+
+.changes{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px}
+.cut-list{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:c}
+.cut-list li{display:grid;grid-template-columns:26px 1fr;gap:8px}
+.cut-list li::before{counter-increment:c;content:counter(c);font-family:var(--f-mono);font-size:13px;color:var(--accent);padding-top:1px}
+.cut-list .why{color:var(--muted);font-size:14px}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{font:inherit;font-size:14px;font-weight:500;border:0;background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg button:focus-visible,.chip:focus-visible,.btn:focus-visible,.linkbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 12px;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.legend svg{display:block}
+.mapbox{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+#map{display:block;width:100%;min-width:980px;height:auto}
+
+#map .band{fill:var(--band)}
+#map .band.alt{fill:var(--band-alt)}
+#map .band-id{font-family:var(--f-mono);font-size:12px;fill:var(--muted);letter-spacing:.04em}
+#map .band-name{font-family:var(--f-display);font-size:17px;font-weight:700;fill:var(--ink)}
+#map .band-job{font-family:var(--f-body);font-size:12px;fill:var(--muted)}
+#map .item{cursor:pointer}
+#map .item:focus{outline:none}
+#map .item:focus-visible .shape{stroke:var(--accent);stroke-width:2.5}
+#map .node .shape{fill:var(--surface);stroke:var(--ink);stroke-width:1.3}
+#map .node.dashed .shape{stroke-dasharray:5 4}
+#map .node.cm .shape{stroke:var(--feedback)}
+#map .nid{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+#map .ntitle{font-family:var(--f-display);font-weight:600;fill:var(--ink)}
+#map .ntag{font-family:var(--f-body);font-size:10.5px;font-style:italic;fill:var(--muted)}
+#map .stop rect{fill:var(--ink)}
+#map .stop text{font-family:var(--f-mono);font-size:9px;fill:var(--bg);letter-spacing:.04em}
+#map .art .shape{fill:var(--art);stroke:var(--muted);stroke-width:1}
+#map .art .fold{fill:none;stroke:var(--muted);stroke-width:1}
+#map .art.record .shape{fill:var(--rec)}
+#map .art.generated .shape{stroke-dasharray:4 3}
+#map .ext .shape{fill:var(--ext);stroke:var(--muted);stroke-width:1}
+#map .exit .shape{fill:var(--ink);stroke:var(--ink)}
+#map .exit .alabel{fill:var(--bg)}
+#map .alabel{font-family:var(--f-body);font-size:12.5px;font-weight:600;fill:var(--ink)}
+#map .asub{font-family:var(--f-body);font-size:10.5px;fill:var(--muted)}
+
+#map .e{fill:none}
+#map .e.flow,#map .e.loop{stroke:var(--accent);stroke-width:1.7}
+#map .e.read{stroke:var(--input);stroke-width:1.2}
+#map .e.look{stroke:var(--input);stroke-width:1.2;stroke-dasharray:1.5 3.5}
+#map.mode-flow .e.look,#map.mode-back .e.look{display:none}
+#map .e.write{stroke:var(--muted);stroke-width:1}
+#map .e.back{stroke:var(--feedback);stroke-width:1.4;stroke-dasharray:6 4}
+#map .e.change{stroke:var(--feedback);stroke-width:1.6;stroke-dasharray:6 4}
+#map .e.ret{stroke:var(--feedback);stroke-width:1.7}
+#map .elabel{font-family:var(--f-body);font-size:11px;fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+#map .elabel.fb{fill:var(--feedback)}
+#map .m-flow{fill:var(--accent)} #map .m-read{fill:var(--input)} #map .m-write{fill:var(--muted)} #map .m-back{fill:var(--feedback)}
+
+#map.mode-flow .e.read,#map.mode-flow .e.back{display:none}
+#map.mode-inputs .e.back,#map.mode-inputs .e.change,#map.mode-inputs .e.ret{display:none}
+#map.mode-inputs .e.flow,#map.mode-inputs .e.loop{opacity:.18}
+#map.mode-inputs .elabel.flowlbl{opacity:.25}
+#map.mode-back .e.read{display:none}
+#map.mode-back .e.flow,#map.mode-back .e.loop,#map.mode-back .e.write{opacity:.18}
+#map.mode-back .elabel.flowlbl{opacity:.25}
+#map.has-sel .e{opacity:.06}
+#map.has-sel .e.on{display:inline!important;opacity:1;stroke-width:2.2}
+#map.has-sel .elabel{opacity:.15}
+#map.has-sel .elabel.on{opacity:1}
+#map.has-sel .item{opacity:.28}
+#map.has-sel .item.on{opacity:1}
+#map.has-sel .item.sel .shape{stroke:var(--accent);stroke-width:2.6}
+
+.trace{display:grid;gap:14px}
+.trace .empty{color:var(--muted)}
+.trace-head{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:baseline}
+.trace-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px 22px}
+.fld{display:grid;gap:5px;align-content:start;min-width:0}
+.fld > .k{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;background:var(--art);color:var(--ink);padding:3px 8px;cursor:pointer;text-align:left;line-height:1.35}
+.chip[disabled]{cursor:default}
+.chip small{color:var(--muted);font-size:11.5px}
+.chip.read{border-left:3px solid var(--input)}
+.chip.write{border-left:3px solid var(--muted)}
+.chip.flow{border-left:3px solid var(--accent)}
+.chip.back{border-left:3px solid var(--feedback)}
+.backlist{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.backlist li{display:grid;gap:2px}
+.backlist .when{font-size:13px;color:var(--muted)}
+.stoptag{display:inline-block;font-family:var(--f-mono);font-size:11px;background:var(--ink);color:var(--bg);border-radius:4px;padding:1px 6px;margin-right:6px}
+.nostoptag{display:inline-block;font-family:var(--f-mono);font-size:11px;border:1px solid var(--line);color:var(--muted);border-radius:4px;padding:0 6px;margin-right:6px}
+.changed{font-size:14px;border-left:3px solid var(--accent);padding-left:10px;color:var(--ink)}
+
+.wf{display:grid;gap:14px}
+.wf-head{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.wf-head .runs{font-size:14px;color:var(--muted)}
+.tagpill{font-family:var(--f-mono);font-size:11px;border:1px solid var(--feedback);color:var(--feedback);border-radius:999px;padding:1px 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:12px;align-content:start;min-width:0}
+.card-head{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.card-head .id{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.card .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.card .meta .wide{grid-column:1/-1}
+.linkbtn{font:inherit;font-size:12.5px;border:0;background:none;color:var(--accent);cursor:pointer;padding:2px 0;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+
+.shared{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px}
+.vflow{display:grid;gap:0}
+.vstep{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;background:var(--art);border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+.vstep .n{font-family:var(--f-mono);font-weight:500;color:var(--accent)}
+.vstep .side{grid-column:2;font-size:13.5px;color:var(--muted);border-left:3px solid var(--accent);padding-left:8px;margin-top:4px}
+.varrow{height:16px;margin-left:24px;border-left:1.6px solid var(--accent);position:relative}
+.varrow::after{content:"";position:absolute;left:-5px;bottom:-1px;border:4.5px solid transparent;border-top:6px solid var(--accent)}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--soft)}
+th{font-family:var(--f-display);font-weight:600;font-size:14px;background:var(--art)}
+tr:last-child td{border-bottom:0}
+td ul{margin:0;padding-left:18px}
+.matrix th,.matrix td{text-align:center;padding:6px 6px;font-variant-numeric:tabular-nums}
+.matrix th.rowh,.matrix td.rowh{text-align:left;position:sticky;left:0;background:var(--surface);white-space:nowrap;z-index:1}
+.matrix th.rowh{background:var(--art);z-index:2}
+.matrix th.col{font-family:var(--f-mono);font-size:11.5px;font-weight:500;white-space:nowrap}
+.matrix th.grp{font-family:var(--f-display);font-size:13px;border-left:1px solid var(--line)}
+.matrix td.gstart,.matrix th.gstart{border-left:1px solid var(--line)}
+.mk{display:inline-block;min-width:20px;font-family:var(--f-mono);font-size:11.5px;font-weight:500;border-radius:4px;padding:1px 4px}
+.mk.w{background:var(--ink);color:var(--bg)}
+.mk.r{border:1px solid var(--input);color:var(--input)}
+.mk.l{border:1px dotted var(--input);color:var(--input)}
+.mk.x{color:var(--muted);text-decoration:line-through;opacity:.7}
+.steptable td,.steptable th{min-width:110px}
+.steptable td:nth-child(2),.steptable th:nth-child(2){min-width:44px;font-family:var(--f-mono)}
+.steptable td:nth-child(7){min-width:200px}
+.steptable td:nth-child(9){min-width:230px}
+.steptable .ph{white-space:nowrap}
+.steptable ul{display:grid;gap:2px}
+.kind{font-family:var(--f-mono);font-size:11px;color:var(--muted);display:block}
+@media (max-width:560px){ .card .meta{grid-template-columns:1fr} .cards{grid-template-columns:1fr} .shared,.changes{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:no-preference){ #map .item,#map .e{transition:opacity .15s} }
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Revised workflow, for review</div>
+  <h1>Specifier Workflow Map</h1>
+  <p class="lede">From the client's documents to ready stories. Every artifact stays, because together they are the audit trail. The cuts are in the workflow: fewer steps and fewer stops.</p>
+  <div class="intro-grid">
+    <div class="panel">
+      <h3>Who does what</h3>
+      <dl class="who">
+        <dt>The specifiers<br><span class="note" style="font-weight:400">BA and PO</span></dt>
+        <dd><ul>
+          <li>answer every question</li>
+          <li>make every decision</li>
+          <li>accept every document</li>
+        </ul></dd>
+        <dt>The skills</dt>
+        <dd><ul>
+          <li>read the sources</li>
+          <li>draft</li>
+          <li>check</li>
+          <li>record</li>
+        </ul></dd>
+      </dl>
+      <p class="note" style="margin-top:10px">No one else takes part.</p>
+    </div>
+    <div class="panel">
+      <h3>Three kinds of file</h3>
+      <div class="kinds">
+        <div><svg width="30" height="22" aria-hidden="true"><path d="M2 2 H22 L28 8 V20 H2 Z" fill="var(--art)" stroke="var(--muted)"/></svg><div><b>Living document</b><span class="note">Kept current. Each fact has one home among them. Anywhere else, a fact appears as a reference by ID or as a word-for-word copy a program checks.</span></div></div>
+        <div><svg width="30" height="22" aria-hidden="true"><path d="M2 2 H22 L28 8 V20 H2 Z" fill="var(--rec)" stroke="var(--muted)"/></svg><div><b>Record</b><span class="note">Written at the time and never rewritten. This is the audit trail: how each decision was reached.</span></div></div>
+        <div><svg width="30" height="22" aria-hidden="true"><path d="M2 2 H22 L28 8 V20 H2 Z" fill="var(--art)" stroke="var(--muted)" stroke-dasharray="4 3"/></svg><div><b>Generated file</b><span class="note">Made by a program from living documents. Never edited by hand.</span></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Ground rules</h3>
+      <ul class="plain">
+        <li>Every living document carries its own decision record.</li>
+        <li>Look before you ask: the sources first, then the decision records of everything the step reads.</li>
+        <li>A later step never edits an accepted document. It sends the problem back.</li>
+        <li>Nothing is invented. Every line cites a source or a decision.</li>
+        <li>Words are agreed before features are written.</li>
+        <li>Phases 1 to 3 cover the whole product once. Phase 4 runs one EPIC at a time.</li>
+        <li>Stories are assembled from decisions already made.</li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<section aria-labelledby="chg-h">
+  <div class="sec-head">
+    <h2 id="chg-h">What changed in this version</h2>
+  </div>
+  <div class="changes">
+    <div class="panel">
+      <h3>Cuts in the workflow</h3>
+      <ol class="cut-list">
+        <li><div><b>probe-requirements now does the intake.</b> <span class="why">It lists the sources and which one wins. Same reading, and "which source wins" is just another question.</span></div></li>
+        <li><div><b>write-brd no longer runs its own discovery round.</b> <span class="why">It starts from the Discovery Brief and asks only what is still open. Before, it asked again what the probe had asked.</span></div></li>
+        <li><div><b>generate-epics has no approval stop for the EPIC Register.</b> <span class="why">The Register is a checked copy of the clustering option you already picked. Approving a copy adds nothing.</span></div></li>
+        <li><div><b>frd-author has no scope stop.</b> <span class="why">Done-when clauses and capabilities are settled once, in the Feature catalog, instead of once per FRD.</span></div></li>
+        <li><div><b>Design links are attached in draft-stories.</b> <span class="why">A lookup does not need a step of its own.</span></div></li>
+        <li><div><b>groom-stories and write-acceptance-criteria have no stops.</b> <span class="why">They assemble each story from decided pieces. The coverage gate and one ready mark per EPIC replace a gate per batch of four stories and a gate per story.</span></div></li>
+        <li><div><b>Change management has no separate sorting step.</b> <span class="why">change-impact already classifies each change.</span></div></li>
+        <li><div><b>Sources are read only in Phase 1.</b> <span class="why">After that, each step reads its nearest input and looks up the rest by ID. If something is missing, it goes back to the PRD.</span></div></li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Artifacts</h3>
+      <p style="margin-bottom:10px"><b>None are cut.</b> <span class="note">They are the audit trail. What changed is how they relate:</span></p>
+      <ul class="plain">
+        <li>Each file is now one of the three kinds above.</li>
+        <li>Sections that repeated another document now point to it:
+          <ul>
+            <li>BRD: NFRs and the user journey move to the PRD</li>
+            <li>PRD: scope moves to the BRD</li>
+            <li>PRD: per-feature business rules move to the FRDs</li>
+            <li>PRD: data requirements move to the Glossary (names) and the FRDs (what each capability keeps)</li>
+            <li>Glossary: role terms point to the PRD personas</li>
+            <li>Glossary: step terms carry names, not order</li>
+            <li>Story grooming sections point to the FRD, Feature catalog and BRD</li>
+          </ul>
+        </li>
+        <li>EPIC sequencing and EPIC mapping are generated, never hand-written.</li>
+        <li>EPIC detail is optional. It holds only EPIC-level success measures and NFRs.</li>
+        <li>The PRD holds every requirement word for word, numbered, with no priority and no grouping. Priority and capabilities live in the Feature catalog, which points to the requirements by number.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="map-section" aria-labelledby="map-h">
+  <div class="sec-head">
+    <h2 id="map-h">The map</h2>
+    <p class="note">Switch the view to see one kind of connection at a time. Select any step or file to trace everything it touches.</p>
+  </div>
+  <div class="toolbar">
+    <div class="seg" role="group" aria-label="Connections shown">
+      <button id="mode-flow" type="button" aria-pressed="true" data-mode="flow">Handoffs</button>
+      <button id="mode-inputs" type="button" aria-pressed="false" data-mode="inputs">Inputs</button>
+      <button id="mode-back" type="button" aria-pressed="false" data-mode="back">Routes back</button>
+    </div>
+    <div class="legend" aria-label="Legend">
+      <span><svg width="30" height="10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" stroke="var(--accent)" stroke-width="2"/></svg>handoff</span>
+      <span><svg width="30" height="10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" stroke="var(--input)" stroke-width="1.6"/></svg>reads</span>
+      <span><svg width="30" height="10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" stroke="var(--input)" stroke-width="1.6" stroke-dasharray="1.5 3.5"/></svg>looks up by ID</span>
+      <span><svg width="30" height="10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" stroke="var(--muted)" stroke-width="1.2"/></svg>writes</span>
+      <span><svg width="30" height="10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" stroke="var(--feedback)" stroke-width="1.8" stroke-dasharray="6 4"/></svg>sends back</span>
+      <span><svg width="30" height="10" aria-hidden="true"><line x1="0" y1="5" x2="30" y2="5" stroke="var(--feedback)" stroke-width="2"/></svg>re-run after a change</span>
+      <span><svg width="34" height="16" aria-hidden="true"><rect x="1" y="1" width="32" height="14" rx="3" fill="var(--ink)"/><text x="17" y="11.5" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--bg)">STOP</text></svg>the specifiers decide</span>
+    </div>
+    <button class="btn" id="clear" type="button">Clear selection</button>
+  </div>
+  <div class="mapbox">
+    <svg id="map" class="mode-flow" viewBox="0 0 1250 1300" role="group" aria-label="Swimlane map of the four phases and change management, with each skill, the files it reads and writes, and the routes back"></svg>
+  </div>
+  <div class="panel trace" id="trace" aria-live="polite"></div>
+</section>
+
+<section aria-labelledby="steps-h">
+  <div class="sec-head">
+    <h2 id="steps-h">Step by step</h2>
+    <p class="note">Reading means the step works through the whole document. Looking up means it fetches one item by its ID. <span id="readcount"></span></p>
+  </div>
+  <div class="tbl-wrap"><table class="steptable" id="steptable"></table></div>
+</section>
+
+<section aria-labelledby="sub-h">
+  <div class="sec-head">
+    <h2 id="sub-h">Every step</h2>
+    <p class="note">"Recording a decision" and "Sending back", named in the steps, are explained in the next section.</p>
+  </div>
+  <div id="cards" style="display:grid;gap:34px"></div>
+</section>
+
+<section aria-labelledby="shared-h">
+  <div class="sec-head">
+    <h2 id="shared-h">Used inside every step</h2>
+  </div>
+  <div class="shared">
+    <div class="panel">
+      <h3>Recording a decision</h3>
+      <p class="note" style="margin:4px 0 12px">Runs whenever a step needs something only the specifiers can settle.</p>
+      <div class="vflow">
+        <div class="vstep"><span class="n">1</span><div>A step needs something decided.</div></div>
+        <div class="varrow"></div>
+        <div class="vstep"><span class="n">2</span><div><b>Look first</b> in the sources and in the decision records of everything the step reads.</div><div class="side">Found: cite it. No question is asked.</div></div>
+        <div class="varrow"></div>
+        <div class="vstep"><span class="n">3</span><div><b>Write the question</b> in this document's decision record, with why it matters, the options, and whether it blocks.</div></div>
+        <div class="varrow"></div>
+        <div class="vstep"><span class="n">4</span><div><b>The specifiers answer.</b> The answer is recorded word for word, with the date.</div></div>
+        <div class="varrow"></div>
+        <div class="vstep"><span class="n">5</span><div><b>Act on the answer</b>, as in the table below.</div></div>
+        <div class="varrow"></div>
+        <div class="vstep"><span class="n">6</span><div><b>Close</b> the entry by listing every place its answer is used.</div></div>
+      </div>
+      <div class="tbl-wrap" style="margin-top:10px">
+        <table>
+          <thead><tr><th>The answer</th><th>What happens</th></tr></thead>
+          <tbody>
+            <tr><td>A clear answer</td><td>Apply it. Everything built on it cites its number.</td></tr>
+            <tr><td>"Assume X"</td><td>Apply it as an assumption. It is flagged wherever it is used.</td></tr>
+            <tr><td>"Out of scope"</td><td>Record it, leave it out here, and send it back to the BRD's scope.</td></tr>
+            <tr><td>It conflicts with a source</td><td>Decide which one wins, and record the winner.</td></tr>
+            <tr><td>It raises a new question</td><td>Write a new entry, linked to this one, and go back to step 3.</td></tr>
+            <tr><td>"Not yet"</td><td>Leave it open, with a date.
+              <ul>
+                <li>Doesn't block: carry on, marked TBD.</li>
+                <li>Blocks: the specifiers choose one of these:
+                  <ul><li>wait</li><li>assume</li><li>go ahead at risk</li></ul>
+                </li>
+              </ul></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Sending back</h3>
+      <p class="note" style="margin:4px 0 12px">Runs when a step finds a gap in a document written earlier.</p>
+      <div class="vflow">
+        <div class="vstep"><span class="n">1</span><div>A step finds a gap in an earlier document.</div></div>
+        <div class="varrow"></div>
+        <div class="vstep"><span class="n">2</span><div><b>Raise it in that document's decision record.</b> The earlier document is never edited from here.</div></div>
+        <div class="varrow"></div>
+        <div class="vstep"><span class="n">3</span><div><b>Route it</b> by the state of that document.</div>
+          <div class="side">Not yet accepted: its own step settles it.</div>
+          <div class="side">Already accepted: it goes through change management.</div></div>
+        <div class="varrow"></div>
+        <div class="vstep"><span class="n">4</span><div><b>The step that found it</b> waits, or carries on if the gap doesn't block it.</div></div>
+      </div>
+      <h3 style="margin:22px 0 8px">The decision record</h3>
+      <p class="note" style="margin-bottom:8px">Every living document carries one. Each entry holds:</p>
+      <ul class="plain">
+        <li>its number</li>
+        <li>the question</li>
+        <li>why it matters</li>
+        <li>the options offered</li>
+        <li>the answer or choice</li>
+        <li>the date it was given</li>
+        <li>every place it is used</li>
+        <li>its status:
+          <ul><li>open</li><li>answered</li><li>assumed</li><li>carried</li><li>closed</li></ul>
+        </li>
+      </ul>
+      <p class="note" style="margin-top:8px">Each acceptance is an entry too, with its date and the version accepted.</p>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="back-h">
+  <div class="sec-head">
+    <h2 id="back-h">Every route back</h2>
+    <p class="note">Every route back follows "Sending back". If the target is not yet accepted, its own step settles it. If it is accepted, it goes through change management.</p>
+  </div>
+  <div class="tbl-wrap"><table id="backtable"></table></div>
+  <h3 style="margin-top:8px">Loops</h3>
+  <div class="tbl-wrap"><table id="looptable"></table></div>
+</section>
+
+<section aria-labelledby="mx-h">
+  <div class="sec-head">
+    <h2 id="mx-h">Who reads what</h2>
+    <p class="note">Each row is a file. Each column is a step. Read a row left to right to see where a file is produced and where it is used downstream.</p>
+    <div class="legend">
+      <span><span class="mk w">W</span> produces it</span>
+      <span><span class="mk r">R</span> reads it</span>
+      <span><span class="mk l">L</span> looks up items in it by ID</span>
+      <span><span class="mk x">R</span> reads it today, and no longer</span>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table class="matrix" id="matrix"></table></div>
+</section>
+
+<section aria-labelledby="art-h">
+  <div class="sec-head">
+    <h2 id="art-h">Which file holds what</h2>
+    <p class="note">Read each row left to right: what the file is built from, the step that writes it, what it holds, and the steps that read it next. In "Reads from", the brackets name the step that wrote that input. Among living documents, a fact lives in one file only.</p>
+  </div>
+  <div class="tbl-wrap"><table id="arttable"></table></div>
+</section>
+
+<section aria-labelledby="open-h">
+  <div class="sec-head">
+    <h2 id="open-h">Still open</h2>
+  </div>
+  <div class="panel">
+    <ul class="plain">
+      <li><b>An FRD whose capability spans two EPICs.</b> Write all its rules the first time any of its features is in an EPIC, or extend it EPIC by EPIC.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var PH = [
+  {id:"P1", label:"Phase 1", name:"Requirements", runs:"Once", y:16, h:206},
+  {id:"P2", label:"Phase 2", name:"Features", runs:"Once, then kept current", y:246, h:242},
+  {id:"P3", label:"Phase 3", name:"EPICs", runs:"Once, then kept current", y:512, h:200},
+  {id:"P4", label:"Phase 4", name:"Stories", runs:"Once per EPIC, in Register order", y:736, h:314},
+  {id:"CM", label:"", name:"Change management", runs:"When a change reaches an accepted document", y:1074, h:216, tag:"second layer"}
+];
+
+var N = {
+ "1.1":{ph:"P1", title:["probe-requirements"], job:"Find what is known, assumed and missing before anything is written.",
+   reads:["SRC"], writes:["DB"],
+   does:["List the sources, and which one wins when two disagree.","Restate what is known, with its source.","Mark what is only assumed.","Ask the missing questions, blockers first, and record each answer."],
+   stop:"The specifiers answer the questions.", done:"No blocking question is open.",
+   hands:["1.2"], back:[], changed:"Now also does the intake: listing the sources and which one wins."},
+ "1.2":{ph:"P1", title:["write-brd"], job:"Say why the change is happening.",
+   reads:["SRC","DB"], writes:["BRD"],
+   does:["Start from the Discovery Brief. Ask only what it leaves open.",{t:"Write the BRD:", sub:["problem or opportunity","objectives and success metrics","scope in and out","business requirements (BR-xx)","risks and constraints","release-level acceptance criteria"]}],
+   stop:"Accept the BRD.", done:"Acceptance is recorded.",
+   hands:["1.3"], back:[{to:"1.1", when:"A source is missing."}], changed:"No separate discovery round of its own."},
+ "1.3":{ph:"P1", title:["write-prd"], job:"Say what the product must do, and for whom.",
+   reads:["SRC","DB","BRD"], writes:["PRD"],
+   does:[{t:"Write the PRD:", sub:["personas, and what each may do across the product","key user flows: the end-to-end journey","product-wide business rules","NFRs","transition requirements","other systems it depends on"]},"Place every requirement word for word, numbered, with no priority and no grouping."],
+   stop:"Accept the PRD.", done:"Acceptance is recorded.",
+   hands:["2.1"], back:[{to:"1.2", when:"An objective or the scope has to change."}]},
+
+ "2.1":{ph:"P2", title:["harvest"], tag:"Gate 1 and Gate 2", job:"Agree one word for each thing, and what it means.",
+   reads:["BRD","PRD"], writes:["GL","GLOG"],
+   does:["Read the BRD and PRD for the things, roles, steps and states.","Propose one word where several name one thing, and settle each at Gate 1.","Write each definition, and settle each at Gate 2.","Write the seven glossary files."],
+   stop:"Gate 1: which word wins. Gate 2: the definitions.", done:"Every Gate 1 and Gate 2 item is settled, or carried as not yet.",
+   hands:["2.2"], back:[{to:"1.3", when:"The PRD contradicts itself."}]},
+ "2.2":{ph:"P2", title:["define-features"], job:"Break the product into features, written in the agreed words.",
+   reads:["SRC","BRD","PRD","GL"], writes:["FC"],
+   does:["Group the requirements into features, named in the agreed words.","Group the features into modules. Each module is a capability.","Split each done when into clauses.","Set priority with its basis, and depends on.","Check every requirement is covered."],
+   stop:"Accept the Feature catalog.", done:"Acceptance is recorded, and every requirement is covered.",
+   hands:["3.1"], back:[{to:"1.3", when:"A requirement is unclear or missing."},{to:"2.1", when:"A new product word turns up."}],
+   changed:"Done-when clauses and capabilities are now settled here, once."},
+
+ "3.1":{ph:"P3", title:["cluster-features"], job:"Choose how features group into EPICs.",
+   reads:["FC","BRD"], writes:["CL"],
+   does:["Offer two or three ways to group the features, with pros and cons.","Settle borderline features.","Record dependencies between EPICs and a suggested order."],
+   stop:"Pick one option.", done:"An option is picked and recorded.",
+   hands:["3.2"], back:[{to:"2.2", when:"A feature or a dependency is wrong."}]},
+ "3.2":{ph:"P3", title:["generate-epics"], tag:"EPIC Register", job:"Turn the picked option into the EPIC Register.",
+   reads:["CL","FC"], writes:["REG","SEQ","MAP"],
+   does:["Copy the picked option into the EPIC Register, with its order.","Generate EPIC sequencing and EPIC mapping from it.","A program checks the copy."],
+   stop:null, nostop:"It is a checked copy of the option you picked.", done:"The copy check passes.",
+   hands:["4.1"], back:[], changed:"No approval stop."},
+
+ "4.1":{ph:"P4", title:["generate-epics"], tag:"EPIC detail, optional", dashed:true, job:"Set EPIC-level success measures and NFRs, if you want them.",
+   reads:["REG","BRD","PRD","FC"], writes:["ED"],
+   does:["Only when you want EPIC-level success measures or NFRs.","Everything else in it points to the EPIC Register, the BRD and the Feature catalog."],
+   stop:"Accept the measures and NFRs.", done:"Acceptance is recorded, or the step is skipped.",
+   hands:["4.2"], back:[{to:"1.2", when:"The EPIC needs an objective the BRD does not have."}], changed:"Holds only EPIC-level measures and NFRs."},
+ "4.2":{ph:"P4", title:["frd-author"], job:"State what must always be true, for each capability this EPIC touches.",
+   reads:["SRC","FC","PRD","GL"], writes:["FRD"],
+   does:[{t:"For each capability this EPIC touches:", sub:["an FRD covers these features: use it","an FRD exists but lacks them: extend it","no FRD: write it"]},"Write a rule for each done-when clause and requirement.","Answer the open questions, then accept."],
+   stop:"Answer open questions, then accept each FRD.", done:"Acceptance is recorded for each FRD.",
+   hands:["4.3"], back:[{to:"2.2", when:"A feature or its done when is wrong."},{to:"1.3", when:"A requirement is wrong or missing."},{to:"2.1", when:"A word is missing or wrong."}],
+   changed:"No scope stop. Clauses and capabilities come from the Feature catalog."},
+ "4.3":{ph:"P4", title:["draft-stories"], job:"Cut the EPIC into stories small enough to build.",
+   reads:["REG","FRD","GL","BRD","DS"], writes:["IDX","ST"],
+   does:["Cut the EPIC into stories, following the FRD flows.","Write each shell: title, As a, I want, So that.","Set order and size.","Attach design links, if a design exists."],
+   stop:"Approve the cut.", done:"The cut is approved.",
+   hands:["4.4"], back:[{to:"4.2", when:"A rule or a flow step is missing."}], changed:"Design links are attached here."},
+ "4.4":{ph:"P4", title:["groom-stories","write-acceptance-criteria"], tag:"assemble", job:"Fill each story from decided pieces. Nothing is decided here.",
+   reads:["IDX","ST","FRD","GL","BRD","FC","ED"], writes:["ST"],
+   does:[{t:"Fill each story with:", sub:["the rules it proves, from the FRD","its flow steps, from the FRD","its dependencies, from the Feature catalog","its metrics, from the BRD or EPIC detail"]},{t:"Write acceptance criteria:", sub:["one or more for each rule","behaviour only","each names the rule it proves"]},"A missing piece is sent back. Nothing is made up."],
+   stop:null, nostop:"Nothing is decided here.", done:"Every story is filled.",
+   hands:["4.5"], back:[{to:"4.3", when:"The cut doesn't fit the rules."},{to:"4.2", when:"A rule is missing."},{to:"2.2", when:"A dependency is missing."},{to:"2.1", when:"A role name or a word is missing."},{to:"1.2", when:"No objective gives the story its value."}],
+   changed:"No gate per batch of four, and no gate per story."},
+ "4.5":{ph:"P4", title:["coverage gate"], job:"Prove each story is complete and traceable.",
+   reads:["ST","FRD"], writes:["IDX"],
+   does:["Check every rule in this EPIC is proved by a criterion.","Check every copy matches its source.","Check nothing is invented.","Mark each story ready, then start the next EPIC."],
+   stop:"Mark the stories ready.", done:"Every story passes and is marked ready.",
+   hands:["READY","4.1"], back:[{to:"4.4", when:"A copy is wrong, or a criterion is missing."},{to:"4.3", when:"The cut is wrong."}]},
+
+ "C1":{ph:"CM", title:["traceability map"], tag:"find what is linked", job:"Find everything linked to what changed.",
+   reads:["CHG","TM"], writes:["CIR"],
+   does:[{t:"A change arrives as:", sub:["a new version of a source, listed by probe-requirements","a send-back to an accepted document"]},"List every item linked to the changed ID, at every level below."],
+   stop:null, nostop:"A program finds the links.", done:"Every linked item is listed.",
+   hands:["C2"], back:[]},
+ "C2":{ph:"CM", title:["blast-radius"], tag:"change-impact per item", job:"Judge each linked item.",
+   reads:[], writes:["CIR"],
+   does:[{t:"change-impact gives each item:", sub:["its impact class","a recommendation: no change, update, or new story","the specific edits"]}],
+   stop:null, nostop:"It recommends; the specifiers decide next.", done:"Every item has a verdict.",
+   hands:["C3"], back:[], changed:"Sorting the change is part of change-impact, not a step of its own."},
+ "C3":{ph:"CM", title:["decide"], tag:"in the touched document", job:"Decide each verdict in the document the change lands on.",
+   reads:["CIR"], writes:[],
+   does:["The specifiers decide each verdict, in that document's decision record."],
+   stop:"Decide each verdict.", done:"Every verdict is decided.",
+   hands:["C4"], back:[]},
+ "C4":{ph:"CM", title:["re-run"], tag:"touched steps only", job:"Re-run each touched step, for the touched items only.",
+   reads:[], writes:["VL"],
+   does:["Each touched step re-runs with its own stops.","Stories are re-filled and re-checked.","A story already built gets a new story for the difference.","version-log snapshots each changed document."],
+   stop:null, nostop:"Each re-run step keeps its own stops.", done:"Every touched step has re-run.",
+   hands:["RERUN"], back:[]}
+};
+var ORDER = ["1.1","1.2","1.3","2.1","2.2","3.1","3.2","4.1","4.2","4.3","4.4","4.5","C1","C2","C3","C4"];
+
+/* reads today (as on the earlier map), should read, looks up by ID, and why */
+var RD = {
+ "1.1":{today:["SRC"], reads:["SRC"], looks:[], why:"Phase 1 is the only place sources are read."},
+ "1.2":{today:["SRC","DB"], reads:["SRC","DB"], looks:[], why:"Phase 1."},
+ "1.3":{today:["SRC","DB","BRD"], reads:["SRC","DB","BRD"], looks:[], why:"Phase 1. It holds every requirement, so nothing later needs the sources."},
+ "2.1":{today:["SRC","BRD","PRD"], reads:["BRD","PRD"], looks:[], why:"The words that matter are the ones in our documents. The PRD keeps the client's wording."},
+ "2.2":{today:["SRC","BRD","PRD","GL"], reads:["PRD"], looks:["GL","BRD"], why:"The PRD holds every requirement. The Glossary only supplies names. The BRD only supplies the reason behind a priority."},
+ "3.1":{today:["FC","BRD"], reads:["FC"], looks:[], why:"Priority and its basis are already in the Feature catalog."},
+ "3.2":{today:["CL","FC"], reads:["CL"], looks:["FC"], why:"It copies the option you picked."},
+ "4.1":{today:["REG","BRD","PRD","FC"], reads:["REG"], looks:["BRD","PRD","FC"], why:"Everything it needs hangs off the EPIC Register row's IDs."},
+ "4.2":{today:["SRC","FC","PRD","GL"], reads:["FC"], looks:["PRD","GL"], why:"It quotes each requirement from the PRD, and its check compares against the PRD."},
+ "4.3":{today:["REG","FRD","GL","BRD","DS"], reads:["REG","FRD","DS"], looks:["GL","BRD"], why:"The EPIC row says which features. The FRD flows say where to cut."},
+ "4.4":{today:["IDX","ST","FRD","GL","BRD","FC","ED"], reads:["IDX","ST"], looks:["FRD","FC","BRD","ED","GL"], why:"Assembly is look-ups by ID, nothing else."},
+ "4.5":{today:["ST","FRD"], reads:["ST","FRD"], looks:[], why:"It is a check. It also looks up each copied item at its home."},
+ "C1":{today:["CHG","TM"], reads:["CHG","TM"], looks:[], why:"A program finds everything linked to the changed ID."},
+ "C2":{today:[], reads:["CIR"], looks:[], why:"change-impact judges one touched item at a time, looking each one up."},
+ "C3":{today:["CIR"], reads:["CIR"], looks:[], why:"The specifiers decide in the touched document."},
+ "C4":{today:[], reads:[], looks:[], why:"Each touched step re-runs with its own reads."}
+};
+ORDER.forEach(function(n){ var r = RD[n]; N[n].today = r.today; N[n].reads = r.reads; N[n].looks = r.looks; N[n].why = r.why; });
+
+var A = {
+ SRC:{name:"Sources", kind:"external", job:"What the client gave us.", contains:["client documents","the idea"]},
+ DS:{name:"Design", sub:"if any", kind:"external", job:"How it looks, when a design exists.", contains:["screens and layouts"]},
+ DB:{name:"Discovery Brief", kind:"record", job:"What we knew, assumed and asked before writing anything.", contains:["the sources, and which one wins","what is known, with its source","what is assumed","questions and answers","risks and edge cases"]},
+ BRD:{name:"BRD", kind:"living", job:"Why.", contains:["executive summary","background and current state","problem or opportunity","objectives and success metrics","scope in and out","business assumptions and dependencies","business requirements (BR-xx)","risks and constraints","release-level acceptance criteria","decision record"]},
+ PRD:{name:"PRD", kind:"living", job:"What, and for whom.", contains:["product overview","personas, and what each may do across the product","key user flows: the end-to-end journey","product-wide business rules","NFRs","transition requirements","other systems it depends on","requirements, numbered, word for word, with no priority and no grouping","decision record"]},
+ GL:{name:"Glossary", sub:"seven files", kind:"living", job:"The words.", contains:["terms and relationships","object terms","role terms, pointing to the PRD personas","step terms: names, not order","states and values","decision register"]},
+ GLOG:{name:"Glossary gate log", kind:"record", job:"How each word and definition was decided.", contains:["every Gate 1 and Gate 2 item","the evidence","the recommendation","the call"]},
+ FC:{name:"Feature catalog", kind:"living", job:"The product in pieces.", contains:["features, grouped by module (each module is a capability)","description","done when, split into clauses","covers: the PRD requirement numbers","priority and its basis","depends on","coverage check","decision record"]},
+ CL:{name:"Clustering", kind:"record", job:"How the EPIC grouping was chosen.", contains:["two or three grouping options, with pros and cons","the recommendation","the pick","borderline features","dependencies between EPICs","suggested sequence"]},
+ REG:{name:"EPIC Register", kind:"living", job:"What ships together, in what order.", contains:["EPIC name and outcome","its features","band","persona (the name)","depends on","order","decision record"]},
+ SEQ:{name:"EPIC sequencing", kind:"generated", job:"Order, from the EPIC Register.", contains:["order","what can run in parallel","critical path"]},
+ MAP:{name:"EPIC mapping", kind:"generated", job:"Features per EPIC, from the EPIC Register.", contains:["features per EPIC, with source IDs","coverage"]},
+ ED:{name:"EPIC detail", sub:"optional, one per EPIC", kind:"living", job:"EPIC-level measures and NFRs.", contains:["benefit hypothesis","EPIC-level success measures","EPIC-level NFRs","decision record","references to the EPIC Register, BRD and Feature catalog for everything else"]},
+ FRD:{name:"FRD", sub:"one per capability", kind:"living", job:"What must always be true.", contains:["lineage","depends on","last changed","excludes","requirements, quoted (a checked copy)","features covered","gates","actors","rules","coverage","flow","data","standard questions","open questions","decision record","check record"]},
+ IDX:{name:"Story index", sub:"one per EPIC", kind:"living", job:"The cut.", contains:["the stories, with titles and order","feature coverage","size","design links","ready marks","decision record"]},
+ ST:{name:"Story files", sub:"one per story", kind:"living", job:"The slice to build.", contains:["title","As a, I want, So that","in scope and out of scope","rules it proves (FRD IDs)","flow steps (from the FRD)","dependencies (from the Feature catalog)","metrics (from the BRD or EPIC detail)","design link","acceptance criteria, each naming its rule"]},
+ TM:{name:"Traceability map", kind:"generated", job:"Every ID, and everything linked to it.", contains:["every ID","everything that links to it"]},
+ CIR:{name:"Change Impact Report", kind:"record", job:"What a change touches, and the verdict for each.", contains:["each touched item","its impact class","the recommendation","the specific edits"]},
+ VL:{name:"Version log", kind:"record", job:"Snapshots of each document over time.", contains:["a stamped copy of each document","what changed since the last version"]}
+};
+var AORDER = ["SRC","DB","BRD","PRD","GL","GLOG","FC","CL","REG","SEQ","MAP","ED","FRD","DS","IDX","ST","TM","CIR","VL"];
+var KINDNAME = {living:"living document", record:"record", generated:"generated file", external:"from outside"};
+
+var X = [130,330,530,730,930,1130];
+var POS = {
+ SRC:[X[0],90], "1.1":[X[1],90], "1.2":[X[2],90], "1.3":[X[3],90],
+ DB:[X[1],172], BRD:[X[2],172], PRD:[X[3],172],
+ "2.1":[X[1],322], "2.2":[X[2],322],
+ GL:[X[1],405], GLOG:[X[1],458], FC:[X[2],405],
+ "3.1":[X[1],585], "3.2":[X[2],585],
+ CL:[X[1],668], REG:[X[2],668], SEQ:[X[3],668], MAP:[X[4],668],
+ "4.1":[X[1],840], "4.2":[X[2],840], "4.3":[X[3],840], "4.4":[X[4],840], "4.5":[X[5],840],
+ ED:[X[1],930], FRD:[X[2],930], IDX:[X[3],930], ST:[X[4],930], READY:[X[5],930], DS:[X[0],1005],
+ CHG:[X[0],1160], "C1":[X[1],1160], "C2":[X[2],1160], "C3":[X[3],1160], "C4":[X[4],1160],
+ TM:[X[1],1245], CIR:[X[2],1245], VL:[X[4],1245]
+};
+
+function kindOf(id){
+  if (N[id]) return "node";
+  if (A[id]) return A[id].kind;
+  if (id === "CHG") return "external";
+  if (id === "READY") return "exit";
+  return "node";
+}
+function box(id){
+  var p = POS[id], k = kindOf(id), w = 158, h = 44;
+  if (k === "node") { w = 172; h = id === "4.4" ? 74 : 58; }
+  if (id === "SRC") { w = 150; h = 46; }
+  if (id === "CHG") { w = 168; h = 58; }
+  if (id === "READY") { w = 150; h = 40; }
+  return {x:p[0], y:p[1], w:w, h:h};
+}
+function label(id){
+  if (N[id]) return id + " " + N[id].title.join(" and ");
+  if (A[id]) return A[id].name;
+  if (id === "CHG") return "Change in";
+  if (id === "READY") return "Ready stories";
+  if (id === "RERUN") return "the touched steps";
+  return id;
+}
+function writersOf(a){ return ORDER.filter(function(n){ return N[n].writes.indexOf(a) >= 0; }); }
+function readersOf(a){ return ORDER.filter(function(n){ return N[n].reads.indexOf(a) >= 0; }); }
+var READS_FROM_NOTE = {SRC:"outside the workflow", DS:"outside the workflow", TM:"every living document, by a program", VL:"each document that changed"};
+function readsFromOf(a){
+  var seen = {}, out = [];
+  writersOf(a).forEach(function(w){
+    N[w].reads.forEach(function(r){
+      if (r === a || seen[r]) return;
+      seen[r] = true;
+      var src = r === "CHG" ? "a new version or a send-back" : (writersOf(r).length ? writersOf(r).join(", ") : (r === "TM" ? "made by a program" : "outside"));
+      out.push({id:r, src:src});
+    });
+  });
+  return out;
+}
+function readsFromHTML(a){
+  if (READS_FROM_NOTE[a] && !readsFromOf(a).length) return "<span class=\"note\">" + READS_FROM_NOTE[a] + "</span>";
+  var list = readsFromOf(a);
+  if (READS_FROM_NOTE[a]) list.push({id:"", src:READS_FROM_NOTE[a]});
+  return "<ul>" + list.map(function(x){
+    if (!x.id) return "<li><span class=\"note\">" + x.src + "</span></li>";
+    return "<li>" + (x.id === "CHG" ? "Change in" : A[x.id].name) + " <span class=\"note\">(" + x.src + ")</span></li>";
+  }).join("") + "</ul>";
+}
+
+var E = [];
+function P(pts){ return "M" + pts.map(function(p){ return p[0] + " " + p[1]; }).join(" L"); }
+function flow(from, to, d, lbl, lx, ly, cls, anchor){ E.push({type:cls || "flow", from:from, to:to, d:d, label:lbl, lx:lx, ly:ly, anchor:anchor || "middle", custom:true}); }
+function straight(a, b){
+  var A1 = box(a), B1 = box(b);
+  flow(a, b, P([[A1.x + A1.w/2, A1.y],[B1.x - B1.w/2, B1.y]]), "");
+}
+straight("SRC","1.1"); straight("1.1","1.2"); straight("1.2","1.3");
+flow("1.3","2.1", P([[730,194],[730,234],[56,234],[56,322],[244,322]]), "PRD accepted", 400, 228);
+straight("2.1","2.2");
+flow("2.2","3.1", P([[530,427],[530,500],[56,500],[56,585],[244,585]]), "Feature catalog accepted", 300, 494);
+straight("3.1","3.2");
+flow("3.2","4.1", P([[530,690],[530,724],[56,724],[56,840],[244,840]]), "EPIC Register, in order", 300, 718);
+straight("4.1","4.2"); straight("4.2","4.3"); straight("4.3","4.4"); straight("4.4","4.5");
+flow("4.5","READY", P([[1130,869],[1130,908]]), "ready", 1142, 893, "flow", "start");
+flow("4.5","4.1", P([[1130,811],[1130,782],[330,782],[330,811]]), "next EPIC", 730, 776, "loop");
+straight("CHG","C1"); straight("C1","C2"); straight("C2","C3"); straight("C3","C4");
+flow("DB","CHG", P([[251,172],[22,172],[22,1160],[46,1160]]), "new version of a source", 150, 166, "change");
+E.push({type:"ret", from:"C4", to:"RERUN", d:P([[1016,1160],[1236,1160],[1236,90],[1222,90]]), custom:true});
+E.push({type:"ret", from:"C4", to:"RERUN", d:P([[1236,322],[1222,322]]), custom:true});
+E.push({type:"ret", from:"C4", to:"RERUN", d:P([[1236,585],[1222,585]]), custom:true});
+E.push({type:"ret", from:"C4", to:"RERUN", d:P([[1236,840],[1218,840]]), custom:true});
+E.push({type:"read", from:"DS", to:"4.3", d:"M205 1005 H630 V900 C630 884 660 890 660 869", custom:true});
+
+ORDER.forEach(function(n){
+  N[n].writes.forEach(function(a){ if (POS[a] && !(n === "4.5" && a === "IDX")) E.push({type:"write", from:n, to:a}); });
+  N[n].reads.forEach(function(a){ if (POS[a] && a !== "DS" && a !== "CHG" && N[n].writes.indexOf(a) < 0) E.push({type:"read", from:a, to:n}); });
+  N[n].looks.forEach(function(a){ if (POS[a]) E.push({type:"look", from:a, to:n}); });
+  N[n].back.forEach(function(b){ E.push({type:"back", from:n, to:b.to, when:b.when}); });
+});
+
+var NORM = {top:[0,-1], bottom:[0,1], left:[-1,0], right:[1,0]};
+var ports = {};
+E.forEach(function(e){
+  if (e.custom) return;
+  var a = box(e.from), b = box(e.to), dy = b.y - a.y, dx = b.x - a.x;
+  if (e.type === "back" && Math.abs(dy) < 12) { e.sa = "top"; e.sb = "top"; }
+  else if (Math.abs(dy) >= 50) { e.sa = dy > 0 ? "bottom" : "top"; e.sb = dy > 0 ? "top" : "bottom"; }
+  else { e.sa = dx > 0 ? "right" : "left"; e.sb = dx > 0 ? "left" : "right"; }
+  [["a", e.from, e.sa, b],["b", e.to, e.sb, a]].forEach(function(t){
+    var key = t[1] + "|" + t[2];
+    (ports[key] = ports[key] || []).push({e:e, end:t[0], other:t[3]});
+  });
+});
+Object.keys(ports).forEach(function(key){
+  var list = ports[key], parts = key.split("|"), side = parts[1], bx = box(parts[0]);
+  var horiz = side === "top" || side === "bottom";
+  list.sort(function(p, q){ return horiz ? p.other.x - q.other.x : p.other.y - q.other.y; });
+  var span = (horiz ? bx.w : bx.h) * 0.72, n = list.length;
+  list.forEach(function(p, i){
+    var off = n === 1 ? 0 : -span/2 + span * (i + 0.5) / n;
+    var pt = side === "top" ? [bx.x + off, bx.y - bx.h/2] : side === "bottom" ? [bx.x + off, bx.y + bx.h/2] :
+             side === "left" ? [bx.x - bx.w/2, bx.y + off] : [bx.x + bx.w/2, bx.y + off];
+    if (p.end === "a") p.e.pa = pt; else p.e.pb = pt;
+  });
+});
+E.forEach(function(e){
+  if (e.custom) return;
+  var p1 = e.pa, p2 = e.pb, n1 = NORM[e.sa], n2 = NORM[e.sb];
+  var dist = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+  var k = Math.max(28, Math.min(170, dist * 0.4));
+  if (e.sa === "top" && e.sb === "top") k = Math.max(36, Math.min(110, 30 + Math.abs(p2[0] - p1[0]) * 0.2));
+  e.d = "M" + p1[0].toFixed(1) + " " + p1[1].toFixed(1) +
+        " C" + (p1[0] + n1[0]*k).toFixed(1) + " " + (p1[1] + n1[1]*k).toFixed(1) +
+        " " + (p2[0] + n2[0]*k).toFixed(1) + " " + (p2[1] + n2[1]*k).toFixed(1) +
+        " " + p2[0].toFixed(1) + " " + p2[1].toFixed(1);
+});
+
+var NS = "http://www.w3.org/2000/svg";
+var svg = document.getElementById("map");
+function el(tag, attrs, parent, text){
+  var x = document.createElementNS(NS, tag);
+  for (var k in attrs) x.setAttribute(k, attrs[k]);
+  if (text != null) x.textContent = text;
+  if (parent) parent.appendChild(x);
+  return x;
+}
+var defs = el("defs", {}, svg);
+[["flow","m-flow"],["read","m-read"],["write","m-write"],["back","m-back"]].forEach(function(m){
+  var mk = el("marker", {id:"ar-" + m[0], viewBox:"0 0 10 10", refX:"9", refY:"5", markerWidth:"7", markerHeight:"7", orient:"auto-start-reverse"}, defs);
+  el("path", {d:"M0 0 L10 5 L0 10 z", "class":m[1]}, mk);
+});
+var MARK = {flow:"flow", loop:"flow", read:"read", look:"read", write:"write", back:"back", change:"back", ret:"back"};
+
+var gBands = el("g", {}, svg), gEdges = el("g", {}, svg), gItems = el("g", {}, svg), gLabels = el("g", {}, svg);
+PH.forEach(function(w, i){
+  el("rect", {x:8, y:w.y, width:1234, height:w.h, rx:10, "class":"band" + (i % 2 ? " alt" : "")}, gBands);
+  var x = 74;
+  if (w.label) { el("text", {x:x, y:w.y + 22, "class":"band-id"}, gBands, w.label); x += 62; }
+  el("text", {x:x, y:w.y + 22, "class":"band-name"}, gBands, w.name);
+  el("text", {x:x + w.name.length * 9.4 + 14, y:w.y + 22, "class":"band-job"}, gBands, w.runs + (w.tag ? " (" + w.tag + ")" : ""));
+});
+
+var edgeEls = [];
+E.forEach(function(e){
+  var p = el("path", {d:e.d, "class":"e " + e.type, "marker-end":"url(#ar-" + MARK[e.type] + ")"}, gEdges);
+  var t = label(e.from) + " to " + label(e.to);
+  if (e.type === "back") t = label(e.from) + " sends back to " + label(e.to) + ": " + e.when;
+  if (e.type === "read") t = label(e.to) + " reads " + label(e.from);
+  if (e.type === "look") t = label(e.to) + " looks up items in " + label(e.from) + " by ID";
+  if (e.type === "write") t = label(e.from) + " writes " + label(e.to);
+  el("title", {}, p, t);
+  e.el = p;
+  if (e.label) e.lel = el("text", {x:e.lx, y:e.ly, "text-anchor":e.anchor, "class":"elabel flowlbl" + (e.type === "change" ? " fb" : "")}, gLabels, e.label);
+  edgeEls.push(e);
+});
+var lblRet = el("text", {x:0, y:0, "text-anchor":"middle", transform:"translate(1229 1030) rotate(-90)", "class":"elabel fb"}, gLabels, "re-runs the touched steps");
+E.filter(function(e){ return e.type === "ret"; })[0].lel = lblRet;
+
+var itemEls = {};
+function drawItem(id){
+  var b = box(id), k = kindOf(id), g;
+  var cls = "item " + (k === "node" ? "node" : k === "exit" ? "exit" : k === "external" ? "ext" : "art " + k);
+  if (k === "node" && N[id].dashed) cls += " dashed";
+  if (k === "node" && N[id].ph === "CM") cls += " cm";
+  g = el("g", {"class":cls, tabindex:"0", role:"button", "data-id":id, "aria-label":label(id)}, gItems);
+  var x0 = b.x - b.w/2, y0 = b.y - b.h/2;
+  if (k === "node") {
+    var d = N[id];
+    el("rect", {x:x0, y:y0, width:b.w, height:b.h, rx:6, "class":"shape"}, g);
+    var lines = d.title, tag = d.tag, long = lines.some(function(s){ return s.length > 17; });
+    var fs = long ? 12.5 : 15, lh = long ? 14 : 16;
+    var total = 13 + lines.length * lh + (tag ? 13 : 0);
+    var y = b.y - total/2 + 10;
+    el("text", {x:b.x, y:y, "text-anchor":"middle", "class":"nid"}, g, id);
+    lines.forEach(function(s){ y += lh; el("text", {x:b.x, y:y, "text-anchor":"middle", "class":"ntitle", "font-size":fs}, g, s); });
+    if (tag) { y += 13; el("text", {x:b.x, y:y, "text-anchor":"middle", "class":"ntag"}, g, tag); }
+    if (d.stop) {
+      var sg = el("g", {"class":"stop"}, g);
+      el("rect", {x:x0 + b.w - 36, y:y0 + 5, width:31, height:13, rx:3}, sg);
+      el("text", {x:x0 + b.w - 20.5, y:y0 + 14.5, "text-anchor":"middle"}, sg, "STOP");
+    }
+  } else if (k === "external" || k === "exit") {
+    el("rect", {x:x0, y:y0, width:b.w, height:b.h, rx:b.h/2, "class":"shape"}, g);
+    var name = label(id), sub = id === "CHG" ? "new version or send-back" : (A[id] && A[id].sub) || "";
+    el("text", {x:b.x, y:b.y + (sub ? -2 : 4), "text-anchor":"middle", "class":"alabel"}, g, name);
+    if (sub) el("text", {x:b.x, y:b.y + 13, "text-anchor":"middle", "class":"asub"}, g, sub);
+  } else {
+    var f = 10;
+    el("path", {d:"M" + x0 + " " + y0 + " H" + (x0 + b.w - f) + " L" + (x0 + b.w) + " " + (y0 + f) + " V" + (y0 + b.h) + " H" + x0 + " Z", "class":"shape"}, g);
+    el("path", {d:"M" + (x0 + b.w - f) + " " + y0 + " V" + (y0 + f) + " H" + (x0 + b.w), "class":"fold"}, g);
+    var s2 = A[id].sub || (k === "record" ? "record" : k === "generated" ? "generated" : "");
+    el("text", {x:b.x, y:b.y + (s2 ? -2 : 4), "text-anchor":"middle", "class":"alabel"}, g, A[id].name);
+    if (s2) el("text", {x:b.x, y:b.y + 13, "text-anchor":"middle", "class":"asub"}, g, s2);
+  }
+  itemEls[id] = g;
+  g.addEventListener("click", function(ev){ ev.stopPropagation(); select(id, false); });
+  g.addEventListener("keydown", function(ev){ if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(id, false); } });
+}
+Object.keys(POS).forEach(drawItem);
+
+var trace = document.getElementById("trace");
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function listHTML(items){
+  return "<ul class=\"plain\">" + items.map(function(s){
+    if (typeof s === "string") return "<li>" + esc(s) + "</li>";
+    return "<li>" + esc(s.t) + "<ul>" + s.sub.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></li>";
+  }).join("") + "</ul>";
+}
+function chip(id, cls, small){
+  var target = POS[id] ? id : "";
+  return "<button type=\"button\" class=\"chip " + cls + "\"" + (target ? " data-go=\"" + target + "\"" : " disabled") + ">" + esc(label(id)) + (small ? " <small>" + esc(small) + "</small>" : "") + "</button>";
+}
+function fld(k, inner){ return "<div class=\"fld\"><div class=\"k\">" + k + "</div>" + inner + "</div>"; }
+function chips(arr){ return arr.length ? "<div class=\"chips\">" + arr.join("") + "</div>" : "<span class=\"note\">None</span>"; }
+function readChips(n){
+  return N[n].reads.map(function(a){
+    if (a === "CHG") return chip("CHG", "read", "new version or send-back");
+    var w = writersOf(a); return chip(a, "read", w.length ? "from " + w.join(", ") : "from outside");
+  });
+}
+function handsChips(n){
+  return N[n].hands.map(function(h){
+    if (h === "READY") return chip("READY", "flow", "out of the workflow");
+    if (h === "RERUN") return chip("RERUN", "flow", "as touched");
+    return chip(h, "flow", h === "4.1" && n === "4.5" ? "next EPIC" : "");
+  });
+}
+function backHTML(arr, key){
+  return arr.length ? "<ul class=\"backlist\">" + arr.map(function(b){ return "<li>" + chip(b[key], "back", "") + "<span class=\"when\">" + esc(b.when) + "</span></li>"; }).join("") + "</ul>" : "<span class=\"note\">None</span>";
+}
+function receivesBack(n){
+  var out = [];
+  ORDER.forEach(function(m){ N[m].back.forEach(function(b){ if (b.to === n) out.push({from:m, when:b.when}); }); });
+  return out;
+}
+function stopHTML(d){
+  return d.stop ? "<span><span class=\"stoptag\">STOP</span>" + esc(d.stop) + "</span>" : "<span><span class=\"nostoptag\">no stop</span>" + esc(d.nostop) + "</span>";
+}
+function phaseOf(d){ return PH.filter(function(w){ return w.id === d.ph; })[0]; }
+function nodeTrace(n){
+  var d = N[n], ph = phaseOf(d);
+  return "<div class=\"trace-head\"><span class=\"eyebrow\">" + esc((ph.label ? ph.label + " " : "") + ph.name) + "</span><h3>" + n + " " + esc(d.title.join(" and ")) + (d.tag ? " <span class=\"note\" style=\"font-weight:400\">(" + esc(d.tag) + ")</span>" : "") + "</h3></div>" +
+    "<p>" + esc(d.job) + "</p>" + (d.note ? "<p class=\"note\">" + esc(d.note) + "</p>" : "") + (d.changed ? "<p class=\"changed\">Changed: " + esc(d.changed) + "</p>" : "") +
+    "<div class=\"trace-grid\">" +
+      fld("Reads", chips(readChips(n))) + fld("Looks up by ID", chips(d.looks.map(function(a){ return chip(a, "read", ""); }))) +
+      fld("Writes", chips(d.writes.map(function(a){ return chip(a, "write", ""); }))) +
+      fld("Stop", stopHTML(d)) + fld("Hands off to", chips(handsChips(n))) +
+      fld("Sends back to", backHTML(d.back, "to")) + fld("Receives back from", backHTML(receivesBack(n), "from")) +
+      fld("Done when", "<span>" + esc(d.done) + "</span>") + fld("What it does", listHTML(d.does)) +
+    "</div>";
+}
+function artTrace(a){
+  var d = A[a];
+  return "<div class=\"trace-head\"><span class=\"eyebrow\">" + esc(KINDNAME[d.kind]) + "</span><h3>" + esc(d.name) + (d.sub ? " <span class=\"note\" style=\"font-weight:400\">(" + esc(d.sub) + ")</span>" : "") + "</h3></div>" +
+    "<p>" + esc(d.job) + "</p>" +
+    "<div class=\"trace-grid\">" +
+      fld("Reads from", readsFromHTML(a)) +
+      fld("Holds", listHTML(d.contains)) +
+      fld("Written in", chips(writersOf(a).map(function(n){ return chip(n, "write", ""); }))) +
+      fld("Read by", chips(readersOf(a).map(function(n){ return chip(n, "read", ""); }))) +
+    "</div>";
+}
+function otherTrace(id){
+  if (id === "CHG") return "<div class=\"trace-head\"><span class=\"eyebrow\">input to change management</span><h3>Change in</h3></div><p>A change reaches an accepted document in one of two ways:</p><ul class=\"plain\"><li>a new version of a source, listed by probe-requirements</li><li>a send-back to a document that is already accepted</li></ul>";
+  return "<div class=\"trace-head\"><span class=\"eyebrow\">out of the workflow</span><h3>Ready stories</h3></div><p>Stories that passed the coverage gate and are marked ready. Phase 4 then starts the next EPIC.</p>";
+}
+function emptyTrace(){
+  trace.innerHTML = "<p class=\"empty\">Select any step or file on the map to see what it reads, what it writes, whether it stops for the specifiers, where it hands off and where it sends things back.</p>";
+}
+function select(id, scroll){
+  svg.classList.add("has-sel");
+  Object.keys(itemEls).forEach(function(k){ itemEls[k].classList.remove("on", "sel"); });
+  itemEls[id].classList.add("on", "sel");
+  edgeEls.forEach(function(e){
+    var hit = e.from === id || e.to === id || (id === "C4" && e.type === "ret");
+    e.el.classList.toggle("on", hit);
+    if (e.lel) e.lel.classList.toggle("on", hit);
+    if (hit) { if (itemEls[e.from]) itemEls[e.from].classList.add("on"); if (itemEls[e.to]) itemEls[e.to].classList.add("on"); }
+  });
+  trace.innerHTML = N[id] ? nodeTrace(id) : A[id] ? artTrace(id) : otherTrace(id);
+  if (scroll) document.getElementById("map-section").scrollIntoView({behavior:"smooth", block:"start"});
+}
+function clearSel(){
+  svg.classList.remove("has-sel");
+  Object.keys(itemEls).forEach(function(k){ itemEls[k].classList.remove("on", "sel"); });
+  edgeEls.forEach(function(e){ e.el.classList.remove("on"); if (e.lel) e.lel.classList.remove("on"); });
+  emptyTrace();
+}
+svg.addEventListener("click", clearSel);
+document.getElementById("clear").addEventListener("click", clearSel);
+document.addEventListener("click", function(ev){
+  var t = ev.target.closest ? ev.target.closest("[data-go]") : null;
+  if (t) select(t.getAttribute("data-go"), true);
+});
+document.querySelectorAll(".seg button").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var mode = btn.getAttribute("data-mode");
+    svg.classList.remove("mode-flow", "mode-inputs", "mode-back");
+    svg.classList.add("mode-" + mode);
+    document.querySelectorAll(".seg button").forEach(function(b){ b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
+    try { localStorage.setItem("swm-mode", mode); } catch (e) {}
+  });
+});
+try { var m = localStorage.getItem("swm-mode"); if (m) { var b0 = document.querySelector(".seg button[data-mode=\"" + m + "\"]"); if (b0) b0.click(); } } catch (e) {}
+emptyTrace();
+
+document.getElementById("cards").innerHTML = PH.map(function(w){
+  var ids = ORDER.filter(function(n){ return N[n].ph === w.id; });
+  return "<div class=\"wf\"><div class=\"wf-head\"><h3>" + esc((w.label ? w.label + " " : "") + w.name) + "</h3><span class=\"runs\">" + esc(w.runs) + "</span>" + (w.tag ? "<span class=\"tagpill\">" + esc(w.tag) + "</span>" : "") + "</div>" +
+    "<div class=\"cards\">" + ids.map(function(n){
+      var d = N[n];
+      return "<article class=\"card\">" +
+        "<div class=\"card-head\"><div><div class=\"id\">" + n + (d.tag ? " (" + esc(d.tag) + ")" : "") + "</div><h3>" + esc(d.title.join(" and ")) + "</h3></div>" +
+        "<button type=\"button\" class=\"linkbtn\" data-go=\"" + n + "\">Show on map</button></div>" +
+        "<p>" + esc(d.job) + "</p>" + (d.note ? "<p class=\"note\">" + esc(d.note) + "</p>" : "") + (d.changed ? "<p class=\"changed\">Changed: " + esc(d.changed) + "</p>" : "") +
+        "<div class=\"meta\">" +
+          fld("Reads", chips(readChips(n))) + fld("Looks up by ID", chips(d.looks.map(function(a){ return chip(a, "read", ""); }))) +
+          "<div class=\"wide\">" + fld("Writes", chips(d.writes.map(function(a){ return chip(a, "write", ""); }))) + "</div>" +
+          "<div class=\"wide\">" + fld("What it does", listHTML(d.does)) + "</div>" +
+          "<div class=\"wide\">" + fld("Stop", stopHTML(d)) + "</div>" +
+          fld("Done when", "<span>" + esc(d.done) + "</span>") + fld("Hands off to", chips(handsChips(n))) +
+          "<div class=\"wide\">" + fld("Sends back to", backHTML(d.back, "to")) + "</div>" +
+        "</div></article>";
+    }).join("") + "</div></div>";
+}).join("");
+
+function fileList(ids){
+  if (!ids.length) return "<span class=\"note\">none</span>";
+  return "<ul>" + ids.map(function(a){ return "<li>" + (a === "CHG" ? "the change" : esc(A[a].name)) + "</li>"; }).join("") + "</ul>";
+}
+function usedDownstream(n){
+  var at = ORDER.indexOf(n), parts = [];
+  N[n].writes.forEach(function(a){
+    var users = [];
+    ORDER.forEach(function(m, j){
+      if (j <= at) return;
+      if (N[m].reads.indexOf(a) >= 0) users.push(m + " " + N[m].title.join(" and ") + " (reads)");
+      else if (N[m].looks.indexOf(a) >= 0) users.push(m + " " + N[m].title.join(" and ") + " (looks up)");
+    });
+    var body = users.length ? "<ul>" + users.map(function(u){ return "<li>" + esc(u) + "</li>"; }).join("") + "</ul>" : "<span class=\"note\">no later step reads it (kept for audit)</span>";
+    parts.push("<b>" + esc(A[a].name) + "</b>" + body);
+  });
+  if (N[n].hands.indexOf("READY") >= 0) parts.push("<ul><li>ready stories leave the workflow</li><li>the next EPIC starts at 4.1</li></ul>");
+  if (N[n].hands.indexOf("RERUN") >= 0) parts.push("<ul><li>the touched steps re-run</li></ul>");
+  return parts.join("") || "<span class=\"note\">none</span>";
+}
+document.getElementById("steptable").innerHTML = "<thead><tr><th>Phase</th><th>Step</th><th>Step name</th><th>Reads today</th><th>Should read</th><th>Looks up by ID</th><th>Why</th><th>Produces</th><th>Used downstream (where)</th></tr></thead><tbody>" +
+  ORDER.map(function(n){
+    var d = N[n], ph = phaseOf(d);
+    return "<tr><td class=\"ph\">" + esc((ph.label ? ph.label + " " : "") + ph.name) + "</td><td>" + n + "</td><td>" + esc(d.title.join(" and ")) + (d.tag ? "<span class=\"kind\">" + esc(d.tag) + "</span>" : "") + "</td>" +
+      "<td>" + fileList(d.today) + "</td><td>" + fileList(d.reads) + "</td><td>" + fileList(d.looks) + "</td>" +
+      "<td>" + esc(d.why) + "</td>" +
+      "<td>" + (d.writes.length ? "<ul>" + d.writes.map(function(a){ return "<li>" + esc(A[a].name) + "<span class=\"kind\">" + esc(KINDNAME[A[a].kind]) + "</span></li>"; }).join("") + "</ul>" : (n === "C3" ? "entries in the touched document's decision record" : "<span class=\"note\">none</span>")) + "</td>" +
+      "<td>" + usedDownstream(n) + "</td></tr>";
+  }).join("") + "</tbody>";
+(function(){
+  var t = 0, s = 0, st = 0, ss = 0;
+  ORDER.forEach(function(n){ t += N[n].today.length; s += N[n].reads.length; if (N[n].today.indexOf("SRC") >= 0) st++; if (N[n].reads.indexOf("SRC") >= 0) ss++; });
+  document.getElementById("readcount").textContent = "Reads drop from " + t + " to " + s + ". Sources are read in " + ss + " steps instead of " + st + ".";
+})();
+
+var rows = [];
+ORDER.forEach(function(n){ N[n].back.forEach(function(b){ rows.push("<tr><td>" + chip(n, "back", "") + "</td><td>" + chip(b.to, "back", "") + "</td><td>" + esc(b.when) + "</td></tr>"); }); });
+document.getElementById("backtable").innerHTML = "<thead><tr><th>From</th><th>Sends back to</th><th>When</th></tr></thead><tbody>" + rows.join("") + "</tbody>";
+var loops = [
+  ["Review", "Every step with a stop", "Each change the specifiers ask for is recorded, applied and reviewed again, until it is accepted."],
+  ["Recording a decision", "Every step", "A conflict goes back to the specifiers to decide which source wins. A new question becomes a new linked entry."],
+  ["Coverage gate", "4.5 to 4.4 or 4.3", "A failed check goes back to filling or to the cut, until every story passes."],
+  ["Next EPIC", "4.5 to 4.1", "Once an EPIC's stories are ready, the next EPIC in the Register starts."],
+  ["New version of a source", "Discovery Brief to change management", "Once Phase 1 is done, a new version of a source enters as a change."],
+  ["Re-run after a change", "C4 to the touched steps", "Each touched step re-runs for the touched items only. Stories are re-filled."]
+];
+document.getElementById("looptable").innerHTML = "<thead><tr><th>Loop</th><th>Where</th><th>What it does</th></tr></thead><tbody>" + loops.map(function(l){ return "<tr><td><b>" + esc(l[0]) + "</b></td><td>" + esc(l[1]) + "</td><td>" + esc(l[2]) + "</td></tr>"; }).join("") + "</tbody>";
+
+var mx = "<thead><tr><th class=\"rowh\" rowspan=\"2\">File</th>";
+PH.forEach(function(w){ var c = ORDER.filter(function(n){ return N[n].ph === w.id; }).length; mx += "<th class=\"grp\" colspan=\"" + c + "\">" + esc(w.label || "Change") + "</th>"; });
+mx += "</tr><tr>";
+ORDER.forEach(function(n, i){ var gs = i === 0 || N[ORDER[i-1]].ph !== N[n].ph; mx += "<th class=\"col" + (gs ? " gstart" : "") + "\" title=\"" + esc(label(n)) + "\">" + n + "</th>"; });
+mx += "</tr></thead><tbody>";
+AORDER.forEach(function(a){
+  mx += "<tr><td class=\"rowh\">" + chip(a, "", "") + "</td>";
+  ORDER.forEach(function(n, i){
+    var gs = i === 0 || N[ORDER[i-1]].ph !== N[n].ph, c = "";
+    if (N[n].reads.indexOf(a) >= 0) c += "<span class=\"mk r\" title=\"" + esc(label(n)) + " reads " + esc(A[a].name) + "\">R</span>";
+    else if (N[n].today.indexOf(a) >= 0) c += "<span class=\"mk x\" title=\"" + esc(label(n)) + " reads " + esc(A[a].name) + " today, and no longer\">R</span>";
+    if (N[n].looks.indexOf(a) >= 0) c += (c ? " " : "") + "<span class=\"mk l\" title=\"" + esc(label(n)) + " looks up items in " + esc(A[a].name) + " by ID\">L</span>";
+    if (N[n].writes.indexOf(a) >= 0) c += (c ? " " : "") + "<span class=\"mk w\" title=\"" + esc(label(n)) + " writes " + esc(A[a].name) + "\">W</span>";
+    mx += "<td" + (gs ? " class=\"gstart\"" : "") + ">" + c + "</td>";
+  });
+  mx += "</tr>";
+});
+document.getElementById("matrix").innerHTML = mx + "</tbody>";
+
+document.getElementById("arttable").innerHTML = "<thead><tr><th>File</th><th>Its job</th><th>Reads from</th><th>Written in</th><th>Holds</th><th>Read by</th></tr></thead><tbody>" +
+  AORDER.map(function(a){
+    var d = A[a], w = writersOf(a), r = readersOf(a);
+    return "<tr><td>" + chip(a, "", "") + "<span class=\"kind\">" + esc(KINDNAME[d.kind]) + (d.sub ? ", " + esc(d.sub) : "") + "</span></td>" +
+      "<td>" + esc(d.job) + "</td>" +
+      "<td>" + readsFromHTML(a) + "</td>" +
+      "<td>" + (w.length ? "<ul>" + w.map(function(n){ return "<li>" + esc(label(n)) + "</li>"; }).join("") + "</ul>" : "<span class=\"note\">outside the workflow</span>") + "</td>" +
+      "<td>" + listHTML(d.contains) + "</td>" +
+      "<td>" + (r.length ? "<ul>" + r.map(function(n){ return "<li>" + esc(label(n)) + "</li>"; }).join("") + "</ul>" : "<span class=\"note\">none</span>") + "</td></tr>";
+  }).join("") + "</tbody>";
+
+})();
+</script>

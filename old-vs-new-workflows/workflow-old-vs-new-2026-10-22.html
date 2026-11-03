@@ -1,0 +1,749 @@
+<title>Old vs New Workflow</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column. A gates summary first, then one comparison table per part of the workflow,
+   then what is kept, what is not covered yet, and what is still open. Same palette and type as the swimlane page. */
+:root{
+  --bg:#F1F4F5; --surface:#FFFFFF; --ink:#16202A; --muted:#566370; --line:#C6CFD5; --soft:#DDE4E8;
+  --accent:#1C5A85; --feedback:#C2560A; --input:#6150A3; --old:#F6F2EC; --new:#EEF4F9;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F151A; --surface:#162029; --ink:#E2E8ED; --muted:#93A1AD; --line:#2D3944; --soft:#22303B;
+    --accent:#74B3E2; --feedback:#F0A157; --input:#AE9EEB; --old:#221E19; --new:#17242F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F151A; --surface:#162029; --ink:#E2E8ED; --muted:#93A1AD; --line:#2D3944; --soft:#22303B;
+  --accent:#74B3E2; --feedback:#F0A157; --input:#AE9EEB; --old:#221E19; --new:#17242F;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1380px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:28px 64px;display:grid;gap:18px}
+.wrap > *{min-width:0}
+h1{font-family:var(--f-display);font-size:clamp(28px,4vw,38px);font-weight:700;margin:0;line-height:1.15;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:22px;font-weight:600;margin:18px 0 0;text-wrap:balance}
+h2 .ph{font-family:var(--f-mono);font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+p{margin:0;max-width:80ch}
+.lede{color:var(--muted);font-size:16px}
+a{color:var(--accent)}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;display:grid;gap:8px;max-width:90ch}
+.box b{font-family:var(--f-display);font-weight:600;font-size:16px}
+ul,ol{margin:0;padding-left:20px;display:grid;gap:3px}
+.controls{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:14px;position:sticky;top:env(safe-area-inset-top, 0px);z-index:2;background:var(--bg);padding-block:8px}
+.controls .lbl{color:var(--muted);margin-right:4px}
+.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+.cmp{min-width:1180px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--soft)}
+th{font-family:var(--f-display);font-weight:600;font-size:14.5px;background:var(--surface)}
+tr:last-child td{border-bottom:0}
+td ul,td ol{padding-left:18px;gap:2px}
+td ul ul{margin-top:2px}
+.cmp th:nth-child(1){width:3%} .cmp th:nth-child(2){width:9%} .cmp th:nth-child(3),.cmp th:nth-child(4){width:21%}
+.cmp th:nth-child(5),.cmp th:nth-child(6){width:16%} .cmp th:nth-child(7){width:14%}
+td.num{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+td.what{font-family:var(--f-display);font-weight:600;font-size:15px}
+td.old{background:var(--old)} td.new{background:var(--new)}
+th.old{background:var(--old)} th.new{background:var(--new)}
+.src{display:block;margin-top:6px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted);line-height:1.45}
+code{font-family:var(--f-mono);font-size:.9em}
+.who{display:inline-block;font-family:var(--f-mono);font-size:11.5px;border-radius:4px;padding:1px 7px;margin-bottom:4px;white-space:nowrap}
+.who.you{background:var(--accent);color:var(--surface)}
+.who.rec{border:1px solid var(--accent);color:var(--accent)}
+.who.prop{border:1px solid var(--feedback);color:var(--feedback)}
+.q{display:block;font-style:italic;color:var(--muted);font-size:13.5px}
+.stops{min-width:720px}
+.stops td.n{font-family:var(--f-mono);font-size:15px;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+.note{font-size:13.5px;color:var(--muted)}
+.open{border-left:4px solid var(--feedback)}
+@media (max-width:760px){
+  .cmp{min-width:0}
+  .cmp thead{display:none}
+  .cmp, .cmp tbody, .cmp tr, .cmp td{display:block;width:auto}
+  .cmp tr{border-bottom:2px solid var(--line);padding-block:6px}
+  .cmp td{border-bottom:0;padding:6px 12px}
+  .cmp td[data-label]::before{content:attr(data-label);display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .cmp td.num{display:inline-block;padding-right:0}
+  .cmp td.what{display:inline-block}
+  .cmp td.num::before,.cmp td.what::before{display:none}
+}
+</style>
+
+<div class="wrap">
+  <h1>Old vs New Workflow</h1>
+  <p class="lede">What the toolkit does today, set against the redesigned workflow, row by row. Each row gives the reason for the change and the rationale for the answer, with who decided it. An earlier drawing, the <a href="https://claude.ai/artifact/9cyPF86VmH6CTjz3XDgYMk">Specifier Workflow Swimlane</a>, predates several of these decisions.</p>
+
+  <div class="box">
+    <b>What to do with this page</b>
+    <ul>
+      <li>Read each row: old, new, reason, rationale.</li>
+      <li>Rows marked <span class="who prop">My proposal</span> were never put to you as a question. Challenge any of them in chat by row number.</li>
+      <li>Rows 56 to 59 were my proposals until 22 October, when you decided each one. Their quotes say how.</li>
+    </ul>
+    <span class="note">"Old" is your existing toolkit, read from its files; each old cell names its source. Nothing in those files has been changed.</span>
+  </div>
+
+  <h2>The new shape at a glance</h2>
+  <p class="note">Four workflows run one after another. The requirement-update workflow runs whenever you raise a change. The Glossary package sits on top of them all, because every workflow uses the Glossary. Every author skill runs probing-questions-author and the grader, grade-questions.cjs, inside itself, so they aren't listed as steps of their own.</p>
+  <div class="tbl-wrap">
+    <table class="stops">
+      <thead><tr><th>Workflow</th><th>Skills, in order</th><th>Runs</th><th>Ends with</th></tr></thead>
+      <tbody>
+        <tr><td><b>Glossary package</b><br><span class="note">on top of every workflow</span></td>
+          <td><ul><li>glossary-author, today harvest</li><li>glossary-check, today check</li><li>glossary-disposition, today disposition</li></ul></td>
+          <td>built once, right after the PRD is accepted; then used by every workflow</td>
+          <td>the Glossary</td></tr>
+        <tr><td><b>Requirements</b></td>
+          <td><ul><li>discovery-author</li><li>brd-author</li><li>prd-author</li></ul></td>
+          <td>once per product</td>
+          <td>the accepted PRD</td></tr>
+        <tr><td><b>Features and EPICs</b></td>
+          <td><ul><li>feature-author</li><li>epic-grouping-author</li><li>epic-author, register mode, for the EPIC register</li></ul></td>
+          <td>once</td>
+          <td>the EPIC register and the EPIC brief list</td></tr>
+        <tr><td><b>FRD</b></td>
+          <td><ul><li>frd-author</li></ul></td>
+          <td>all FRDs up front, after Features and EPICs, in EPIC register order</td>
+          <td>an accepted FRD</td></tr>
+        <tr><td><b>Stories</b></td>
+          <td><ul><li>epic-author, brief mode, for the EPIC brief</li><li>story-drafter</li><li>story-groomer</li><li>ac-author</li></ul></td>
+          <td>once per EPIC, in EPIC register order</td>
+          <td>the EPIC's stories marked ready</td></tr>
+        <tr><td><b>Requirement-update</b></td>
+          <td><ul><li>glossary-check, on any document you bring from outside</li><li>glossary-disposition, only when glossary-check finds a word that doesn't match the Glossary</li><li>change-impact-author, which runs feature-impact on each linked item</li><li>then the workflows its recommendation names</li></ul></td>
+          <td>whenever you raise a change, at any time</td>
+          <td>an accepted recommendation, then new versions of the documents it names</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Gates, workflow by workflow</h2>
+  <p class="note">A decision review gate, or "gate" for short, is a point where the specifiers must decide before the work goes on. The old toolkit had no single name for it. Old counts are as written in each skill's SKILL.md.</p>
+  <div class="tbl-wrap">
+    <table class="stops">
+      <thead><tr><th>Workflow</th><th class="old">Old</th><th class="n old">Old total</th><th class="new">New</th><th class="n new">New total</th></tr></thead>
+      <tbody>
+        <tr><td><b>Requirements</b></td>
+          <td><ul><li>probe-requirements: 2, only if the idea is thin</li><li>write-brd: 2</li><li>write-prd: 5, plus more when requirements are shown one group at a time</li></ul></td>
+          <td class="n">7 to 9+</td>
+          <td><ul><li>accept the Discovery brief</li><li>accept the BRD</li><li>accept the PRD</li></ul></td>
+          <td class="n">3</td></tr>
+        <tr><td><b>Glossary package</b>, the build</td>
+          <td><ul><li>outside the flow: harvest's 2 gates, when it is run</li></ul></td>
+          <td class="n">0, or 2</td>
+          <td><ul><li>Gate 1: the words</li><li>Gate 2: the definitions</li></ul></td>
+          <td class="n">2</td></tr>
+        <tr><td><b>Features and EPICs</b></td>
+          <td><ul><li>define-features: 3</li><li>cluster-features: 2 to 3</li><li>the EPIC Register: 1</li><li>1 per EPIC detail file: 16 in the MCP run</li></ul></td>
+          <td class="n">22 to 23</td>
+          <td><ul><li>accept the Feature catalog</li><li>pick an option and confirm the EPIC brief list</li></ul></td>
+          <td class="n">2</td></tr>
+        <tr><td><b>FRD</b>, per FRD</td>
+          <td><ul><li>not in the pipeline</li><li>frd-author in its sandbox:<ul><li>Scope</li><li>Draft, plus one per open question</li><li>Changes and acceptance</li></ul></li></ul></td>
+          <td class="n">3+</td>
+          <td><ul><li>accept the FRD, with the Must answer questions it builds on asked first</li></ul></td>
+          <td class="n">1</td></tr>
+        <tr><td><b>Stories</b>, per EPIC<br><span class="note">EPIC-001: 8 stories</span></td>
+          <td><ul><li>draft-stories: 8</li><li>groom-stories: 3 per batch of up to 4, so 6</li><li>write-acceptance-criteria: 2 per story, so 16</li></ul></td>
+          <td class="n">30</td>
+          <td><ul><li>story-drafter: all 8 stories together</li><li>story-groomer: all 8 together</li><li>ac-author: all 8 together; accepting it marks them ready</li><li>plus 1 if the EPIC is on the EPIC brief list</li></ul></td>
+          <td class="n">3 to 4</td></tr>
+        <tr><td><b>Requirement-update</b>, per change</td>
+          <td><ul><li>approve the blast-radius report</li><li>then every re-run skill's own gates</li></ul></td>
+          <td class="n">many</td>
+          <td><ul><li>settle each word that doesn't match the Glossary, at glossary-disposition's gate, only when a document you bring holds one</li><li>accept the recommendation</li><li>then the path's normal gates:<ul><li>net new: 7 to 9, or 9 to 11 with new words</li><li>extend: 5 or 6, plus 1 when the change renames an agreed word, and 1 when the BRD holds the changed thing</li><li>update: 3 or 4, plus 1 when the change renames an agreed word, and 1 when the BRD holds the changed thing</li></ul></li><li>or no more gates, when you choose to insert a small update in place</li></ul><span class="note">The glossary-disposition gates follow from your row 40 call.</span></td>
+          <td class="n">1 + path, or 2 + path when a word doesn't match</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">The new counts are the design. They hold only if the rebuilt skills keep to one gate each, so that becomes a build requirement for orchestration. The old EPIC detail gates sat in Phase 3; the new EPIC brief gate sits at the start of each EPIC's stories.</p>
+
+  <div class="controls" role="group" aria-label="Filter the rows">
+    <span class="lbl">Show</span>
+    <button class="btn" type="button" id="f-all" data-f="all" aria-pressed="true">All changes</button>
+    <button class="btn" type="button" id="f-you" data-f="you" aria-pressed="false">Your calls</button>
+    <button class="btn" type="button" id="f-prop" data-f="prop" aria-pressed="false">My proposals</button>
+  </div>
+
+  <section class="part">
+  <h2><span class="ph">Across the workflow</span>The whole workflow</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">1</td><td class="what">Pieces joined</td>
+        <td class="old"><ul><li>Three toolsets, each run on its own:<ul><li>the specifier pipeline</li><li>the glossary skills: harvest, check, disposition</li><li>frd-author, in a sandbox</li></ul></li><li>The pipeline's six steps name neither the Glossary nor the FRD.</li></ul>
+          <span class="src">.claude/skills/_shared/pipeline.md, Steps<br>glossary_methodology/skill-orchestration.md<br>frd_experiment/README.md</span></td>
+        <td class="new"><ul><li>One connected set of workflows (row 6).</li><li>The Glossary package sits on top of all of them.</li><li>The FRD has its own workflow.</li><li>A requirement-update workflow handles every change, at any time.</li></ul></td>
+        <td>Words and rules were decided outside the flow, or not at all, so stories were written before either existed.</td>
+        <td>Stories can only be assembled when the words and the rules are settled first. Joining the three puts each decision ahead of the step that needs it.</td>
+        <td><span class="who you">You</span><span class="q">“put them all together and see if all the pieces of the jigsaw are there”</span></td></tr>
+      <tr data-who="you"><td class="num">2</td><td class="what">Who decides</td>
+        <td class="old"><ul><li>Each skill ends with HUMAN ACTION REQUIRED, for whoever runs it.</li><li>No role is named for the gates.</li></ul>
+          <span class="src">.claude/WORKFLOW.md, "What the specifier does at each phase"</span></td>
+        <td class="new"><ul><li>The specifiers, the BA and the PO, make every decision.</li><li>Skills read, draft, check and record.</li><li>Programs check and generate.</li></ul></td>
+        <td>A gate with no named owner is easy to wave through.</td>
+        <td>Two named roles keep it simple. Anyone else's input reaches the flow as a source, through discovery-author.</td>
+        <td><span class="who you">You</span><span class="q">“just the BA/PO.. Call the specifiers. No one else is needed”</span></td></tr>
+      <tr data-who="you"><td class="num">3</td><td class="what">How often you stop</td>
+        <td class="old"><ul><li>Almost every step inside a skill ends with a gate.</li><li>draft-stories has eight gated steps per EPIC.</li><li>write-acceptance-criteria stops twice per story.</li></ul>
+          <span class="src">each skill's SKILL.md</span></td>
+        <td class="new"><ul><li>Draft first, decide once: a skill drafts the whole document, its check program runs, then the specifiers decide once, at its gate.</li><li>Copies and generated files get a program check and no gate.</li></ul></td>
+        <td>Many gates approve a partial draft or a copy, so approvals turn into rubber stamps.</td>
+        <td>One gate per document, with the whole draft and the check results in front of you, means fewer and better-informed decisions.</td>
+        <td><span class="who you">You</span><span class="q">“what i was looking at was a serious cut in the workflow”</span></td></tr>
+      <tr data-who="you"><td class="num">4</td><td class="what">Order of the EPICs</td>
+        <td class="old"><ul><li>Phase 4 runs draft-stories "for an EPIC's features"; no order between EPICs is set.</li><li>auto-spec runs EPICs in parallel.</li></ul>
+          <span class="src">.claude/skills/specifier/SKILL.md, Phase 4<br>_shared/pipeline.md, "What the two drivers differ on"</span></td>
+        <td class="new"><ul><li>One EPIC at a time, in EPIC register order.</li><li>A program picks the next EPIC.</li><li>The Stories workflow ends when every EPIC's stories are ready.</li></ul></td>
+        <td>Without an order, any EPIC can be detailed or storied at any time, and nothing shows what is done.</td>
+        <td>Slice by slice matches agile delivery: each EPIC goes from detail to ready stories before the next one starts.</td>
+        <td><span class="who you">You</span><span class="q">“Slice by slice is the way to go because we are in an agile setup”</span></td></tr>
+      <tr data-who="you"><td class="num">5</td><td class="what">Where each fact lives</td>
+        <td class="old"><ul><li>Facts repeat across documents:<ul><li>personas: PRD section 3, the EPIC Register's persona column, and draft-stories step 3, which locks them again from the sources</li><li>journeys: BRD section 8 and PRD section 7</li></ul></li><li>All files are treated alike.</li></ul>
+          <span class="src">write-prd, "The document (sections)"<br>write-brd, Phase 2<br>draft-stories, "The eight gated steps"</span></td>
+        <td class="new"><ul><li>Each fact has one home in a living document; others look it up by ID.</li><li>Three kinds of file:<ul><li>living: changes only through change management</li><li>record: written once; a change adds an entry</li><li>generated: rebuilt by a program</li></ul></li><li>Every artifact is kept.</li></ul></td>
+        <td>The same fact in two places drifts, and nobody knows which one is right.</td>
+        <td>Keeping every artifact keeps the audit trail. One home per fact stops the drift. Records and generated files are never edited by hand, so they can't drift.</td>
+        <td><span class="who you">You</span><span class="q">“why would i have personas in 2 places, why journeys twice”</span><span class="q">“the reason for having these files were audit trail”</span></td></tr>
+      <tr data-who="you"><td class="num">6</td><td class="what">Units of work</td>
+        <td class="old"><ul><li>One pipeline of six steps, BRD to stories, run by the specifier skill.</li><li>The Glossary and the FRD sit outside it.</li></ul>
+          <span class="src">.claude/skills/_shared/pipeline.md, Steps<br>.claude/skills/specifier/SKILL.md</span></td>
+        <td class="new"><ul><li>Five workflows, each doing one to four jobs with the skills it needs:<ul><li>Requirements</li><li>Features and EPICs</li><li>FRD</li><li>Stories</li><li>Requirement-update</li></ul></li><li>The Glossary package sits on top of all five.</li><li>Each workflow keeps its own gates; every skill can still be run on its own.</li></ul></td>
+        <td>One long pipeline is hard to manage, resume or reason about. The Glossary is used everywhere, yet it sat in no step.</td>
+        <td>A few workflows with clear starts and ends are easier to run and to hand over. The Glossary sits on top because every workflow uses it. The FRD gets its own workflow because an FRD covers a capability, which can span EPICs.</td>
+        <td><span class="who you">You</span><span class="q">“workflows have 2-3 jobs to be done”</span><span class="q">“frd should get its own workflows”</span><span class="q">“the glossary stuff is a layer on top of things”</span></td></tr>
+      <tr data-who="you"><td class="num">7</td><td class="what">Skill names</td>
+        <td class="old"><ul><li>Each skill is named in its own style; the name often doesn't say which document it writes:<ul><li>probe-requirements</li><li>write-brd</li><li>write-prd</li><li>harvest</li><li>define-features</li><li>cluster-features</li><li>generate-epics</li><li>frd-author</li><li>draft-stories</li><li>groom-stories</li><li>write-acceptance-criteria</li></ul></li></ul>
+          <span class="src">.claude/skills/<br>glossary_methodology/.skills/<br>frd_experiment/frd-author/</span></td>
+        <td class="new"><ul><li>A skill that writes a document is named after it, plus "-author":<ul><li>discovery-author</li><li>brd-author</li><li>prd-author</li><li>feature-author</li><li>epic-grouping-author</li><li>epic-author</li><li>frd-author</li><li>ac-author</li><li>change-impact-author</li></ul></li><li>probing-questions-author drafts and rates every question. It isn't a step of its own: every author skill runs it inside itself.</li><li>The Glossary package shares one first word:<ul><li>glossary-author</li><li>glossary-check</li><li>glossary-disposition</li></ul></li><li>Two story skills are named for their job:<ul><li>story-drafter</li><li>story-groomer</li></ul></li><li>change-impact is renamed feature-impact, so the name says it judges one item.</li></ul></td>
+        <td>You couldn't tell from a name what it produces. For example, "harvest" doesn't say Glossary.</td>
+        <td>One pattern makes every skill easy to find from the document it writes. The story skills are named for their job, so you can stop each one on its own.</td>
+        <td><span class="who you">You</span><span class="q">“for homogeneity, next time around we will use brd-author, prd-author, feature-author etc.”</span><span class="q">“story-drafter, story-groomer, ac-author”</span><span class="q">epic-grouping-author, 19 October</span><span class="q">probing-questions-author, 21 October</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">Requirements workflow</span>Requirements</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">8</td><td class="what">probe-requirements<span class="src">now discovery-author</span></td>
+        <td class="old"><ul><li>Runs "only if the idea is thin".</li><li>Two gates: answer the questions, then review the Discovery Brief.</li></ul>
+          <span class="src">.claude/WORKFLOW.md, Phase 1<br>probe-requirements, "Mandatory steps"</span></td>
+        <td class="new"><ul><li>Always the first step.</li><li>Also does intake: lists every source, and which one wins when two disagree.</li><li>Its record is the Discovery brief:<ul><li>the sources</li><li>the order of authority</li><li>every topic, compared across the sources (row 50)</li><li>the clashes, and how each was settled</li></ul></li><li>Its questions go to the Question log (row 54).</li><li>One gate: Accept the Discovery brief?</li></ul></td>
+        <td><ul><li>When it ran, write-brd asked its own discovery questions again.</li><li>Nothing said which source wins when two disagree.</li><li>Answers to the questions had no stated home.</li></ul></td>
+        <td>One discovery round, with its questions in the one Question log and its answers in the Discovery brief's decision record. Sources are read only in the Requirements workflow, so this is where they are listed, ranked and compared.</td>
+        <td><span class="who you">You</span><span class="q">“yes, discovery-author runs first”</span><span class="q">its gate's question and the Question log, 21 October</span></td></tr>
+      <tr data-who="you"><td class="num">9</td><td class="what">write-brd<span class="src">now brd-author</span></td>
+        <td class="old"><ul><li>Its own two-phase flow: discovery questions, then the BRD.</li><li>Nine sections, including section 8, User Journey.</li></ul>
+          <span class="src">write-brd, "Phase 1 — Discovery" and "Phase 2 — The BRD"</span></td>
+        <td class="new"><ul><li>No discovery round: it reads the Discovery brief.</li><li>No journey section: the journey moves to the PRD (row 11).</li><li>No NFR section: NFRs move to the PRD (row 42).</li><li>Its gaps become questions in the Question log, and each gap names its question, such as "TBD, question 7" (row 54).</li><li>Objectives and business requirements may be Proposed, when no file gives them (row 55).</li><li>One gate: accept the BRD.</li></ul></td>
+        <td>Discovery happened twice, and the journey was written twice.</td>
+        <td>The BRD keeps its own job: the why, the objectives, the business requirements and the release criteria.</td>
+        <td><span class="who you">You</span><span class="q">follows from your calls in rows 8 and 11</span><span class="q">gaps as questions, and Proposed objectives and business requirements, 21 October</span></td></tr>
+      <tr data-who="you"><td class="num">10</td><td class="what">write-prd<span class="src">now prd-author</span></td>
+        <td class="old"><ul><li>Five gated steps; requirements shown one group at a time.</li><li>Each FR gets a MoSCoW priority and is grouped by capability.</li></ul>
+          <span class="src">write-prd, "The gated flow", step 3</span></td>
+        <td class="new"><ul><li>Holds the requirements word for word, with no priority and no grouping.</li><li>No separate business-rules or data sections: decided rules live in the FRDs, data in the FRDs and the Glossary.</li><li>Also holds:<ul><li>personas</li><li>NFRs, each with an ID (row 42)</li><li>the journey</li><li>the transition requirements</li></ul></li><li>Records where each requirement's wording came from (row 43).</li><li>One gate: accept the PRD.</li></ul></td>
+        <td>Priority and grouping were set twice: in the PRD, then again by define-features and cluster-features.</td>
+        <td>The PRD is the record of what was asked. Priority belongs in the Feature catalog and grouping in the EPIC grouping, where each is decided with its reason.</td>
+        <td><span class="who you">You</span><span class="q">“the features should be prioritized. the PRD should hold what was asked for”</span><span class="q">“A”, dropping the business-rules and data sections</span></td></tr>
+      <tr data-who="you"><td class="num">11</td><td class="what">The journey</td>
+        <td class="old"><ul><li>BRD section 8, User Journey.</li><li>PRD section 7, Key User Flows.</li><li>groom-stories writes a 4 to 7 step User Flow for each story.</li></ul>
+          <span class="src">write-brd; write-prd; groom-stories, step 2</span></td>
+        <td class="new"><ul><li>The end-to-end journey lives only in the PRD.</li><li>The flow inside each capability lives in its FRD.</li><li>The Glossary's Steps page shows how steps connect (comes before, produces, locks), as the glossary method has it.</li><li>Stories point to the FRD flow.</li></ul></td>
+        <td>Three places wrote a journey, at three levels, with nothing tying them together.</td>
+        <td>The PRD owns the path across capabilities, and each FRD owns the path inside one. The Glossary keeps its Steps page so its method is reused unchanged and Feature Fit can draw a change's journey from it. Stories reuse a flow that is already decided.</td>
+        <td><span class="who rec">You, on my recommendation</span></td></tr>
+      <tr data-who="you"><td class="num">12</td><td class="what">Transition requirements</td>
+        <td class="old"><ul><li>No section for them in the BRD or the PRD.</li></ul>
+          <span class="src">write-brd, 9 sections<br>write-prd, 11 sections</span></td>
+        <td class="new"><ul><li>Their own numbered section in the PRD.</li><li>Ones that need building flow down to features.</li><li>Ones that don't stay in the PRD and are checked against the BRD's release criteria.</li></ul></td>
+        <td>BABOK v3 names transition requirements as their own class, for example data conversion and training. The toolkit had no home for them.</td>
+        <td>The PRD already holds the other solution requirements, so they get the same treatment and their own IDs.</td>
+        <td><span class="who rec">You, on my recommendation</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">Glossary package, then Features and EPICs</span>The Glossary and the features</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">13</td><td class="what">When the Glossary is built</td>
+        <td class="old"><ul><li>A separate run, whenever you choose.</li><li>harvest reads "requirements and/or feature catalog"; the sweep reads the whole catalog.</li></ul>
+          <span class="src">harvest, "Reads"<br>glossary_methodology/skill-orchestration.md, part 3</span></td>
+        <td class="new"><ul><li>One Glossary package, on top of every workflow:<ul><li>glossary-author builds it</li><li>glossary-check finds words that don't match</li><li>glossary-disposition decides what to do with each mismatch</li></ul></li><li>Built right after the PRD is accepted, before feature-author.</li><li>Reads the BRD and the PRD.</li><li>Both gates in one run, as today.</li></ul></td>
+        <td>Features, FRDs and stories could be written before the words were agreed, then checked for drift afterwards.</td>
+        <td>With the words agreed first, every document from the Feature catalog on is written in them, and drift becomes the exception.</td>
+        <td><span class="who you">You</span><span class="q">“I want the downstream to be in aligned with the glossary”</span><span class="q">“disposition belongs to glossary”</span><span class="q">“the glossary stuff is a layer on top of things”</span></td></tr>
+      <tr data-who="you"><td class="num">14</td><td class="what">Glossary decision records</td>
+        <td class="old"><ul><li>One decision is written by hand into three files:<ul><li>the gate log</li><li>the decision register</li><li>each section's decisions file</li></ul></li><li>The method says "nothing is written twice", yet the columns repeat.</li><li>After Gate 1, three more places are also updated by hand:<ul><li>Gate 2's "Also written as"</li><li>the retired-words table on each kind page</li><li>the assembly draft</li></ul></li></ul>
+          <span class="src">glossary output-formats.md, "Where each decision is recorded"</span></td>
+        <td class="new"><ul><li>The gate log is the only place a glossary decision is written.</li><li>Programs fill every other place from it:<ul><li>the decision register and the section decisions files, by build-glossary-records.cjs</li><li>Gate 2's "Also written as", by fill-also-written-as.cjs, before Gate 2 is shown</li><li>the "Terms replaced or retired over time" table on each kind page, by build-retired-words-tables.cjs, after the files are written</li></ul></li><li>The assembly draft stays as it was at Gate 1. Its status line says the outcomes are in the gate log.</li><li>On an override, Resolution carries the reason.</li></ul></td>
+        <td>One Gate 1 decision landed in up to six places, five of them copied by hand, so the copies drift apart.</td>
+        <td>One record keeps the audit trail. The generated views still answer "what was settled" and "what happened to this section's words".</td>
+        <td><span class="who you">You</span><span class="q">“A, the gate log is the only place”</span><span class="q">21 October, the assembly draft: “Leave it as it was”</span><span class="q">21 October, “Also written as”: “Filled in automatically”</span><span class="q">21 October, the retired-words tables: “Filled in automatically”</span></td></tr>
+      <tr data-who="you"><td class="num">15</td><td class="what">Words in the BRD and PRD</td>
+        <td class="old"><ul><li>check reports drift in a baselined source document but never fixes it.</li><li>Nothing says how the Glossary treats the BRD's and PRD's own words.</li></ul>
+          <span class="src">check, "Must not"</span></td>
+        <td class="new"><ul><li>The BRD and the PRD keep their own words.</li><li>The Glossary lists those words as "also written as".</li><li>Everything from the Feature catalog on uses the agreed words.</li></ul></td>
+        <td>The Glossary is built from the PRD's words, so rewriting the PRD would mean going back a step for every agreed word.</td>
+        <td>The BRD and PRD stay faithful to what was asked, and the Glossary maps their words to the agreed ones.</td>
+        <td><span class="who you">You</span><span class="q">“I would not go back several steps behind”</span></td></tr>
+      <tr data-who="you"><td class="num">16</td><td class="what">define-features<span class="src">now feature-author</span></td>
+        <td class="old"><ul><li>Reads the PRD, and the BRD for value.</li><li>Stops for the ID scheme, the feature list and the catalog.</li><li>Later, frd-author's first step decides again which features form a capability and how each Done when splits into clauses.</li></ul>
+          <span class="src">define-features, "The gated flow"<br>frd-author, "Step 1 — Scope"</span></td>
+        <td class="new"><ul><li>Written in the agreed words.</li><li>Also settles, for every feature:<ul><li>which capability, and so which FRD, it belongs to</li><li>its "Done when" cut into numbered pieces</li></ul></li><li>Both are recorded in the catalog's decision record.</li><li>Reads the PRD; looks up the Glossary and the BRD by ID.</li><li>One gate: accept the Feature catalog.</li></ul></td>
+        <td>The capability split and the clause split were decided at each FRD's own scope gate, one FRD at a time.</td>
+        <td>Settling them once in the Feature catalog gives every FRD the same starting point and removes the FRD scope gate: about 24 fewer gates for MCP.</td>
+        <td><span class="who you">You</span><span class="q">“Way 1, decide at the Feature catalog”</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">Features and EPICs workflow</span>EPICs</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">17</td><td class="what">The pick and the EPIC brief list</td>
+        <td class="old"><ul><li>cluster-features offers 2 to 3 options and you pick one.</li><li>EPIC detail files come later, "MVP-band first, or the specific EPICs requested".</li><li>Which EPICs get one is not recorded.</li></ul>
+          <span class="src">cluster-features, "The gated flow"<br>generate-epics, "Step 2"</span></td>
+        <td class="new"><ul><li>The same pick gate also confirms the EPIC brief list.</li><li>The skill proposes it in run order: each EPIC with yes or no, and a reason.</li><li>Any clash it finds is settled at the same gate, for example MCP's two cross-band dependencies (F-23 and F-52).</li><li>All of it is recorded in the EPIC grouping, by epic-grouping-author.</li></ul></td>
+        <td>Which EPICs needed detail was decided as you went, and the choice left no record.</td>
+        <td>Deciding the list with the grouping, in run order, makes it a recorded plan you can check against.</td>
+        <td><span class="who you">You</span><span class="q">“You share the proposed list (run order). I think the gating is important for control.”</span><span class="q">“yes, settle clashes at the clustering stop”</span></td></tr>
+      <tr data-who="you"><td class="num">18</td><td class="what">EPIC register</td>
+        <td class="old"><ul><li>Copied field by field from the clustering.</li><li>Then a gate: "the register gate".</li><li>In MCP, that gate also settled two clashes the clustering had passed forward: F-23 and F-52 were promoted.</li></ul>
+          <span class="src">generate-epics, "Step 1 — Register (copy, then gate)"<br>Output/05-epics/EPIC-REGISTER.md, section 4</span></td>
+        <td class="new"><ul><li>No gate: check-register.cjs checks the copy against the EPIC grouping.</li><li>Nothing is left to decide, because clashes are settled at the grouping gate (row 17).</li></ul></td>
+        <td>The gate approved a copy, and settled decisions one step away from where they arose.</td>
+        <td>A program can prove the copy is exact. Each clash is decided where it was found, next to its reason.</td>
+        <td><span class="who you">You</span><span class="q">“yes, settle clashes at the clustering stop”</span></td></tr>
+      <tr data-who="you"><td class="num">19</td><td class="what">EPIC sequencing and EPIC mapping</td>
+        <td class="old"><ul><li>Written by generate-epics, including a prose "Sequence Narrative".</li><li>In MCP, the F-52 promotion had to be written by hand in three places:<ul><li>the Register</li><li>the mapping</li><li>the sequencing</li></ul></li></ul>
+          <span class="src">specifier, Phase 3, step 6<br>Output/05-epics/modernization-control-plane-epic-sequencing.md</span></td>
+        <td class="new"><ul><li>Built by build-sequencing-mapping.cjs from the EPIC register and the EPIC grouping, every time the register is accepted or changes.</li><li>The prose narrative becomes fixed sentences:<ul><li>which EPICs run side by side at each step</li><li>each EPIC's reason, copied from the EPIC grouping</li><li>the critical path</li><li>the most depended-on EPIC</li></ul></li></ul></td>
+        <td>Both files only rearrange the register, yet they were written by hand and could fall out of step with it.</td>
+        <td>A rearrangement of the register can't disagree with it. Only the AI's descriptive touches are lost.</td>
+        <td><span class="who you">You</span><span class="q">“script”</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">FRD and Stories workflows</span>FRDs and stories</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">20</td><td class="what">EPIC brief</td>
+        <td class="old"><ul><li>Phase 3, before any stories.</li><li>One file at a time, a gate for each.</li></ul>
+          <span class="src">.claude/WORKFLOW.md, Phase 3, Gate</span></td>
+        <td class="new"><ul><li>The first gate of each EPIC's Stories workflow: epic-author, brief mode, writes the EPIC brief, and you answer "Accept the EPIC brief?"</li><li>Only for EPICs on the EPIC brief list.</li></ul></td>
+        <td>A brief written long before its stories goes stale as the documents above it change.</td>
+        <td>Written just before its stories, it uses the latest accepted documents, and a problem stops that slice at once.</td>
+        <td><span class="who you">You</span><span class="q">“gating is important for control. any issues, arrest fast”</span></td></tr>
+      <tr data-who="you"><td class="num">21</td><td class="what">FRD</td>
+        <td class="old"><ul><li>Not in the pipeline; frd-author lives in a sandbox.</li><li>Three steps, each with a gate:<ul><li>Scope</li><li>Draft</li><li>Changes and acceptance</li></ul></li></ul>
+          <span class="src">frd_experiment/frd-author/SKILL.md</span></td>
+        <td class="new"><ul><li>Its own workflow, run by frd-author, once per capability.</li><li>An FRD is written whole, covering all its features, even ones in later EPICs.</li><li>One gate: accept the FRD.</li><li>Every Must answer question the FRD builds on comes first at its gate. You answer it, or park the FRD while other work carries on (row 56).</li><li>All FRDs are written up front, after the Features and EPICs workflow, in EPIC register order.</li></ul></td>
+        <td>A capability can span EPICs: Target has F-31 in EPIC-005 and F-32 in EPIC-013. Writing part of it would need an "extend the FRD" step later.</td>
+        <td>A whole FRD keeps one capability's rules decided together. The coverage gate checks only the current EPIC's rules (row 25), so later features don't block.</td>
+        <td><span class="who you">You</span><span class="q">“B”</span><span class="q">“frd should get its own workflows”</span><span class="q">“i am inclined to have it upfront”</span><span class="q">the Must answer guard, 21 October</span></td></tr>
+      <tr data-who="you"><td class="num">22</td><td class="what">Design</td>
+        <td class="old"><ul><li>Read wherever it happens to be supplied:<ul><li>write-prd takes "any design / process / data sources"</li><li>generate-epics detail takes "any design/technical context"</li></ul></li></ul>
+          <span class="src">write-prd, "The gated flow"<br>generate-epics, "Inputs"</span></td>
+        <td class="new"><ul><li>Read at the cut, by story-drafter, when it exists.</li><li>Stories link to it.</li><li>Acceptance criteria never say how.</li></ul></td>
+        <td>Design rarely exists at PRD time. It tends to arrive around the FRD or the EPIC.</td>
+        <td>Reading it at the cut uses it when it exists, without making any step wait for it.</td>
+        <td><span class="who you">You</span><span class="q">“I would practically see it happening at the FRD, or epic level”</span></td></tr>
+      <tr data-who="you"><td class="num">23</td><td class="what">Cutting stories<span class="src">now story-drafter</span></td>
+        <td class="old"><ul><li>draft-stories has eight gated steps per EPIC:<ul><li>intake</li><li>restatement</li><li>personas</li><li>capabilities</li><li>splitting strategy, 4 or more options</li><li>story list</li><li>each story, one at a time</li><li>the index</li></ul></li><li>Stories are ordered later, in a separate step after grooming.</li></ul>
+          <span class="src">draft-stories, "The eight gated steps"<br>specifier, Phase 4, step 9</span></td>
+        <td class="new"><ul><li>One gate, with all the EPIC's stories together: approve the cut.<ul><li>what each story includes and leaves out</li><li>the order within the EPIC</li></ul></li><li>Cut along the FRD flows.</li><li>Personas come from the PRD.</li></ul></td>
+        <td>Personas, capabilities and rules were worked out again at story level, after they had been decided above.</td>
+        <td>With the FRD in place, the only judgement left is where to cut and in what order.</td>
+        <td><span class="who you">You</span><span class="q">“if we have the decisions and words before hand, story is all about assembling the stuff”</span><span class="q">“A, all stories of the EPIC together”</span></td></tr>
+      <tr data-who="you"><td class="num">24</td><td class="what">Grooming and acceptance criteria<span class="src">now story-groomer and ac-author</span></td>
+        <td class="old"><ul><li>groom-stories: three gated steps per batch of up to four stories.</li><li>write-acceptance-criteria: two gates per story.</li><li>Scenarios under UI, Behavior and System.</li></ul>
+          <span class="src">groom-stories, "The three gated steps"<br>write-acceptance-criteria</span></td>
+        <td class="new"><ul><li>Two skills, in order: story-groomer, then ac-author.</li><li>Each ends with one gate, with all the EPIC's stories together.</li><li>At each gate you can change any single story, or send one back.</li><li>Content is looked up by ID from:<ul><li>the FRD</li><li>the Feature catalog</li><li>the BRD</li><li>the EPIC brief</li><li>the Glossary</li></ul></li><li>Acceptance criteria are behaviour only to begin with, each naming its rule.</li></ul></td>
+        <td>Grooming and acceptance criteria had a gate per batch and per story: 22 gates for EPIC-001's 8 stories.</td>
+        <td>A gate at the end of each skill catches a problem before the next skill builds on it, and lets you moderate the stories. Seeing all of an EPIC's stories together shows overlaps, in 2 gates instead of 22.</td>
+        <td><span class="who you">You</span><span class="q">“Behavior only to begin with. Use design when it exists”</span><span class="q">“If there is a problem, I will arrest that early. At times the user will want to moderate the stories too”</span><span class="q">“A, all stories of the EPIC together”</span></td></tr>
+      <tr data-who="you"><td class="num">25</td><td class="what">Coverage gate</td>
+        <td class="old"><ul><li><code>coverage-gate.mjs</code> reads <code>Output/manifest.json</code>.</li><li>No run has written that file.</li></ul>
+          <span class="src">.claude/tools/coverage-gate.mjs</span></td>
+        <td class="new"><ul><li>A program, run before ac-author's gate.</li><li>Checks the EPIC's stories against that EPIC's rules only.</li><li>Checks each copied item against its home.</li></ul></td>
+        <td>The gate had nothing to read, so it never ran.</td>
+        <td>Scoped to the EPIC, it fits whole FRDs: rules for later EPICs don't fail today's slice.</td>
+        <td><span class="who rec">You, on my recommendation</span><span class="q">with the FRD decision, row 21</span></td></tr>
+      <tr data-who="you"><td class="num">26</td><td class="what">Ready for the team</td>
+        <td class="old"><ul><li>No ready step. At the end, "the Output/ tree holds the full spec pack, ready for a tracker adapter".</li></ul>
+          <span class="src">specifier, end of Phase 4</span></td>
+        <td class="new"><ul><li>The checks run before ac-author's gate.</li><li>Accepting at that gate marks the EPIC's stories ready, in the Story list.</li><li>Stories can't be marked ready while a Must answer question raised for them is still open (row 56).</li></ul></td>
+        <td>Nothing said when a story could be handed over.</td>
+        <td>The ready mark rides on the last gate, so it costs no extra gate. It also records which stories are already with the team.</td>
+        <td><span class="who you">You</span><span class="q">“one stop is fine”</span><span class="q">the Must answer guard, 21 October</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">Everywhere</span>Rules that apply at every step</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">27</td><td class="what">Version log</td>
+        <td class="old"><ul><li>Optional: "snapshot with the version-log workflow if you want a version in the audit trail".</li></ul>
+          <span class="src">.claude/WORKFLOW.md, after the Phase 4 section</span></td>
+        <td class="new"><ul><li>Automatic: a program snapshots each document every time it is accepted.</li></ul></td>
+        <td>Without snapshots there is no "before" to compare a change against, unless git happens to hold it.</td>
+        <td>A snapshot at every acceptance means impact analysis, when you take it up, needs no separate before-and-after step.</td>
+        <td><span class="who you">You</span><span class="q">“I cannot guarantee if they'd be in git”</span></td></tr>
+      <tr data-who="you"><td class="num">28</td><td class="what">Traceability map</td>
+        <td class="old"><ul><li>The RUN MANIFEST convention says every step updates <code>Output/manifest.json</code>; no run wrote it.</li><li>blast-radius needs someone to hand it the list of affected items.</li></ul>
+          <span class="src">_shared/system-prompt.md, "RUN MANIFEST"<br>_shared/pipeline.md, "After every step"<br>.claude/workflows/blast-radius.js</span></td>
+        <td class="new"><ul><li>A program rebuilds the Traceability map every time a document is accepted.</li><li>Impact analysis will read it to find what is linked.</li></ul></td>
+        <td>The structural check of the new flow found the map was read but never built.</td>
+        <td>Tied to acceptance, it is always current, and nobody has to remember to run it.</td>
+        <td><span class="who rec">You, on my recommendation</span></td></tr>
+      <tr data-who="you"><td class="num">29</td><td class="what">Decision records</td>
+        <td class="old"><ul><li>Only the FRD (its Decision record) and the Glossary (its gate log) record decisions.</li><li>Answers given to the other skills are not recorded anywhere.</li></ul>
+          <span class="src">frd-author, "Words used in this skill"<br>glossary output-formats.md</span></td>
+        <td class="new"><ul><li>Every living document has its own decision record.</li><li>Each gate's answers are written into the record of that document.</li><li>An "I don't know yet" answer is recorded too: the recommended answer stays in use, marked Proposed, and the entry names the question that stays open in the Question log.</li></ul></td>
+        <td>Answers given at a gate were lost once the chat ended.</td>
+        <td>A record per document keeps each one small and easy to find.</td>
+        <td><span class="who you">You</span><span class="q">“a decision record for each stage must exist. the 1 document may become humungous over time”</span><span class="q">“I don't know yet”, 21 October</span></td></tr>
+      <tr data-who="you"><td class="num">30</td><td class="what">What each step reads</td>
+        <td class="old"><ul><li>Later steps go back to the sources or the BRD:<ul><li>harvest reads the requirements</li><li>cluster-features reads the BRD and PRD for context</li><li>draft-stories locks personas "from the sources"</li><li>groom-stories reads PRD and BRD excerpts, and tracker text</li></ul></li></ul>
+          <span class="src">each skill's Inputs or Reads</span></td>
+        <td class="new"><ul><li>Sources are read only in the Requirements workflow.</li><li>Each step reads its nearest input and looks up anything else by ID.</li></ul></td>
+        <td>A later step reading deep documents can pick up something the accepted documents left out, with no record that it did.</td>
+        <td>If something is missing, it is sent back to the PRD instead of being picked up quietly. How a send-back is handled comes with impact analysis.</td>
+        <td><span class="who you">You</span><span class="q">“why do we need to re read deep documents”</span></td></tr>
+      <tr data-who="you"><td class="num">31</td><td class="what">Checking glossary words<span class="src">now glossary-check</span></td>
+        <td class="old"><ul><li>Run by hand after a change: check finds the drift, disposition acts on it.</li></ul>
+          <span class="src">glossary_methodology/skill-orchestration.md, part 2</span></td>
+        <td class="new"><ul><li>Inside the flow, each document's own check program scans for retired words outside quoted text, before its gate.</li><li>No gate of its own.</li><li>glossary-check is kept for documents brought in with a change (row 41).</li></ul></td>
+        <td>Every document in the new flow is written in agreed words, so a full judgement pass on each is more than is needed.</td>
+        <td>A script catches the common slip, a retired word, every time. The skill is kept for documents that never saw the Glossary.</td>
+        <td><span class="who rec">You, on my recommendation</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">Changes</span>Requirement-update</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">32</td><td class="what">Where a change comes from</td>
+        <td class="old"><ul><li>One entry: you run blast-radius with the changed BR or FR.</li></ul>
+          <span class="src">README, "When a requirement changes"</span></td>
+        <td class="new"><ul><li>You state the change, and bring any files that back it up.</li><li>It comes in the same way wherever it started:<ul><li>from the client</li><li>from you</li><li>from a gap found in the flow</li></ul></li></ul></td>
+        <td>The only stated way in was a changed BR or FR ID.</td>
+        <td>In practice you already know the change, so the workflow starts from your statement instead of working out what changed in a document.</td>
+        <td><span class="who you">You</span><span class="q">“in all likelihood I would have the change in mind and will supply it with artifacts”</span></td></tr>
+      <tr data-who="you"><td class="num">33</td><td class="what">Fixes during the first pass</td>
+        <td class="old"><ul><li>"If the human edits, re-run that step."</li><li>A gap found further down, in an accepted document, has no route back.</li></ul>
+          <span class="src">specifier, "Gates"</span></td>
+        <td class="new"><ul><li>Every fix to an accepted document goes through the requirement-update workflow, from the first pass.</li><li>The step that finds the mistake pauses, and you raise it as a change.</li></ul></td>
+        <td>Fixes made outside a route leave no record, and the documents linked to them aren't updated.</td>
+        <td>One route back upstream keeps the audit trail whole from day one.</td>
+        <td><span class="who you">You</span><span class="q">“option 1, go through the change route”</span></td></tr>
+      <tr data-who="you"><td class="num">34</td><td class="what">The kind of change</td>
+        <td class="old"><ul><li>change-impact rates each item: None, Cosmetic, Substantive or Breaking.</li><li>Nothing sorts the change itself.</li></ul>
+          <span class="src">change-impact, "Method"</span></td>
+        <td class="new"><ul><li>Every change is first sorted into one kind:<ul><li>net new</li><li>extend/enhance</li><li>update/optimize</li></ul></li><li>Two other outcomes: already covered, or blocked.</li><li>When it's blocked, the blocker is a question in the Question log, asked like every other question: the real choices, "I don't know yet", and the next best action (row 52).</li><li>The tests:<ul><li>Feature Fit, for net new and extend</li><li>a new test against the FRD rules, for update</li></ul></li></ul></td>
+        <td>Without a kind, the same change could be routed differently on different days.</td>
+        <td>The kind decides the route, so the recommendation follows a rule. Feature Fit already exists (feature-journey-analysis.md, section 8); only the update test is new.</td>
+        <td><span class="who you">You</span><span class="q">“a requirement could be net new, extend/enhance, update/optimize and that is our job to figure out”</span><span class="q">the blocked case as a question, 21 October</span></td></tr>
+      <tr data-who="you"><td class="num">35</td><td class="what">Three paths</td>
+        <td class="old"><ul><li>One route for every change: approve the report, then re-run each impacted skill.</li></ul>
+          <span class="src">README, "When a requirement changes"</span></td>
+        <td class="new"><ul><li>Net new, 7 to 9 gates, or 9 to 11 with new words:<ul><li>BRD, only if outside its scope</li><li>PRD</li><li>new words agreed first, in the Glossary package</li><li>a new feature, placed in an EPIC</li><li>a new FRD</li><li>new stories</li></ul></li><li>Extend, 5 or 6 gates:<ul><li>glossary-disposition first, only when the change renames an agreed word</li><li>BRD, only if it holds the changed thing</li><li>PRD</li><li>the feature's "Done when"</li><li>a new FRD version</li><li>updated stories</li></ul></li><li>Update, 3 or 4 gates:<ul><li>glossary-disposition first, only when the change renames an agreed word</li><li>BRD, only if it holds the changed thing</li><li>PRD, only if it holds the changed thing</li><li>the FRD rule</li><li>the stories that cite it</li></ul></li><li>A rename adds one gate to the extend and update paths, and so does a change the BRD holds.</li><li>A small update is inserted in place instead, and nothing is re-run (row 57).</li></ul></td>
+        <td>A small rule change went down the same route as a new capability.</td>
+        <td>The kind sets how high a change starts and how far it spreads. Each path reuses the happy-path workflows, run in part.</td>
+        <td><span class="who you">You</span><span class="q">“we have to identify the kind of change and then have 3 paths to move forward”</span><span class="q">glossary-disposition first, for a rename: follows from your row 40 call</span><span class="q">“I will let you present the changes to the user and take the path chosen to extend and update”</span></td></tr>
+      <tr data-who="you"><td class="num">36</td><td class="what">How a change is decided</td>
+        <td class="old"><ul><li>blast-radius produces a Change Impact Report.</li><li>You approve the report.</li><li>The specifier re-runs each impacted skill, each with its own gates.</li></ul>
+          <span class="src">README, "When a requirement changes"</span></td>
+        <td class="new"><ul><li>change-impact-author writes the Change impact report:<ul><li>the kind</li><li>the journey, from the PRD and the FRD</li><li>what is reused and what is new</li><li>what blocks</li><li>a recommendation for each level</li></ul></li><li>feature-impact, renamed from change-impact, judges each linked item. change-impact-author runs it once per item; blast-radius is dropped.</li><li>One gate: accept the recommendation.</li><li>The named workflows then run, each creating a new version of its document.</li></ul></td>
+        <td>Each linked item was decided twice: once in the report, once at its re-run.</td>
+        <td>One report gives you the journey and the recommendation, like the Anacity Feature Fit views. The documents are then made by the skills that own them.</td>
+        <td><span class="who you">You</span><span class="q">“change-impact-author”</span><span class="q">“keep it inside change-impact-author”</span><span class="q">“drop blast radius. Let change-impact be renamed to feature-impact”</span></td></tr>
+      <tr data-who="you"><td class="num">37</td><td class="what">A change arriving while work is in progress</td>
+        <td class="old"><ul><li>No rule.</li></ul>
+          <span class="src">README, "When a requirement changes"</span></td>
+        <td class="new"><ul><li>The report sizes the change against whatever is in progress:<ul><li>an EPIC</li><li>an FRD</li><li>the Feature catalog</li><li>the EPIC grouping</li></ul></li><li>Small: folded in; the work carries on from its gate, on the new versions.</li><li>Large: the piece is parked and goes to the back of the queue, and the change closes once its own steps are done.</li><li>Anything that depends on a parked piece waits, so nothing is built on top of it. When only those are left, the parked piece comes back.</li><li>Nothing in progress: nothing is sized; the change just runs.</li><li>Every document that exists counts, drafted or accepted: a drafted one gets the change in its next draft, an accepted one a new version.</li></ul></td>
+        <td>A change arriving mid-flow could stop everything, or none of it, with no way to choose. Once FRDs moved up front, there was often no EPIC to measure against.</td>
+        <td>Size first, then respond, against whatever is actually in progress. Parking keeps work moving instead of circling on one document; the guard stops anything being built on a piece that is about to change.</td>
+        <td><span class="who you">You</span><span class="q">“I will do what a product manager does.. analyze the change, and how large is the change (blast radius)”</span><span class="q">“option 1, size against whatever is in progress”</span><span class="q">“with the guard”</span><span class="q">“my goal is to keep moving forward and not getting fixated on a single artifact”</span><span class="q">“we really cant say which is a draft and which is confirmed”</span></td></tr>
+      <tr data-who="you"><td class="num">38</td><td class="what">Wording-only changes</td>
+        <td class="old"><ul><li>change-impact can class a change as Cosmetic, but every change takes the same route.</li></ul>
+          <span class="src">.claude/workflows/blast-radius.js, impact classes</span></td>
+        <td class="new"><ul><li>The report says "copy the new wording, nothing else".</li><li>copy-wording.cjs copies it to every place it is quoted, when you choose it at the recommendation's gate.</li></ul></td>
+        <td>A reworded requirement went through the full ripple.</td>
+        <td>Wording changes stay cheap. Only a change in meaning starts the ripple.</td>
+        <td><span class="who you">You</span><span class="q">“Stuff that is cosmetic, content updates etc. are not some things I'd really be concerned about”</span></td></tr>
+      <tr data-who="prop"><td class="num">39</td><td class="what">Closing a change</td>
+        <td class="old"><ul><li>No close step.</li><li>Nothing lists where a change was applied.</li></ul>
+          <span class="src">README, "When a requirement changes"</span></td>
+        <td class="new"><ul><li>When every redo is accepted and the checks pass, a program writes the closing entry, listing every place the change was applied.</li><li>No gate.</li></ul></td>
+        <td>Without a close, nobody can tell whether a change has finished.</td>
+        <td>The close is a record, not a decision, so a program writes it.</td>
+        <td><span class="who prop">My proposal</span></td></tr>
+      <tr data-who="you"><td class="num">40</td><td class="what">The Glossary in a change</td>
+        <td class="old"><ul><li>disposition updates the glossary, the register and the ripple when a change reaches a word.</li></ul>
+          <span class="src">glossary_methodology/skill-orchestration.md, part 2</span></td>
+        <td class="new"><ul><li>Read as the word map.</li><li>New words a change brings are agreed first, by glossary-author at its usual point: after the PRD, before feature-author, at Gates 1 and 2.</li><li>An existing word changes only through glossary-disposition.</li><li>When a document from outside uses a word that doesn't match, glossary-disposition settles each one at its own gate, right after glossary-check and before change-impact-author, so the impact analysis works with agreed words. For each word you choose one of:<ul><li>fix the document</li><li>change the Glossary</li><li>add it as a new word</li></ul></li><li>When a change renames an agreed word, the extend and update paths start with glossary-disposition.</li><li>The PRD keeps the client's words; the Glossary lists them as "also written as".</li></ul></td>
+        <td>We don't rewrite the PRD to match the Glossary, yet the features, FRDs and stories must use agreed words. A new word would otherwise slip past the checks, which only look for retired words.</td>
+        <td>The same "glossary first" rule as the happy path. Using an alias in stories instead was considered; it would leave two words for one thing in the documents developers read.</td>
+        <td><span class="who you">You</span><span class="q">“we dont update the prd for glossary, so why now?”</span><span class="q">“A, agree the word first”</span><span class="q">glossary-disposition as a step of the requirement-update workflow, 21 October: follows from this call</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">From outside</span>Documents from outside</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">41</td><td class="what">Documents from outside</td>
+        <td class="old"><ul><li>Start at any phase with what you have.</li><li>"Stories already in the tracker": run groom-stories or write-acceptance-criteria directly.</li><li>A provided document is placed as is, or a "reconstructed-stub" stands in for a missing upstream.</li></ul>
+          <span class="src">.claude/WORKFLOW.md, "Entry points"<br>_shared/pipeline.md, "Entry / no-skip / provided docs"</span></td>
+        <td class="new"><ul><li>No separate entrance.</li><li>A document from outside is a file you bring along with a change, for example:<ul><li>tracker stories</li><li>a hand-edited FRD</li><li>a client backlog</li></ul></li><li>It goes through the requirement-update workflow. glossary-check and its own format check run on it.</li><li>Any word glossary-check finds that doesn't match is settled at glossary-disposition's gate, before change-impact-author starts (row 40).</li></ul></td>
+        <td>Tracker stories skipped the Glossary and the FRD, and a reconstructed stub stood in for decisions nobody made.</td>
+        <td>A document arriving from outside is a requirement-update, and it can arrive at any time. One way in keeps one record.</td>
+        <td><span class="who you">You</span><span class="q">“is actually a "requirement-update" and it can happen outside of the flow”</span><span class="q">glossary-disposition after glossary-check: follows from your row 40 call</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">Page review</span>Decided in the review of the new pages</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">42</td><td class="what">NFRs</td>
+        <td class="old"><ul><li>Three skills each write their own NFRs:<ul><li>write-brd, section 6</li><li>write-prd, section 8</li><li>generate-epics, each EPIC detail</li></ul></li><li>In MCP the NFRs were "TBD", so the EPIC-003 detail invented its own, marked AI-RECOMMENDED.</li></ul>
+          <span class="src">write-brd, "Phase 2"<br>write-prd, "The document (sections)"<br>Output/mcp-requirements-v4.md, "Non-functional requirements - TBD"<br>Output/05-epics/EPIC-003 detail, section 7</span></td>
+        <td class="new"><ul><li>NFRs live only in the PRD, each with an ID.</li><li>The BRD drops its NFR section.</li><li>Each EPIC brief lists which NFR IDs apply, with no wording of its own.</li><li>An NFR the PRD lacks is raised through the change route.</li></ul></td>
+        <td>The same NFR could be worded three ways, and each EPIC detail could invent its own.</td>
+        <td>One home per fact, like the journey and the transition requirements. A change to an NFR is made in one place.</td>
+        <td><span class="who you">You</span><span class="q">“A, NFRs live only in the PRD”</span></td></tr>
+      <tr data-who="you"><td class="num">43</td><td class="what">A new version of a source</td>
+        <td class="old"><ul><li>The Discovery Brief lists the sources once, at the start.</li><li>Nothing tracks a new version, or what else it changed.</li></ul>
+          <span class="src">probe-requirements, "Discovery Brief (output structure)"</span></td>
+        <td class="new"><ul><li>The PRD records where each requirement's wording came from: the document and its version.</li><li>A program compares the new version with the old and lists every other difference in the Change impact report.</li><li>You decide at the usual gate whether any of those becomes its own change.</li><li>The Discovery brief stays the record of how the project started.</li></ul></td>
+        <td>Nobody could trace which version a wording came from, and a client's quiet edits could slip in alongside the change they mentioned.</td>
+        <td>No re-run of discovery, no extra gate, almost no tokens: re-running from the start was ruled out as too costly for the client.</td>
+        <td><span class="who you">You</span><span class="q">“A, both the source and the difference list”</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <section class="part">
+  <h2><span class="ph">Since the redesign</span>Decided while building</h2>
+  <div class="tbl-wrap"><table class="cmp">
+    <thead><tr><th>#</th><th>What</th><th class="old">Old</th><th class="new">New</th><th>Reason: what was wrong</th><th>Rationale: why this answer</th><th>Who decided</th></tr></thead>
+    <tbody>
+      <tr data-who="you"><td class="num">44</td><td class="what">Document and file names</td>
+        <td class="old"><ul><li>Output folders numbered by phase, such as <code>Output/05-epics/</code>.</li><li>Each skill names its files in its own style.</li></ul>
+          <span class="src">Output/, the MCP run</span></td>
+        <td class="new"><ul><li>The Discovery brief, BRD and PRD carry the product's name, such as <code>expense-claims-brd.md</code>.</li><li>No numbers in folder or file names.</li><li>The FRDs sit in <code>frd/</code>.</li><li>Each EPIC's stories sit inside its EPIC folder.</li><li>Four documents were renamed:<ul><li>Clustering became EPIC grouping</li><li>EPIC detail became EPIC brief</li><li>Story index became Story list</li><li>Story files became Stories</li></ul></li><li>Every path comes from one file, <code>project-folders.md</code>, which every program reads.</li></ul></td>
+        <td>A numbered folder said where a file came from, but not what it was, and names differed from skill to skill.</td>
+        <td>A name that says what a file is can be found without opening it. One layout file means a program and a person look in the same place.</td>
+        <td><span class="who you">You</span><span class="q">19 October</span></td></tr>
+      <tr data-who="you"><td class="num">45</td><td class="what">Project folders</td>
+        <td class="old"><ul><li>Each skill writes where its own instructions say.</li><li>Nothing checks that the folders exist.</li></ul>
+          <span class="src">each skill's SKILL.md</span></td>
+        <td class="new"><ul><li>Every project lives in <code>Output/{project}/</code>.</li><li>Before any step writes, scaffold-project.cjs checks the project's folders, and creates any that are missing.</li><li>It never deletes or overwrites anything, and leaves a folder that holds older work alone.</li></ul></td>
+        <td>A step could write into a folder that didn't exist yet, or into the wrong one.</td>
+        <td>One program, run first, means every step finds its folders, and nothing already there is lost.</td>
+        <td><span class="who you">You</span><span class="q">19 October</span></td></tr>
+      <tr data-who="you"><td class="num">46</td><td class="what">What you read first at a gate, and the Check record</td>
+        <td class="old"><ul><li>Each skill sums up its draft at the end, in its own words.</li><li>Nothing records which checks passed.</li></ul>
+          <span class="src">each skill's SKILL.md, HUMAN ACTION REQUIRED</span></td>
+        <td class="new"><ul><li>The check program prints three blocks, and the skill pastes each exactly as it is:<ul><li>"For the person": what you read first at the gate</li><li>"One line": the check result, for each later decision at the same gate</li><li>"For the file": the check record</li></ul></li><li>The last block goes into the document's Check record.</li></ul></td>
+        <td>A summary written by the skill could leave out or soften a failed check.</td>
+        <td>Facts printed by a program can't be retyped wrongly, and the Check record shows later what was checked when the document was accepted.</td>
+        <td><span class="who you">You</span><span class="q">at the Phase 1 gate</span></td></tr>
+      <tr data-who="you"><td class="num">47</td><td class="what">Beyond the client's words, and the list for the client</td>
+        <td class="old"><ul><li>Nothing marks where a document adds to, or differs from, what the client wrote.</li></ul>
+          <span class="src">write-brd<br>write-prd</span></td>
+        <td class="new"><ul><li>At every gate you see each place the draft goes beyond, or differs from, the client's words.</li><li>After you accept, you get the list for the client, in two halves:<ul><li>what your decisions changed or added, to confirm with the client</li><li>what we still need from you: every open question and every TBD, each worded as a question</li></ul></li><li>The client's reply comes in as a new version of their document, through the requirement-update workflow.</li></ul></td>
+        <td>Additions made on the client's behalf could reach the stories without the client ever seeing them.</td>
+        <td>You see every addition before you accept it, and the client gets one list to confirm and answer.</td>
+        <td><span class="who you">You</span><span class="q">at the Phase 1 gate</span><span class="q">"What we still need from you", 21 October</span></td></tr>
+      <tr data-who="you"><td class="num">48</td><td class="what">The third "no"</td>
+        <td class="old"><ul><li>No limit: a document can be sent back again and again.</li></ul>
+          <span class="src">specifier, "Gates"</span></td>
+        <td class="new"><ul><li>After the third "no" at the same gate in one run, the skill stops redrafting and offers its choices:<ul><li>park it, only at an FRD's or an EPIC's gates</li><li>accept it as it is: your remaining points become questions in the Question log</li><li>one more round</li></ul></li><li>Every other gate covers the whole product, so it offers only the last two.</li></ul></td>
+        <td>Nothing stopped a document from circling for ever.</td>
+        <td>Work keeps moving. Parking is offered only where other work can carry on while one piece waits.</td>
+        <td><span class="who you">You</span><span class="q">at the Phase 1 gate</span></td></tr>
+      <tr data-who="you"><td class="num">49</td><td class="what">Templates and worked examples</td>
+        <td class="old"><ul><li>Templates sit inside each skill, with notes hidden in comments.</li><li>Examples are short, inside the instructions.</li></ul>
+          <span class="src">each skill's templates</span></td>
+        <td class="new"><ul><li>Every template opens with what it is, and what it is not.</li><li>A line under every heading says what the section holds.</li><li>Each placeholder says exactly what to write, with an example.</li><li>A worked example of each document, all for one made-up product, Expense claims.</li><li>No client material in the templates or the examples.</li></ul></td>
+        <td>A blank template with hidden notes left the writer guessing.</td>
+        <td>A template that explains itself, next to a finished example, gives the same output whoever writes it.</td>
+        <td><span class="who you">You</span><span class="q">19 to 21 October</span></td></tr>
+      <tr data-who="you"><td class="num">50</td><td class="what">How the sources are compared</td>
+        <td class="old"><ul><li>probe-requirements lists the sources once.</li><li>Nothing says which source wins when two disagree.</li></ul>
+          <span class="src">probe-requirements, "Discovery Brief (output structure)"</span></td>
+        <td class="new"><ul><li>list-sources.cjs lists every file in the sources folder, and marks copies and older versions.</li><li>You set the order of authority, by kind of document.</li><li>Every topic is compared across the sources, as agree, differ or silent.</li><li>Each clash is settled by the order of authority, or by your decision.</li><li>It works for hundreds of files.</li></ul></td>
+        <td>With many files, clashes between them were found late, or not at all.</td>
+        <td>Comparing topic by topic, the way an expert reads a pile of documents, finds every clash at the start.</td>
+        <td><span class="who you">You</span><span class="q">20 October</span></td></tr>
+      <tr data-who="you"><td class="num">51</td><td class="what">The decision review gate</td>
+        <td class="old"><ul><li>The points where you decide go by several names, such as "stop" and HUMAN ACTION REQUIRED.</li></ul>
+          <span class="src">each skill's SKILL.md<br>the design pages</span></td>
+        <td class="new"><ul><li>One name everywhere: the decision review gate, or "gate" for short.</li><li><code>decision-review-gates.md</code> holds the rules for every gate.</li><li>A test fails if the old word comes back in that sense.</li></ul></td>
+        <td>Several names for one thing made the rules harder to follow.</td>
+        <td>A gate is where work waits for a decision, then goes on. The Glossary's Gate 1 and Gate 2 already used the word.</td>
+        <td><span class="who you">You</span><span class="q">21 October</span></td></tr>
+      <tr data-who="you"><td class="num">52</td><td class="what">How a question is asked</td>
+        <td class="old"><ul><li>Many questions are asked as yes or no.</li><li>Nothing says what each answer leads to.</li></ul>
+          <span class="src">probe-requirements<br>write-brd</span></td>
+        <td class="new"><ul><li>Every question has the same shape:<ul><li>why I'm asking, citing the file, or saying no file speaks to it</li><li>a real example</li><li>what it changes, with its impact and severity</li><li>the real choices, never yes or no, each with why you'd pick it and what happens next</li><li>"I don't know yet", always offered</li><li>the recommendation, and the next best action</li></ul></li><li>"I don't know yet" keeps the work moving: the recommended answer is used, marked Proposed, and the question stays open.</li><li>The only yes-or-no question left is a gate's own, such as "Accept the BRD?"</li></ul></td>
+        <td>A yes or no hides the real choices, and an answer with no consequence shown is a guess.</td>
+        <td>Seeing what each answer leads to makes the decision an informed one, and "I don't know yet" never holds up the work.</td>
+        <td><span class="who you">You</span><span class="q">21 October</span></td></tr>
+      <tr data-who="you"><td class="num">53</td><td class="what">Which questions must be answered</td>
+        <td class="old"><ul><li>Each question is marked as holding up the work or not, by judgement.</li></ul>
+          <span class="src">probe-requirements, "Discovery Brief (output structure)"</span></td>
+        <td class="new"><ul><li>Every question is rated twice, each High, Medium or Low, with its reason:<ul><li>impact: how much is redone if the answer is wrong</li><li>severity: how much harm is done</li></ul></li><li>A grid places it in one of three groups, and sets the order they're asked in:<ul><li>Must answer: any High severity</li><li>Should answer</li><li>Can move ahead</li></ul></li><li>At a gate, Must answer comes first, one at a time, then Should answer, then the Can move ahead list, settled by one decision.</li><li>An open question never fails a check.</li></ul></td>
+        <td>Without a rule, a minor question could hold up the work, and a serious one could slip through.</td>
+        <td>Harm comes before reach: the grid puts the questions that could do real harm first, and lets the rest move ahead.</td>
+        <td><span class="who you">You</span><span class="q">21 October</span></td></tr>
+      <tr data-who="you"><td class="num">54</td><td class="what">Where questions live</td>
+        <td class="old"><ul><li>Each document keeps its own open questions.</li><li>The Discovery Brief has its own question list.</li></ul>
+          <span class="src">write-prd<br>define-features<br>frd-author<br>draft-stories</span></td>
+        <td class="new"><ul><li>One Question log per product holds every question, whichever document raised it.</li><li>probing-questions-author drafts and rates each question, inside every author skill.</li><li>grade-questions.cjs places each in its group, sets the order and checks its shape.</li><li>Every gap in a document names its question, such as "TBD, question 12".</li><li>status.cjs lists every Must answer question still open, after every acceptance.</li></ul></td>
+        <td>Questions spread across documents were easy to lose, and a gap could be left with no question behind it.</td>
+        <td>One log shows everything still open in one place, and a program proves no gap is lost.</td>
+        <td><span class="who you">You</span><span class="q">21 October</span></td></tr>
+      <tr data-who="you"><td class="num">55</td><td class="what">Proposed objectives and business requirements</td>
+        <td class="old"><ul><li>No rule for an objective or business requirement that no file gives.</li></ul>
+          <span class="src">write-brd</span></td>
+        <td class="new"><ul><li>The skill suggests one, marked Proposed (needs confirmation), with its question, and carries on.</li><li>You confirm or change it at the gate, or the client confirms it later.</li></ul></td>
+        <td>Waiting for every objective to be given stalls the BRD.</td>
+        <td>A suggestion to react to keeps the work moving, and the mark keeps it in sight until it's confirmed.</td>
+        <td><span class="who you">You</span><span class="q">21 October</span></td></tr>
+      <tr data-who="you"><td class="num">56</td><td class="what">The Must answer guard</td>
+        <td class="old"><ul><li>No rule: work carries on over open questions.</li></ul>
+          <span class="src">frd-author<br>write-acceptance-criteria</span></td>
+        <td class="new"><ul><li>A Must answer question an FRD builds on is answered before that FRD is accepted. Until then the FRD can be parked, and other work carries on.</li><li>One raised while writing stories is answered before those stories are marked ready.</li><li>The routing programs put capabilities and EPICs that wait on a Must answer question last, so you work first on what you can finish.</li></ul></td>
+        <td>A rule built on an answer that could do real harm could reach the team.</td>
+        <td>The guard sits only where work is handed on, so nothing earlier stalls.</td>
+        <td><span class="who you">You</span><span class="q">the guard, 21 October</span><span class="q">“put it last”, the routing, 21 October</span></td></tr>
+      <tr data-who="you"><td class="num">57</td><td class="what">An answer that arrives later, and small updates</td>
+        <td class="old"><ul><li>No route for an answer that comes after the gate.</li></ul>
+          <span class="src">README, "When a requirement changes"</span></td>
+        <td class="new"><ul><li>It comes in as a change, through the requirement-update workflow, starting from the question's "What it changes".</li><li>A small update is inserted where it belongs, and nothing is re-run: insert-answer.cjs writes a late answer wherever the documents name its question. You choose it at the recommendation's gate.</li><li>The Extend and Update paths update the BRD when it holds the changed thing.</li></ul></td>
+        <td>An answer given later could be applied by hand, with no record of what it changed.</td>
+        <td>The same way in as every other change keeps one record, and a small update stays cheap.</td>
+        <td><span class="who you">You</span><span class="q">“as a change”</span><span class="q">“A small update may not need us to re run everything. Just insert the item at the right place.”</span></td></tr>
+      <tr data-who="you"><td class="num">58</td><td class="what">A dramatic change</td>
+        <td class="old"><ul><li>No rule.</li></ul>
+          <span class="src">README, "When a requirement changes"</span></td>
+        <td class="new"><ul><li>When a change reaches most of the product, you re-run the whole workflow instead of patching it.</li><li>The recommendation flags a change that reaches more than half of the business requirements, and offers the re-run as one of your choices.</li><li>On a re-run, each question you answered before is asked again, with your earlier answer recommended and dated.</li></ul></td>
+        <td>Patching a change that touches nearly everything costs more than starting again, and leaves more to miss.</td>
+        <td>A re-run rebuilds every document in order, and offering your earlier answers saves asking them again.</td>
+        <td><span class="who you">You</span><span class="q">the re-run, 21 October</span><span class="q">“accept”, the flag, 22 October</span><span class="q">“Offer each one as the recommended answer”, 22 October</span></td></tr>
+      <tr data-who="you"><td class="num">59</td><td class="what">Keeping the Workflows page in step</td>
+        <td class="old"><ul><li>The pages were drawn by hand, and fell behind the plan: old names and missing steps stayed for days.</li></ul>
+          <span class="src">Specifier v3 Workflows, 16 to 21 October</span></td>
+        <td class="new"><ul><li>The master plan and the specs are the source, and the pages are views of them.</li><li>Before the Workflows page is republished, a script compares every step and gate on it with the plan's section 4, and lists any difference.</li></ul></td>
+        <td>A page kept by hand drifts from the plan, and nobody notices until it misleads someone.</td>
+        <td>A check that runs every time catches drift at once. It helps build the plan, and isn't part of the kit.</td>
+        <td><span class="who you">You</span><span class="q">“let us just get the workflow artifacts in order”</span><span class="q">“ya ok”, the check, 22 October</span></td></tr>
+      <tr data-who="you"><td class="num">60</td><td class="what">The glossary method's words</td>
+        <td class="old"><ul><li>The method used several words for one meaning, against its own one-word-one-meaning rule.</li><li>A word list and a reworded method were approved on 6 October, but never applied, because the old files stay untouched.</li></ul>
+          <span class="src">glossary_methodology/.skills/_shared/glossary/</span></td>
+        <td class="new"><ul><li>Phase 3 copies the method as approved: the word list, method-words.md, and the files reworded to use it.</li><li>Every glossary skill and prompt reads the list, and the method's end-of-run search fails on a banned word.</li><li>Until then, the approved files are kept in specifier_v3/phase-3-inputs/glossary-method/.</li></ul></td>
+        <td>A method that breaks its own word rule teaches people to use words loosely.</td>
+        <td>The approved work is used instead of lost, and the kit's method follows its own rule from the start.</td>
+        <td><span class="who you">You</span><span class="q">the word list and its sweep, approved 6 October</span><span class="q">“the approved, reworded version”, 22 October</span></td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <h2>Kept as it is</h2>
+  <div class="box">
+    <ul>
+      <li>The order of the work: requirements, then words, then features and EPICs, then FRDs and stories.</li>
+      <li>Every artifact you use today. None is removed, and four were renamed (row 44).</li>
+      <li>The ID chain, from business requirement to acceptance criteria. One change: the PRD keeps the source's own IDs instead of FR-xx, so the chain runs through:<ul><li>BR-xx, in the BRD</li><li>the source's own requirement IDs, in the PRD</li><li>features, in the Feature catalog</li><li>their "done when" pieces</li><li>EPICs</li><li>FRD rules</li><li>stories and their acceptance criteria</li></ul></li>
+      <li>The Glossary's two gates, in one run, now in glossary-author.</li>
+      <li>cluster-features offering 2 to 3 options for you to pick, now in epic-grouping-author.</li>
+      <li>change-impact, renamed feature-impact, now called by change-impact-author. blast-radius is dropped: it only ran change-impact many times at once.</li><li>The Feature Fit method and its checker, from glossary-methodology-prompts.</li>
+      <li>A snapshot at every acceptance, now taken by version-log.cjs, written fresh.</li>
+      <li>frd-author's check program.</li>
+      <li>Each skill's own method. The redesign changes the wiring, the gates and what each step reads.</li>
+    </ul>
+  </div>
+
+  <h2>Not covered by the new workflow yet</h2>
+  <div class="box">
+    <ul>
+      <li>auto-spec, the unattended run, has not been redesigned.</li>
+      <li>The eval layer (the rubrics, eval-runner and compliance-audit) has no place in the new flow yet.</li>
+      <li>The update/optimize test against the FRD rules: still to be written.</li><li>Whether the BA and the PO split the decisions between them.</li>
+      <li>Checking, at release, the transition requirements that need no build: outside this workflow.</li>
+    </ul>
+  </div>
+
+  <h2>Next</h2>
+  <div class="box">
+    <p>Phase 1, the foundation, is built and reviewed.</p>
+    <ul>
+      <li>Phase 2 is next: the Requirements workflow, starting with probing-questions-author, because discovery-author needs it.</li>
+      <li>The <a href="https://claude.ai/artifact/DgU1Det3BfetGTzFsc4XfL">Specifier v3 Workflows</a> page shows every step, kept in line with the master plan.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  document.querySelectorAll("table.cmp").forEach(function(t){
+    var heads = Array.prototype.map.call(t.querySelectorAll("thead th"), function(th){ return th.textContent; });
+    t.querySelectorAll("tbody tr").forEach(function(tr){
+      Array.prototype.forEach.call(tr.children, function(td, i){ if (i > 1) td.setAttribute("data-label", heads[i]); });
+    });
+  });
+  var rows = document.querySelectorAll("table.cmp tbody tr");
+  var prop = 0, yours = 0;
+  rows.forEach(function(r){ if (r.getAttribute("data-who") === "prop") prop++; else yours++; });
+  document.getElementById("f-you").textContent = "Your calls (" + yours + ")";
+  document.getElementById("f-prop").textContent = "My proposals (" + prop + ")";
+  var btns = document.querySelectorAll(".controls .btn");
+  function apply(f){
+    rows.forEach(function(r){ var w = r.getAttribute("data-who"); r.hidden = !(f === "all" || (f === "prop" ? w === "prop" : w !== "prop")); });
+    document.querySelectorAll("section.part").forEach(function(s){
+      s.hidden = s.querySelectorAll("tbody tr:not([hidden])").length === 0;
+    });
+    btns.forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-f") === f ? "true" : "false"); });
+  }
+  btns.forEach(function(b){ b.addEventListener("click", function(){ apply(b.getAttribute("data-f")); }); });
+})();
+</script>
+
