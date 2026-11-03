@@ -37,7 +37,7 @@ This skill follows `../_shared/data-model-design.md`, sections 1 to 5, and write
   - `Output/{project}/glossary/data-models/{product}-glossary-things.md`
   - its product-wide decisions and Glossary changes, in `Output/{project}/glossary/data-models/{product}-data-model-decisions.md`
 - **Its gate:** the product-wide decisions, then "Accept the things?"
-- **Its check:** `check-data-model.cjs`. It runs `data-model-design.md`, step 7, check 1, and the kit's checks, on the things file and on the decisions file.
+- **Its check:** `check-data-model.ts`. It runs `data-model-design.md`, step 7, check 1, and the kit's checks, on the things file and on the decisions file.
 
 ## Steps
 
@@ -56,8 +56,8 @@ Check the inputs, as `data-model-design.md`, section 3, "Before you start", says
 
 ### 3. Ask again what is still open
 
-Before anything else is written, ask again each entry still open that this skill owns, as `data-model-design.md`, section 3, "What is still open is asked again first", says. Run `node tools/status.cjs --project {project}`. Its block "Data model, still open" lists each entry, and names the skill that asks it. This skill owns the entries of the things file:
-- each product-wide decision answered "I don't know yet": ask it again as gate 1 asks it, one per message, as multiple choice, with the recommended answer first and "I don't know yet"
+Before anything else is written, ask again each entry still open that this skill owns, as `data-model-design.md`, section 3, "What is still open is asked again first", says. Run `node tools/status.ts --project {project}`. Its block "Data model, still open" lists each entry, and names the skill that asks it. This skill owns the entries of the things file:
+- each product-wide decision answered "I don't know yet": ask it again as gate 1 asks it, one per message, by probing-questions-author, as multiple choice, with the recommended answer first and "I don't know yet"
 - each Glossary change raised from the things file and left open: ask whether to send it to the Glossary again, with "Send it with the next batch" recommended, and "I don't know yet"
 
 Record each answer straight away, in the register and in the file. An answer to a product-wide decision also fills its "?" in every family's file. data-model-author writes it into each of those files, in a change.
@@ -91,30 +91,30 @@ Words that become a field or choices are not listed: data-model-author puts them
 
 ### 9. Check
 
-Run `node tools/check-data-model.cjs --project {project}`. It runs check 1 in `data-model-design.md`, step 7: every Glossary term that is a thing, or becomes nothing, is in `{product}-glossary-things.md`. It also checks that every family names its file, that every definition matches the Glossary word for word, that every thing the Glossary makes one kind of another thing is in its family's "Kind of" list, and that every open product-wide decision is under "Decisions to make". It runs the kit's checks too: the opening, the sections, the placeholders, simple writing and the retired Glossary words. It checks the decisions file as well. Fix every finding, and run it again, until every check passes.
+Run `node tools/check-data-model.ts --project {project}`. It runs check 1 in `data-model-design.md`, step 7: every Glossary term that is a thing, or becomes nothing, is in `{product}-glossary-things.md`. It also checks that every family names its file, that every definition matches the Glossary word for word, that every thing the Glossary makes one kind of another thing is in its family's "Kind of" list, and that every open product-wide decision is under "Decisions to make". It runs the kit's checks too: the opening, the sections, the placeholders, simple writing and the retired Glossary words. It checks the decisions file as well. Fix every finding, and run it again, until every check passes.
 
 It runs simple writing, so it counts as the quick check that `../_shared/simple-writing-rules.md` asks for. A definition is copied word for word from the Glossary, so never change one to pass the check. The check never fails a definition. When it shows one to look at, that belongs to the Glossary. Send it where a Glossary change goes, as `data-model-design.md`, "Where each gap goes", says. Run the check again each time a file changes at the gate.
 
 ### 10. The gate
 
-Hold gate 1, as `data-model-design.md`, section 5, says:
+Hold gate 1, as `data-model-design.md`, section 5, says, with probing-questions-author asking each decision in its Ask mode:
 - show the person `{product}-glossary-things.md`
 - show the check's "For the person" block first. It holds what the check program shows for each file, such as "Simple writing, to look at: 3 places".
 - show the Glossary changes found. Each one waits, marked "To raise". Once every data model file is accepted, all of them go to the Glossary together, as step 8 of `data-model-design.md` says.
-- ask the product-wide decisions first, one per message, as multiple choice. The recommended answer comes first, and "I don't know yet" is always one of the answers. Record each answer straight away, in the register and in the file.
+- ask the product-wide decisions first, one per message, by probing-questions-author, as multiple choice. The recommended answer comes first, and "I don't know yet" is always one of the answers. Record each answer straight away, in the register and in the file.
 - then ask **"Accept the things?"**
 - when they change a row, change it in `{product}-glossary-things.md`, then ask again
 - when they accept:
   1. set the "Next step" line to "None: the things are accepted."
-  2. run the check once more, and paste its "For the file" block into the Check record of the things file, and into the Check record of the decisions file. Do this before `accept.cjs`, never after.
-  3. run `node tools/accept.cjs --project {project} --document data-model-things`. It sets the status line of the things file, and saves a copy of it in the Version log. It does the same for the decisions file.
-  4. close with `node tools/status.cjs --project {project}`
+  2. run the check once more, and paste its "For the file" block into the Check record of the things file, and into the Check record of the decisions file. Do this before `accept.ts`, never after.
+  3. run `node tools/accept.ts --project {project} --document data-model-things`. It sets the status line of the things file, and saves a copy of it in the Version log. It does the same for the decisions file.
+  4. close with `node tools/status.ts --project {project}`
 
 ## In a change
 
 Inside a change you said yes to, `../_shared/decision-review-gates.md`, rule 12, says what to do in place of the gate: no gate question, and the skill asks you something only for the reasons it gives.
 
-When a Glossary term is added, renamed or withdrawn after `{product}-glossary-things.md` is accepted, change only the rows for that term, then hold the gate again. Every other row stays as it is. Step 4 of `data-model-workflow` is such a change: it names the Glossary changes the Glossary has settled, and a word that waited on one is placed now. While the skill changes the file, its status line reads "Status: drafted". When the person accepts it again, `accept.cjs` saves the new version, so the change can see what changed.
+When a Glossary term is added, renamed or withdrawn after `{product}-glossary-things.md` is accepted, change only the rows for that term, then hold the gate again. Every other row stays as it is. Step 4 of `data-model-workflow` is such a change: it names the Glossary changes the Glossary has settled, and a word that waited on one is placed now. While the skill changes the file, its status line reads "Status: drafted". When the person accepts it again, `accept.ts` saves the new version, so the change can see what changed.
 
 ## Rules
 
@@ -125,7 +125,7 @@ The most important few:
 - **Each gap goes where its kind goes,** as `data-model-design.md`, "Where each gap goes", says. A data model decision stays with the specifier, and never goes into the Question log. The data model never comments on the requirements.
 - **Product-wide decisions are asked once, by this skill.** Every family's file then uses the same answer. While one is open, each family's file shows "? (DM-{n})" in each cell it answers.
 - **What is still open is asked again first.** A decision answered "I don't know yet", and a Glossary change left open, are never forgotten.
-- **The status line is set by programs.** The skill writes "Status: drafted". `accept.cjs` sets it when the person accepts.
+- **The status line is set by programs.** The skill writes "Status: drafted". `accept.ts` sets it when the person accepts.
 - **Template only.** The saved file is exactly the template's sections. Narration stays in the conversation.
 
 ## Handoff

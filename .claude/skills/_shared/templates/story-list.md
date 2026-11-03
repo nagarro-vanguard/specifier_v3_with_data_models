@@ -42,7 +42,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** The list of one EPIC's stories, in order, each with its statement and status, and which stories cover each feature.
 - **What it is not:** The stories' detail. Each Story's grooming and acceptance criteria are in its own file, beside this one.
-- **Written by:** story-drafter, from `templates/story-list.md`, and kept up to date by story-groomer and ac-author. Checked by check-stories.cjs before each of their gates.
+- **Written by:** story-drafter, from `templates/story-list.md`, and kept up to date by story-groomer and ac-author. Checked by check-stories.ts before each of their gates.
 
 ### What each section holds
 
@@ -53,7 +53,7 @@ This part is never copied into a document. It says what the template is for, wha
 | Out of scope / routed | Anything someone might expect in this EPIC that isn't in it, where it went instead, and why. |
 | Coverage | Every feature of this EPIC, and the stories that tell it. A feature with no story is routed, and listed under "Out of scope / routed". |
 | Decision record | Every decision made at this EPIC's story gates, in the order made, in the shape of `templates/parts/decision-record.md`. |
-| Check record | The record of the last check, pasted exactly as check-stories.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-stories.ts printed it. |
 
 ### What to write for each label
 

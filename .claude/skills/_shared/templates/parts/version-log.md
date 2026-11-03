@@ -4,9 +4,9 @@
 >
 > **What it is not:** The copies themselves. Each row links to its copy.
 >
-> **Who uses it:** `version-log.cjs` writes it. `status.cjs` and `traceability-map.cjs` read it.
+> **Who uses it:** `version-log.ts` writes it. `status.ts` and `traceability-map.ts` read it.
 
-Only `version-log.cjs` writes the Version log. Nobody edits it by hand.
+Only `version-log.ts` writes the Version log. Nobody edits it by hand.
 
 ## 1. Where it lives
 
@@ -17,9 +17,9 @@ Only `version-log.cjs` writes the Version log. Nobody edits it by hand.
 
 The log opens with its title, "Version log — {project}", and the two lines on what it is and isn't. Then comes one table, with one row for each acceptance, added at the bottom. A row is never edited.
 
-At every acceptance, `accept.cjs` also saves a copy of the Question log as it stands, so the log gains a row for the Question log too. Its Decision record entry is None, because the Question log has no gate of its own.
+At every acceptance, `accept.ts` also saves a copy of the Question log as it stands, so the log gains a row for the Question log too. Its Decision record entry is None, because the Question log has no gate of its own.
 
-You may accept the data model's things file or a data model file. Then `accept.cjs` also saves a copy of the data model's decisions file, so the log gains a row for it too. Each data model gate records its answers in the decisions file. Its Decision record entry is its last settled decision, such as DM-6.
+You may accept the data model's things file or a data model file. Then `accept.ts` also saves a copy of the data model's decisions file, so the log gains a row for it too. Each data model gate records its answers in the decisions file. Its Decision record entry is its last settled decision, such as DM-6.
 
 | Column | What it holds |
 |---|---|

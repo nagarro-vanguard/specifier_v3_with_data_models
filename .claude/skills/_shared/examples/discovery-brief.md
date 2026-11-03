@@ -1,4 +1,4 @@
-> **Example.** A worked example of a Discovery brief, for a made-up product called Expense claims. It shows what a good one looks like at its gate, with all seven decisions made. One question is still open, because the answer was "I don't know yet", and it is kept in the Question log example. Its Check record is still empty: check-discovery-brief.cjs pastes its record into that section when the gate ends. Nothing in it is a real requirement.
+> **Example.** A worked example of a Discovery brief, for a made-up product called Expense claims. It shows what a good one looks like at its gate, with all seven decisions made. One question is still open, because the answer was "I don't know yet", and it is kept in the Question log example. Its Check record is still empty: check-discovery-brief.ts pastes its record into that section when the gate ends. Nothing in it is a real requirement.
 
 # Discovery brief — Expense claims
 

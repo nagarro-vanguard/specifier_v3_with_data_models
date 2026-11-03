@@ -27,7 +27,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** The list of EPICs, copied field for field from the chosen grouping in the EPIC grouping, with the order they are worked in.
 - **What it is not:** A place to decide anything. Nothing in the register is written fresh, and a program checks that it matches the EPIC grouping.
-- **Written by:** epic-author, from `templates/epic-register.md`. Checked by check-register.cjs. It has no gate: it is accepted when the check finds it matches the EPIC grouping.
+- **Written by:** epic-author, from `templates/epic-register.md`. Checked by check-register.ts. It has no gate: it is accepted when the check finds it matches the EPIC grouping.
 
 ### What each section holds
 
@@ -45,7 +45,7 @@ This part is never copied into a document. It says what the template is for, wha
 | {created date} | the date the register was first written, as YYYY-MM-DD | 2026-10-20 |
 | {grouping version} | the EPIC grouping's accepted version | 1 |
 | {based on} | whether the BRD and PRD were accepted. When there is no BRD, say so. The outcomes are then hypotheses only. | BRD and PRD both accepted |
-| {check date} | the date check-register.cjs last passed, as YYYY-MM-DD, which it writes itself. Until it passes, write: not yet | 2026-10-20 |
+| {check date} | the date check-register.ts last passed, as YYYY-MM-DD, which it writes itself. Until it passes, write: not yet | 2026-10-20 |
 | {EPIC ID} | EPIC- and three digits, from the grouping's Sl. No. | EPIC-002 |
 | {EPIC name} | the EPIC's name, word for word | Claim approval |
 | {outcome} | the EPIC's outcome, word for word | As a line manager, I need to approve my team's claims, so that only checked claims are paid |

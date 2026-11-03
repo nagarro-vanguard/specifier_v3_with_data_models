@@ -36,7 +36,7 @@
 ## 4. What each step reads
 
 - Only three skills read your requirement files directly: `discovery-author`, `brd-author` and `prd-author`.
-- When you raise a change and bring new files with it, `change-request-disposition` and `compare-versions.cjs` read those files too.
+- When you raise a change and bring new files with it, `change-request-disposition` and `compare-versions.ts` read those files too.
 - Every other step reads the document just before it in the flow, and looks up anything else it needs by ID. For example, `frd-author` reads the Feature catalog, and finds a requirement's wording in the PRD by the requirement's ID.
 - The data model's steps read the Glossary, the BRD and the PRD, as `data-model-design.md`, section 2, says.
 
@@ -47,14 +47,14 @@
 - The BRD uses the client's own words for things, because the Glossary comes after it. Where the client's word differs from the agreed one, the Glossary records it as "also written as", so the two can always be matched.
 - On a project's first run, the PRD comes before the Glossary, so its simple words are plain words, not agreed ones. The accepted PRD is never rewritten to match the Glossary afterwards: the Glossary records each word it replaced as "also written as", so the two can always be matched, as for the BRD.
 - When the project already has a Glossary, such as in a change, the PRD's simple words use its agreed words, never a retired one.
-- A check program finds each word the Glossary retired, and names the agreed word to use instead. It uses `tools/lib/scan-retired-words.cjs`. These check programs run it:
-  - `check-data-model.cjs`
-  - `check-features.cjs`
-  - `check-epic-grouping.cjs`
-  - `check-epic-brief.cjs`
-  - `check-frd.cjs`
-  - `check-stories.cjs`
-  - `check-prd.cjs`, only when the project already has a Glossary
+- A check program finds each word the Glossary retired, and names the agreed word to use instead. It uses `tools/lib/scan-retired-words.ts`. These check programs run it:
+  - `check-data-model.ts`
+  - `check-features.ts`
+  - `check-epic-grouping.ts`
+  - `check-epic-brief.ts`
+  - `check-frd.ts`
+  - `check-stories.ts`
+  - `check-prd.ts`, only when the project already has a Glossary
 - No document copies the client's sentences into a requirement. The PRD writes each requirement in simple words, and keeps the client's exact words next to it. `simple-writing-rules.md`, part 4, says where else the client's exact words are kept.
 
 ## 6. Draft first, decide once
@@ -62,7 +62,7 @@
 - A skill writes the whole document first, runs its check program, and only then stops for your decision. It stops once for each document.
 - The one exception is `glossary-author`, which has two gates: Gate 1 settles the words, and Gate 2 settles their definitions.
 - Before its gate, a skill also runs the quick check on each file it wrote or changed, as `simple-writing-rules.md` says.
-- At the gate, the first thing you read is printed by programs, counted from the documents, so none of it is the AI's own wording: the check program's summary, then `grade-questions.cjs`'s list of open questions, in order, each with its ratings. The program's last block is pasted into the document's Check record section, at the very end.
+- At the gate, the first thing you read is printed by programs, counted from the documents, so none of it is the AI's own wording: the check program's summary, then `grade-questions.ts`'s list of open questions, in order, each with its ratings. The program's last block is pasted into the document's Check record section, at the very end. For the BRD and the PRD, that block is one line: Pass or Fail, then the date and time, such as "Pass, 2026-11-03 14:05".
 - The data model's gates show the check program's summary, then the data model's own decisions, from its decisions file. `data-model-design.md`, gates 1 and 2, says how.
 - How a skill talks to you at its gate is in `decision-review-gates.md`.
 
@@ -73,7 +73,7 @@ Every count starts at 1.
 | What | ID |
 |---|---|
 | Business requirement | BR-01, BR-02 and so on |
-| Requirement in the PRD | REQ-{section}.{n}, counted by the PRD from 1 in each section, one requirement per row, such as REQ-3.1. The client's own number for the row goes in its source. Every row of the PRD's Requirements section has one, whatever its Kind: Requirement, Purpose, Scope or Way of working. Only a Requirement row becomes a feature. |
+| Requirement in the PRD | REQ-{section}.{n}, counted by the PRD from 1 in each section, one requirement per row, such as REQ-3.1. Every row of the PRD's Requirements section has one, whatever its Kind: Requirement, Purpose, Scope or Way of working. Only a Requirement row becomes a feature. |
 | NFR | NFR-1, NFR-2 and so on |
 | Transition requirement | the source's own ID, or TR-1, TR-2 and so on |
 | Data model decision | DM-1, DM-2 and so on, across the whole product |
@@ -104,15 +104,15 @@ A shared rules file, such as this one, and a skill keep their own opening notes:
 | The line reads | It means | Written by |
 |---|---|---|
 | Status: drafted | being written, or rewritten after a "no" at its gate | the skill |
-| Status: accepted on {date}, version {n} | you accepted it, and version n is saved | `version-log.cjs`, when you accept |
-| Status: parked on {date}, at its gate | set aside at its gate, after your third "no" | `park.cjs` |
+| Status: accepted on {date}, version {n} | you accepted it, and version n is saved | `version-log.ts`, when you accept |
+| Status: parked on {date}, at its gate | set aside at its gate, after your third "no" | `park.ts` |
 
-- `status.cjs` and `size-rules.cjs` read this line to see what's in progress.
+- `status.ts` and `size-rules.ts` read this line to see what's in progress.
 - A Story has no status line. Its status is the Status row of its own table: drafted, groomed or ready. An EPIC is ready when every one of its stories is ready.
 - The data model's things file and each data model file have one more line, straight after the status line. It starts "Next step:", and says what you do next.
 - A document a program writes, such as the Version log, opens with one line saying which program writes it, and that it is never edited by hand.
 
-**The reader's copy.** A document keeps its citations, such as "per BR-03", because the kit's programs and the Traceability map link each fact to its source. A reader outside the kit, such as a developer reading a story as a GitHub issue, gets the reader's copy instead: `node tools/reader-copy.cjs --file {document}` prints the document without its citations. The document itself never changes.
+**The reader's copy.** The BRD and the PRD have no citations, so each one's reader's copy is the document itself. Every other document keeps its citations, such as "per BR-03", because the kit's programs and the Traceability map link each fact to its source. A reader outside the kit, such as a developer reading a story as a GitHub issue, gets the reader's copy instead: `node tools/reader-copy.ts --file {document}` prints the document without its citations. The document itself never changes.
 
 **Example: the opening of a PRD.** Its first line is the title, "PRD — Expense claims". The next line is its status line, "Status: accepted on 2026-10-19, version 2". Its first section follows straight after.
 
@@ -127,10 +127,11 @@ Never fill a gap with a guess. Use one of these labels instead:
 | The information is still to come | TBD |
 | A quote from a source is missing | [Needs source excerpt] |
 
-Every gap names its question in the Question log, in the same place, such as "TBD, question 12" or "Euros only, Proposed (needs confirmation), question 4". The question says why it is asked, what it changes and who can answer it, and `grade-questions.cjs` checks that no gap is left without one. A document never holds its own list of open questions. They are kept only in the Question log.
+Every gap names its question in the Question log, in the same place, such as "TBD, question 12" or "Euros only, Proposed (needs confirmation), question 4". The question says why it is asked, what it changes and who can answer it, and `grade-questions.ts` checks that no gap is left without one. A document never holds its own list of open questions. They are kept only in the Question log.
 
 - A requirement that can't be checked yes or no names its question in the same way, such as "as needed, question 9". `simple-writing-rules.md` lists the words that can't be checked.
-- The data model is the one exception. A gap in a data model file names where it went, such as "? (DM-8)" for a decision. The data model's decisions file keeps each one. `data-model-design.md`, "Where each gap goes", says where each kind of gap goes.
+- The BRD and the PRD write their two gaps as short marks: `[TBD, Q12]` in place of the value, and `Euros only<sup>*Q4</sup>` for a suggested value, with the line "<sup>*</sup> Proposed: needs your confirmation. Qn is its question in the Question log." straight under each table or list that holds one. `templates/brd.md` and `templates/prd.md`, "No citations, and two marks", say how.
+- The data model is the other exception. A gap in a data model file names where it went, such as "? (DM-8)" for a decision. The data model's decisions file keeps each one. `data-model-design.md`, "Where each gap goes", says where each kind of gap goes.
 
 ## 10. Confidence
 
@@ -155,7 +156,9 @@ Every specific says where it came from, in one of these forms:
 - "per {document} section {n}"
 - "per your decision at {gate}", for something you decided at a gate
 
-The data model files are the one exception. They cite no source. The data model's decisions file keeps the reason for each decision, as `data-model-design.md`, section 2, says under "No citations".
+Two kinds of document are the exception, and cite no source:
+- **The BRD and the PRD.** Each names no file, no version, no section and no decision, and has no Source column and no Decision record. The Discovery brief lists the files each is written from, and the Question log keeps every question, its answer and where it was decided. A gap still names its question, as part 9 says.
+- **The data model files.** The data model's decisions file keeps the reason for each decision, as `data-model-design.md`, section 2, says under "No citations".
 
 ## 13. Business language
 
@@ -176,11 +179,11 @@ For example, a feature called "Manager approval" doesn't tell you who counts as 
 
 ## 15. Ask, don't assume
 
-- When something that matters is unknown, the skill never guesses. It runs probing-questions-author, which drafts the question and rates its impact and severity, and then `grade-questions.cjs`, which places it in the Question log. Both run inside the skill, after it drafts and before its check program.
+- When something that matters is unknown, the skill never guesses. It runs probing-questions-author, which drafts the question and rates its impact and severity, and then `grade-questions.ts`, which places it in the Question log. Both run inside the skill, after it drafts and before its check program.
 - The skill doesn't stall either. Until a question is answered, the document uses the recommended answer, marked Proposed (needs confirmation), and names the question.
 - The data model is the one exception. Its gaps never go into the Question log. Each one goes where its kind goes, as `data-model-design.md`, "Where each gap goes", says. Most go to a decision in the data model's own decisions file. The data model reads the Question log only for the recommended answer to a question the PRD left open.
 - When no file and no answer gives an objective or a business requirement, brd-author suggests one, marked Proposed (needs confirmation), and goes on. You decide each one at the gate. The PRD never suggests a requirement: it records only what the client asked for, and a business requirement nothing covers becomes a question.
-- At the gate, questions are asked in the order `grade-questions.cjs` sets, in the shape `decision-review-gates.md` gives. Their answers are the real choices, never "yes" or "no", and "I don't know yet" is always one of them.
+- At the gate, probing-questions-author asks the questions, in the order `grade-questions.ts` sets, as `decision-review-gates.md`, rule 4, says. Their answers are the real choices, never "yes" or "no", and "I don't know yet" is always one of them.
 - An open question never fails a check. A check fails only when a gap is lost, or a question is incomplete: a gap that names no question, or a question missing one of its parts, such as its ratings or its next best action.
 - When the requirements change so much that most of the work would change, you can start the project again from nothing, instead of raising a change. This re-run of the whole workflow happens only when you ask for it in words, such as "start the project again from nothing". `requirements-workflow` first shows what will move, and asks for your yes. Then every file and folder in `Output/{project}/` except `sources/` moves to `_archive/Output-{date}/{project}/`, at the top of the kit. No program does this move yet: the workflow does it by hand, as its part "Starting again from nothing" says. Every step then runs fresh, from the Discovery brief on. A re-run doesn't ask each earlier question again.
 
@@ -196,7 +199,7 @@ For example, a feature called "Manager approval" doesn't tell you who counts as 
 - A link's path holds no spaces. Use hyphens.
 - In a mermaid diagram, every label that holds brackets, braces or quotes is wrapped in double quotes, and edge labels are written as `-->|"label"|`.
 - Markdown is never shown inside a code block as an example. Show a real example, and a table of what each line holds.
-- `tools/lib/md-lint.cjs` finds every break, and every check program runs it.
+- `tools/lib/md-lint.ts` finds every break, and every check program runs it.
 
 ## 17. A mistake found later
 
@@ -213,18 +216,18 @@ NFRs are kept only in the PRD, each with an ID. Every other document lists the I
 
 ## 19. Each requirement's source
 
-For every requirement, the PRD records the document and the version its wording came from.
+The PRD names no file and no version. Each requirement sits under the client's own heading, with the client's own words next to it. The Discovery brief lists the files the PRD is written from, with their versions.
 
 ## 20. Running a skill on its own
 
 - Every skill can run on its own, without a workflow. It behaves the same either way.
-- Before it writes anything, it runs `tools/scaffold-project.cjs --project {project}`, which makes sure the project's folders exist. A project is kept in `Output/{project}/`, in the folder you work from, laid out as `project-folders.md` says. Folders a project may not need, such as `changes/`, are created the first time they are used.
-- Given only the project's name, it finds its inputs through `tools/lib/run-paths.cjs`.
+- Before it writes anything, it runs `tools/scaffold-project.ts --project {project}`, which makes sure the project's folders exist. A project is kept in `Output/{project}/`, in the folder you work from, laid out as `project-folders.md` says. Folders a project may not need, such as `changes/`, are created the first time they are used.
+- Given only the project's name, it finds its inputs through `tools/lib/run-paths.ts`.
 - If an input is missing, or isn't accepted yet, it names the input and stops.
 
 ## 21. Acceptance
 
-- Every "yes" at a gate runs `tools/accept.cjs` with the document's name.
+- Every "yes" at a gate runs `tools/accept.ts` with the document's name.
 - That saves a numbered copy in the Version log, saves a copy of the Question log as it stands, rebuilds the Traceability map, and updates the progress of any open change.
 
 ## 22. Quality

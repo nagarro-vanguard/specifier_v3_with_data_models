@@ -83,7 +83,7 @@ the block: its **Recommendation** becomes the item's Judgement in section 13 of 
 Change impact report, and its why, in one line, the Why. When the change moves a
 feature to another EPIC or FRD, that line starts "moves to", then the EPIC or FRD.
 
-Write the block as `../_shared/simple-writing-rules.md` says, every time. Inside change-request-workflow, `check-change-report.cjs` checks it in section 13. When you write the block into a file yourself, run `node tools/check-simple-writing.cjs --file {file}` on that file. Fix what it lists to fix, and run it again. Then show the one line it prints, such as "Simple writing, impact.md: 0 to fix, 2 to look at."
+Write the block as `../_shared/simple-writing-rules.md` says, every time. Inside change-request-workflow, `check-change-report.ts` checks it in section 13. When you write the block into a file yourself, run `node tools/check-simple-writing.ts --file {file}` on that file. Fix what it lists to fix, and run it again. Then show the one line it prints, such as "Simple writing, impact.md: 0 to fix, 2 to look at."
 
 ## Rules
 

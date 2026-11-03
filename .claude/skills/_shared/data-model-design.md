@@ -80,7 +80,7 @@ Nothing else is a source. A data model decision never is: its answer fills its o
 | A gap is never guessed | When the sources don't answer, that is a gap. Send it where "Where each gap goes" says. Most gaps become a decision in the decision register, with real options and a recommendation. Never fill a gap on the person's behalf, and never mark anything "assumed". Never leave the reader in the dark either: the file lists each open decision under its thing, with the recommended answer and why, and its "Next step" line says what to do. | A name with no stated length → "? (DM-8)" |
 | Two sources disagree | If the Glossary is one of them, the Glossary wins. If two requirements disagree, or the BRD and the PRD do, that is a data model decision. The person picks which answer the data model uses, as "Where each gap goes", row 4, says. The requirements stay as they are. | Two requirements give different limits for one field → "? (DM-7)", with each limit as an option |
 | No citations | The data model files show answers, not where each came from. The decision register keeps the reason for each decision, and where it lands. The one exception is an answer that is not yet confirmed. It names its question, as "Where each gap goes", row 5, says. | – |
-| The person decides | Every open decision is asked at the gate, as multiple choice. The recommended answer comes first, and "I don't know yet" is always one of the answers. The answer replaces the "?" and is kept in the register. "I don't know yet" keeps the "?", and the decision is asked again first at the next run. | – |
+| The person decides | Every open decision is asked at the gate by probing-questions-author, in its Ask mode, as multiple choice. The recommended answer comes first, and "I don't know yet" is always one of the answers. The answer replaces the "?" and is kept in the register. "I don't know yet" keeps the "?", and the decision is asked again first at the next run. | – |
 
 **A family's part of the PRD** is the section the Glossary's "Families at a glance" table names as that family's source.
 
@@ -135,7 +135,7 @@ A gap is anything the data model needs that the sources don't give. When a step 
 
 The Glossary's own `decision-register.md` is written by a program and never edited by hand. So the data model keeps its own decision register, `{product}-data-model-decisions.md`, next to its files.
 
-**Each file is treated like every other document in the kit.** It opens with its title, then the status line "Status: drafted", as `conventions.md`, "The opening of every document", says. It ends with a Check record. The person accepts the things file or a data model file at its gate. Then `accept.cjs` sets its status line to "accepted on" the date, and its version. It also saves a copy of the file and of the decision register in the Version log. So a later change can see what changed. Each gate records its answers in the decision register, so the register is saved with the file.
+**Each file is treated like every other document in the kit.** It opens with its title, then the status line "Status: drafted", as `conventions.md`, "The opening of every document", says. It ends with a Check record. The person accepts the things file or a data model file at its gate. Then `accept.ts` sets its status line to "accepted on" the date, and its version. It also saves a copy of the file and of the decision register in the Version log. So a later change can see what changed. Each gate records its answers in the decision register, so the register is saved with the file.
 
 **Which file a thing goes in.** A thing goes in the file of its Glossary family, which is the heading it sits under on its Glossary page. For example, Loan sits under Lending, so it goes in `lending.md`.
 
@@ -161,7 +161,7 @@ The Glossary's own `decision-register.md` is written by a program and never edit
 Starting again from `requirements-workflow`, step 1, starts the project again from nothing. No data model file is left, so the data model starts as a new build.
 
 **What is still open is asked again first.** A decision answered "I don't know yet", and a Glossary change left open, are never forgotten:
-- `node tools/status.cjs --project {project}` lists each one, under "Data model, still open". It also names the skill that asks it again. Under its "Next:" line, it says when: first, at the next run of `data-model-workflow`. Such an entry holds up no other step.
+- `node tools/status.ts --project {project}` lists each one, under "Data model, still open". It also names the skill that asks it again. Under its "Next:" line, it says when: first, at the next run of `data-model-workflow`. Such an entry holds up no other step.
 - In every mode, things-author and data-model-author ask each one they own again, first: once the inputs are checked, and before the sources are read. things-author owns the entries of the things file: the product-wide decisions, and the Glossary changes raised from it. data-model-author owns the entries of its own file.
 - A decision is asked again as gate 2 asks it, with the same options, the recommended answer first, and "I don't know yet".
 - A Glossary change left open is asked again as one question: send it to the Glossary again? The answers are "Send it with the next batch", recommended, and "I don't know yet". The first marks it "To raise", so step 8 sends it with the others. The second leaves it open.
@@ -244,7 +244,7 @@ Stop, and show the person `{product}-glossary-things.md`, with the Glossary chan
 
 Record every answer in the decision register straight away, as gate 2 says. A settled product-wide decision leaves "Decisions to make". One answered "I don't know yet" stays in the table. When they change a row, change it in `{product}-glossary-things.md`. Run the check in step 7 again after each change.
 
-**When the person accepts the things:** write "None: the things are accepted" as the "Next step" line. Then run the check once more, and paste its "For the file" block into the Check record of the things file and of the decision register. Do this before `accept.cjs`, never after, because `accept.cjs` saves each file as it is. Then run `node tools/accept.cjs --project {project} --document data-model-things`. It sets the status lines of both files, and saves a copy of each. Step 2 starts only once the things are accepted.
+**When the person accepts the things:** write "None: the things are accepted" as the "Next step" line. Then run the check once more, and paste its "For the file" block into the Check record of the things file and of the decision register. Do this before `accept.ts`, never after, because `accept.ts` saves each file as it is. Then run `node tools/accept.ts --project {project} --document data-model-things`. It sets the status lines of both files, and saves a copy of each. Step 2 starts only once the things are accepted.
 
 ---
 
@@ -440,7 +440,7 @@ Write three things, in this order:
 
 ## 11. Step 7: Check
 
-`tools/check-data-model.cjs` runs these checks. Run `node tools/check-data-model.cjs --project {project}` for the things file, at gate 1. Run it with `--family` and the file's name, such as `--family lending`, for one data model file, at gate 2. Each time, it checks the decision register too. It also runs the kit's checks: the opening, the sections, the placeholders, simple writing, one requirement per row, and the retired Glossary words. Fix every finding, and run it again until every check passes. Some of these checks need a person. The program lists each one it can't check, at the end of what it shows. At the gate, its last block goes into the Check record.
+`tools/check-data-model.ts` runs these checks. Run `node tools/check-data-model.ts --project {project}` for the things file, at gate 1. Run it with `--family` and the file's name, such as `--family lending`, for one data model file, at gate 2. Each time, it checks the decision register too. It also runs the kit's checks: the opening, the sections, the placeholders, simple writing, one requirement per row, and the retired Glossary words. Fix every finding, and run it again until every check passes. Some of these checks need a person. The program lists each one it can't check, at the end of what it shows. At the gate, its last block goes into the Check record.
 
 1. Every Glossary term that is a thing, or becomes nothing, is in `{product}-glossary-things.md`, as a thing or under "Left out".
 2. Every thing in this family has its part in the file, every Glossary word of this family that belongs to a thing shows as one of its fields or a field's choices, and every field, action or move this family adds to a thing from an earlier family is under "Adds to {Thing}".
@@ -460,14 +460,14 @@ Write three things, in this order:
 
 For each data model file, once steps 2 to 7 are done, stop and show the person the whole file, its moves included. Then ask, in this order:
 
-1. **The "one at a time" decisions,** one per message, in register order, laid out as `decision-review-gates.md` shows: the question, why I'm asking, for example, what it changes, each option with why you'd pick it and what happens next, "I don't know yet", my recommendation, and the next best action.
+1. **The "one at a time" decisions,** one per message, in register order, asked by probing-questions-author, in its Ask mode, as `decision-review-gates.md`, rule 4, says.
 2. **The "settled together" decisions,** as one list: each question with its recommended answer. The person gives one of three answers:
    - take all the recommended answers
    - change some, then take the rest
    - "I don't know yet"
 3. **The gate's own question:** "Accept the {family name} data model?", with the family's name, such as Lending.
 
-Each decision is asked as multiple choice, as `decision-review-gates.md`, rule 4, says. The recommended answer comes first, and "I don't know yet" is always one of the answers.
+Each decision is asked by probing-questions-author, as multiple choice, as `decision-review-gates.md`, rule 4, says. The recommended answer comes first, and "I don't know yet" is always one of the answers.
 
 **An answer that is not a rule:**
 - It may add a word, a state or a value the Glossary doesn't have. Then a Glossary change replaces the decision, as step 5 says.
@@ -482,7 +482,7 @@ Each decision is asked as multiple choice, as `decision-review-gates.md`, rule 4
 
 A settled decision is never edited. A later change adds a new entry, with the next ID, whose question starts "Replaces DM-{n}:". Each ID has one entry only.
 
-**When the person accepts:** set the "Next step" line to "None: this file is accepted." When a decision is still open, the line names it too, such as "None: this file is accepted. DM-4 is still open, and is asked again first at the next run." Run the check in step 7 once more, and paste its "For the file" block into the Check record of the file and of the decision register. Do this before `accept.cjs`, never after, because `accept.cjs` saves each file as it is. Then run `node tools/accept.cjs --project {project} --document data-model --family {family}`, where {family} is the file's name, such as lending. It sets the status lines of the file and of the decision register, and saves a copy of each. The skill never writes "accepted" itself.
+**When the person accepts:** set the "Next step" line to "None: this file is accepted." When a decision is still open, the line names it too, such as "None: this file is accepted. DM-4 is still open, and is asked again first at the next run." Run the check in step 7 once more, and paste its "For the file" block into the Check record of the file and of the decision register. Do this before `accept.ts`, never after, because `accept.ts` saves each file as it is. Then run `node tools/accept.ts --project {project} --document data-model --family {family}`, where {family} is the file's name, such as lending. It sets the status lines of the file and of the decision register, and saves a copy of each. The skill never writes "accepted" itself.
 
 Then the workflow goes on to the next family's file.
 
@@ -521,4 +521,4 @@ Then step 9 brings the data model in step with the Glossary.
 1. **Run `things-author`, then `data-model-author`, each in a change,** for the terms the Glossary changed only. A new thing gets its part. A renamed value is renamed everywhere it appears. A term that now belongs to a thing is added. Each "? (GC-{n})" gets its answer. Their gates are held again for what changed.
 2. **Once every file they changed is accepted again,** mark each change "Settled in the Glossary on {date}. Brought into the data model on {date}".
 
-Until a change has that last mark, `status.cjs` shows step 4 of `data-model-workflow` as still to do.
+Until a change has that last mark, `status.ts` shows step 4 of `data-model-workflow` as still to do.

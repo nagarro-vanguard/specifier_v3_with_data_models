@@ -27,15 +27,15 @@ This skill follows `../_shared/conventions.md`, `../_shared/simple-writing-rules
 - **Reads:** the accepted Feature catalog. In a change, also the Change impact report.
 - **Writes:**
   - `epics/grouping.md`. It only ever adds to it.
-  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.cjs`
+  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.ts`
 - **Its gate:** "Pick a grouping, settle its clashes, confirm the EPIC brief list." In place-one-feature mode: "Confirm the placement?"
-- **Its check:** `check-epic-grouping.cjs`
+- **Its check:** `check-epic-grouping.ts`
 
 ## Steps
 
 ### 1. Set up
 
-Run `node tools/scaffold-project.cjs --project {project}`. If the Feature catalog isn't accepted, say so and stop.
+Run `node tools/scaffold-project.ts --project {project}`. If the Feature catalog isn't accepted, say so and stop.
 
 ### 2. The inventory
 
@@ -59,22 +59,22 @@ If the specifier picks another option at the gate, section 3 is written out agai
 
 ### 5. Raise the questions
 
-Run probing-questions-author on the grouping, write each question's number at its gap, then run `node tools/grade-questions.cjs --project {project}`.
+Run probing-questions-author on the grouping, write each question's number at its gap, then run `node tools/grade-questions.ts --project {project}`.
 
 ### 6. Check
 
-Run `node tools/check-epic-grouping.cjs --project {project}`. It finds every clash from the catalog itself, so none can be missed. It also finds each word the Glossary retired, and names the agreed word to use instead. Fix every finding and run it again, until every check passes.
+Run `node tools/check-epic-grouping.ts --project {project}`. It finds every clash from the catalog itself, so none can be missed. It also finds each word the Glossary retired, and names the agreed word to use instead. Fix every finding and run it again, until every check passes.
 
 ### 7. The gate
 
-Hold the gate exactly as `decision-review-gates.md` says:
-- first, the two "For the person" blocks: the check program's, then `grade-questions.cjs`'s
-- then the questions the grouping raised or builds on, in the order `grade-questions.cjs` sets
+Hold the gate exactly as `decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode. The order:
+- first, the two "For the person" blocks: the check program's, then `grade-questions.ts`'s
+- then the questions the grouping raised or builds on, in the order `grade-questions.ts` sets
 - then the pick: which grouping, with each option as an answer, and "I don't know yet"
 - then each clash in the chosen grouping, one at a time, with its settlements as the answers, such as moving a feature into the first band, or changing the sequence
 - then the EPIC brief list, to confirm or change
 
-**Pick a grouping, settle its clashes, confirm the EPIC brief list.** Record each answer straight away, in the Decision record and the Question log. When every decision is made and the check passes, run `node tools/accept.cjs --project {project} --document epic-grouping`, then close with `status.cjs`.
+**Pick a grouping, settle its clashes, confirm the EPIC brief list.** Record each answer straight away, in the Decision record and the Question log. When every decision is made and the check passes, run `node tools/accept.ts --project {project} --document epic-grouping`, then close with `status.ts`.
 
 The EPIC grouping covers the whole product, so after a third "no" the skill offers only "accept it as it is" and "one more round" (`decision-review-gates.md`, rule 11).
 
@@ -84,12 +84,12 @@ Inside a change you said yes to, `../_shared/decision-review-gates.md`, rule 12,
 
 For a net-new feature a change brings, in this order:
 1. Propose where it goes: an existing EPIC or a new one, its place in the run order, and whether it gets an EPIC brief. Write the proposal into section 4, "Placements from changes". Nothing already written is changed.
-2. Run `node tools/check-epic-grouping.cjs --project {project}`, and fix every finding.
-3. Hold this mode's one gate, **Confirm the placement?**, as `../_shared/decision-review-gates.md` says:
+2. Run `node tools/check-epic-grouping.ts --project {project}`, and fix every finding.
+3. Hold this mode's one gate, **Confirm the placement?**, as `../_shared/decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode. The order:
    - first, the check program's "For the person" block
    - then the gate's question about the feature, **Where does {feature} go?**, in the shape rule 4 gives: the EPIC you propose, each other EPIC it could join, a new EPIC, and "I don't know yet". Record the decision straight away, and change section 4 if the answer differs from the proposal.
    - last, **Confirm the placement?**
-4. When the specifier confirms, run `node tools/accept.cjs --project {project} --document epic-grouping`, so the change that brought the feature can close.
+4. When the specifier confirms, run `node tools/accept.ts --project {project} --document epic-grouping`, so the change that brought the feature can close.
 
 ## Rules
 

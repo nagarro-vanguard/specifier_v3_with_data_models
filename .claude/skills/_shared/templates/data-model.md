@@ -83,7 +83,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** One Glossary family's things. For each thing, it holds its actions, the rules for each field, and how it moves. A story writer turns each of them into the same tests every time.
 - **What it is not:** Screens, how the data is stored, or data passed to or from outside systems. The reasons for each decision, which are in the data model's decisions file.
-- **Written by:** data-model-author, from `templates/data-model.md`, as `data-model-design.md`, steps 2 to 7 and gate 2, say. Checked by check-data-model.cjs before its gate. When you accept the file, accept.cjs sets the status line. It also saves a copy of this file and of the decisions file.
+- **Written by:** data-model-author, from `templates/data-model.md`, as `data-model-design.md`, steps 2 to 7 and gate 2, say. Checked by check-data-model.ts before its gate. When you accept the file, accept.ts sets the status line. It also saves a copy of this file and of the decisions file.
 - **File name:** `Output/{project}/glossary/data-models/{family}.md`. {family} is the family's name in lowercase with hyphens, such as `lending`, as `project-folders.md` says.
 - **The Next step line:** what the person needs to do next. Before the gate, it says how many decisions are open. Once the file is accepted, it reads "None: this file is accepted." When a decision is still open after the gate, it names that decision too.
 
@@ -94,7 +94,7 @@ This part is never copied into a document. It says what the template is for, wha
 | Things and their fields | One row per thing in this family, then one per thing this family adds to, in the order of their parts. Each row lists the fields of that part's rules table, in the same order. |
 | {Thing} | One part per thing in this family, in the Glossary's order. Its parts come in the order the next table gives. |
 | Adds to {Thing} | One part per thing from an earlier family that this family adds a field, an action or a move to. It holds only what this family adds, and leaves out any table it adds nothing to. When it has open decisions, it ends with "Decisions to make". |
-| Check record | The record of the last check, pasted exactly as check-data-model.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-data-model.ts printed it. |
 
 ### What each part of a thing holds
 

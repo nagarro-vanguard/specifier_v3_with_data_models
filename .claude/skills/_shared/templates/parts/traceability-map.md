@@ -4,9 +4,9 @@
 >
 > **What it is not:** A document you read or edit. A program rebuilds it at every acceptance.
 >
-> **Who uses it:** `traceability-map.cjs` writes it. `find-linked.cjs` reads it, to find what a change touches.
+> **Who uses it:** `traceability-map.ts` writes it. `find-linked.ts` reads it, to find what a change touches.
 
-It is the file `traceability-map.json`. Only `traceability-map.cjs` writes it, rebuilt at every acceptance from the latest accepted version of each document. Nobody edits it by hand.
+It is the file `traceability-map.json`. Only `traceability-map.ts` writes it, rebuilt at every acceptance from the latest accepted version of each document. Nobody edits it by hand.
 
 ## The shape
 
@@ -57,4 +57,4 @@ One per ID. Each ID appears once.
 
 ## The check
 
-Every link's from and to must be an existing item. `traceability-map.cjs` lists any that aren't, and exits with code 1.
+Every link's from and to must be an existing item. `traceability-map.ts` lists any that aren't, and exits with code 1.

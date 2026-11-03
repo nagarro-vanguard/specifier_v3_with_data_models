@@ -28,24 +28,24 @@ This skill follows `../_shared/conventions.md`, `../_shared/simple-writing-rules
 - **Writes:**
   - `epics/{epic}/story-list.md`
   - one Story per story, `epics/{epic}/{story}.md`, only after approval
-  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.cjs`
+  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.ts`
 - **Its gate:** "Approve the split?", for all the EPIC's stories together.
-- **Its check:** `check-stories.cjs`
+- **Its check:** `check-stories.ts`
 
 ## Steps
 
 Steps 1 to 6 run without stopping.
 
-1. **Set up.** Run `node tools/scaffold-project.cjs --project {project} --epic {epic}`. If an FRD the EPIC's features need isn't accepted, say so and stop.
+1. **Set up.** Run `node tools/scaffold-project.ts --project {project} --epic {epic}`. If an FRD the EPIC's features need isn't accepted, say so and stop.
 2. **Restate** the EPIC from its register row, and its brief if it has one, in plain words.
 3. **Personas.** Take the "As a" personas from the PRD, in the Glossary's role words.
 4. **Capabilities.** Take the capabilities from the FRDs' flows: each step a person takes is a candidate. Split any bundle. Expand any "manage" into what it really means.
 5. **Split and order.** Choose how to split, recommend it, and order the stories in the order they are worked. Every feature of the EPIC is told by at least one story, or routed elsewhere with its reason.
 6. **Draft the Story list** from its template: each story's title and statement, its requirement and feature, status drafted, the routed items, and the coverage. Add design links when a design exists. Check each story against Q1, one capability, and Q10, legible at one altitude. A long "I want", or one with many clauses, is the signal to split it or thin it.
-7. **Raise the questions.** Run probing-questions-author on the list, write each question's number where its gap is, then run `node tools/grade-questions.cjs --project {project}`.
-8. **Check.** Run `node tools/check-stories.cjs --project {project} --epic {epic}`. Fix every finding and run it again.
-9. **The gate.** Hold it as `../_shared/decision-review-gates.md` says: the two "For the person" blocks, the questions in order, then **Approve the split?**, covering all the EPIC's stories together, with their order. Record each answer straight away.
-10. **After approval,** create one Story per story from its template, named by its title in lowercase with hyphens: its status rows, and its statement, word for word from the list, under Description. The grooming sections and the Acceptance criteria are added later, by story-groomer and ac-author. Run the check again, and paste its "For the file" block into the Story list's Check record. Then run `node tools/accept.cjs --project {project} --document story-list --epic {epic}`, which saves this version of the Story list, and close with `status.cjs`.
+7. **Raise the questions.** Run probing-questions-author on the list, write each question's number where its gap is, then run `node tools/grade-questions.ts --project {project}`.
+8. **Check.** Run `node tools/check-stories.ts --project {project} --epic {epic}`. Fix every finding and run it again.
+9. **The gate.** Hold it as `../_shared/decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode. The order: the two "For the person" blocks, the questions in order, then **Approve the split?**, covering all the EPIC's stories together, with their order. Record each answer straight away.
+10. **After approval,** create one Story per story from its template, named by its title in lowercase with hyphens: its status rows, and its statement, word for word from the list, under Description. The grooming sections and the Acceptance criteria are added later, by story-groomer and ac-author. Run the check again, and paste its "For the file" block into the Story list's Check record. Then run `node tools/accept.ts --project {project} --document story-list --epic {epic}`, which saves this version of the Story list, and close with `status.ts`.
 
 An EPIC's gates offer "park it" after a third "no", with "accept it as it is" and "one more round" (`../_shared/decision-review-gates.md`, rule 11).
 

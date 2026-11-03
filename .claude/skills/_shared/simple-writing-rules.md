@@ -8,12 +8,12 @@
 
 **The rule: every skill, every file, every time.**
 - Every skill follows these rules for every file it writes or changes, and for every message at a gate. It follows them every time, not only for a new document.
-- After it writes, the skill runs the quick check on each file it wrote or changed: `node tools/check-simple-writing.cjs --file {file}`. Once the project has a Glossary, it adds `--project {project}`, so the agreed Glossary words are allowed. It fixes everything the check lists to fix, and runs the check again.
+- After it writes, the skill runs the quick check on each file it wrote or changed: `node tools/check-simple-writing.ts --file {file}`. Once the project has a Glossary, it adds `--project {project}`, so the agreed Glossary words are allowed. It fixes everything the check lists to fix, and runs the check again.
 - When the skill's own check program already runs this check, that counts as the quick check.
 - At the gate, the skill shows the one line the quick check prints for each file, such as "Simple writing, lending.md: 0 to fix, 4 to look at."
 - No program can check a message at a gate. For gate messages, the rule is an instruction only. The skill follows it as it writes each message.
 
-*Every author skill points to this file. `conventions.md` holds no writing rules. The check is `tools/lib/simple-writing.cjs`. Every check program runs it, and `tools/check-simple-writing.cjs` runs it on any one document.*
+*Every author skill points to this file. `conventions.md` holds no writing rules. The check is `tools/lib/simple-writing.ts`. Every check program runs it, and `tools/check-simple-writing.ts` runs it on any one document.*
 
 ## 1. Who we write for
 
@@ -69,7 +69,7 @@ The examples are for a made-up online shop.
 | 7.1 Specify and Model Requirements | The analyst analyses, combines and refines elicitation results into requirements. | A copied quote is an elicitation result. It is not yet a requirement. |
 | 7.2 Verify Requirements | A good requirement is understandable in the audience's own terms, has one meaning, and is concise. | The simple words are the requirement. |
 | 4.3 Confirm Elicitation Results | Elicitation results are checked against their source. | The client's words stay next to the simple words, for checking. |
-| 5.1 Trace Requirements | Each requirement can be traced back to its source. | Each row keeps its source: the file, its version and its place. |
+| 5.1 Trace Requirements | Each requirement can be traced back to its source. | Each row sits under the client's own heading, with the client's words next to it. The Discovery brief names the file and its version. |
 | 10.18 Document Analysis | Notes on a document hold its exact details next to a summary in the analyst's words. | Exact quotes belong in the Discovery brief, not in the PRD's requirements. |
 
 ## 5. Where these rules apply
@@ -87,7 +87,7 @@ The examples are for a made-up online shop.
 
 ## 6. How the check works
 
-`tools/lib/simple-writing.cjs` reads a document and the lists in part 7. Every check program runs it before its gate. Anything "to fix" is a finding, and the skill fixes it before you see the document. Anything "to look at" is shown to you at the gate.
+`tools/lib/simple-writing.ts` reads a document and the lists in part 7. Every check program runs it before its gate. Anything "to fix" is a finding, and the skill fixes it before you see the document. Anything "to look at" is shown to you at the gate.
 
 | What it finds | What happens |
 |---|---|
@@ -218,6 +218,9 @@ The examples are for a made-up online shop.
 | big picture | overview |
 | move the needle | make a difference |
 | day one | from the start |
+| • the thread<br>• one thread<br>• a thread | say what links the things |
+| • the edges<br>• at the edges | say which parts |
+| • in waves<br>• waves of | in stages, or in releases |
 
 ### Pointing words
 

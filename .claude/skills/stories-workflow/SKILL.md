@@ -34,25 +34,25 @@ This workflow follows `../_shared/conventions.md`, `../_shared/simple-writing-ru
 
 | Step | Done by | Previous step | Reads | Looks up by ID | Writes | Check before the gate | Gate | Next step |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `route-next-epic.cjs` | start | • EPIC register<br>• every Story list | none | the next EPIC that isn't waiting on a parked one or on a Must answer question | none | none | 2, or "every EPIC ready" |
-| 2 | `route-brief-list.cjs` | 1 | EPIC grouping | none | yes or no | none | none | yes: 3<br>no: 4 |
-| 3 | `epic-author`, brief mode | 2 | EPIC register | • BRD<br>• PRD<br>• Feature catalog | • EPIC brief<br>• Question log | `check-epic-brief.cjs` | Accept the EPIC brief? | 4 |
-| 4 | `story-drafter` | 2 or 3 | • EPIC register<br>• FRDs<br>• Design, if any | • Glossary<br>• BRD<br>• PRD | • Story list<br>• story shells<br>• Question log | `check-stories.cjs` | Approve the split? All stories together. | 5 |
-| 5 | `story-groomer` | 4 | • Story list<br>• story shells | • FRDs<br>• Feature catalog<br>• BRD<br>• EPIC brief<br>• Glossary | • Stories, groomed<br>• Question log | `check-stories.cjs` | Accept the grooming? All stories together. | 6 |
-| 6 | `ac-author` | 5 | Stories | • FRDs<br>• Glossary | • Stories, with acceptance criteria<br>• ready marks<br>• Question log | • `check-stories.cjs`<br>• `coverage-check.cjs` | Accept the criteria? This marks the stories ready. While a Must answer question raised in these stories is open, they can't be marked ready. | end of this run |
+| 1 | `route-next-epic.ts` | start | • EPIC register<br>• every Story list | none | the next EPIC that isn't waiting on a parked one or on a Must answer question | none | none | 2, or "every EPIC ready" |
+| 2 | `route-brief-list.ts` | 1 | EPIC grouping | none | yes or no | none | none | yes: 3<br>no: 4 |
+| 3 | `epic-author`, brief mode | 2 | EPIC register | • BRD<br>• PRD<br>• Feature catalog | • EPIC brief<br>• Question log | `check-epic-brief.ts` | Accept the EPIC brief? | 4 |
+| 4 | `story-drafter` | 2 or 3 | • EPIC register<br>• FRDs<br>• Design, if any | • Glossary<br>• BRD<br>• PRD | • Story list<br>• story shells<br>• Question log | `check-stories.ts` | Approve the split? All stories together. | 5 |
+| 5 | `story-groomer` | 4 | • Story list<br>• story shells | • FRDs<br>• Feature catalog<br>• BRD<br>• EPIC brief<br>• Glossary | • Stories, groomed<br>• Question log | `check-stories.ts` | Accept the grooming? All stories together. | 6 |
+| 6 | `ac-author` | 5 | Stories | • FRDs<br>• Glossary | • Stories, with acceptance criteria<br>• ready marks<br>• Question log | • `check-stories.ts`<br>• `coverage-check.ts` | Accept the criteria? This marks the stories ready. While a Must answer question raised in these stories is open, they can't be marked ready. | end of this run |
 
 ## How it runs
 
-1. Run `node tools/route-next-epic.cjs --project {project}`. When the specifier names an EPIC, use that one instead. If it prints "Every EPIC ready.", print that line and stop.
-2. Run `node tools/scaffold-project.cjs --project {project} --epic {epic folder}`.
-3. Run `node tools/route-brief-list.cjs --project {project} --epic {EPIC ID}`. On "yes", call epic-author in brief mode for the EPIC, and wait for its gate. On "no", go to the next step.
+1. Run `node tools/route-next-epic.ts --project {project}`. When the specifier names an EPIC, use that one instead. If it prints "Every EPIC ready.", print that line and stop.
+2. Run `node tools/scaffold-project.ts --project {project} --epic {epic folder}`.
+3. Run `node tools/route-brief-list.ts --project {project} --epic {EPIC ID}`. On "yes", call epic-author in brief mode for the EPIC, and wait for its gate. On "no", go to the next step.
 4. Call story-drafter, then story-groomer, then ac-author, for the EPIC, each waiting for its gate to end. When the specifier names a step and the stories it covers, start at that step, for those stories only.
    - **In a change:** run only the steps the change's path names, for the EPIC and the stories it names. Give each skill the change's number. A story already marked ready is never changed: the path sends a new story for the difference to story-drafter.
 5. **The ready guard:** the stories can't be marked ready while a Must answer question raised in them is open. ac-author asks each such question first. If one can't be answered yet, the EPIC can be parked, and other work goes on.
-6. Add nothing between the steps. Each skill runs probing-questions-author and `grade-questions.cjs` inside itself, before its check and its gate, so the workflow has no steps of its own.
-7. Run `node tools/route-next-epic.cjs --project {project}` again, and print its first line, which says what comes next. In a change, print the next row of the change's path instead.
+6. Add nothing between the steps. Each skill runs probing-questions-author and `grade-questions.ts` inside itself, before its check and its gate, so the workflow has no steps of its own.
+7. Run `node tools/route-next-epic.ts --project {project}` again, and print its first line, which says what comes next. In a change, print the next row of the change's path instead.
 
-**Putting a ready story into a tracker,** such as a GitHub issue: use the reader's copy, `node tools/reader-copy.cjs --file {Story file}`, as the issue's body. It leaves out the citations, which only the kit's programs need. The Story file keeps them, and stays the agreed copy: a change to the story is made in the file, and the reader's copy is made again.
+**Putting a ready story into a tracker,** such as a GitHub issue: use the reader's copy, `node tools/reader-copy.ts --file {Story file}`, as the issue's body. It leaves out the citations, which only the kit's programs need. The Story file keeps them, and stays the agreed copy: a change to the story is made in the file, and the reader's copy is made again.
 
 ## How it goes back
 

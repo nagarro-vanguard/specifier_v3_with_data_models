@@ -40,7 +40,7 @@ This skill follows `../_shared/data-model-design.md`, sections 1 to 3 and 6 to 1
   - one data model file, `Output/{project}/glossary/data-models/{family}.md`
   - its decisions and Glossary changes, in `Output/{project}/glossary/data-models/{product}-data-model-decisions.md`
 - **Its gate:** gate 2. The decisions come first, as multiple choice, then "Accept the {family name} data model?" {family name} is the family's name, such as Lending. {family} is its file name, such as lending.
-- **Its check:** `check-data-model.cjs --family {family}`. It runs `data-model-design.md`, step 7, checks 2 to 11, and the kit's checks, on the file and on the decisions file.
+- **Its check:** `check-data-model.ts --family {family}`. It runs `data-model-design.md`, step 7, checks 2 to 11, and the kit's checks, on the file and on the decisions file.
 
 ## Steps
 
@@ -61,8 +61,8 @@ Find the mode for this family's file, as `data-model-design.md`, section 3, "Bef
 
 ### 3. Ask again what is still open
 
-Before anything else is written, ask again each entry still open that this skill owns, as `data-model-design.md`, section 3, "What is still open is asked again first", says. Run `node tools/status.cjs --project {project}`. Its block "Data model, still open" lists each entry, and names the skill that asks it. This skill owns the entries of this family's file:
-- each decision answered "I don't know yet": ask it again as gate 2 asks it, as multiple choice, with the recommended answer first and "I don't know yet"
+Before anything else is written, ask again each entry still open that this skill owns, as `data-model-design.md`, section 3, "What is still open is asked again first", says. Run `node tools/status.ts --project {project}`. Its block "Data model, still open" lists each entry, and names the skill that asks it. This skill owns the entries of this family's file:
+- each decision answered "I don't know yet": ask it again as gate 2 asks it, by probing-questions-author, as multiple choice, with the recommended answer first and "I don't know yet"
 - each Glossary change raised from this file and left open: ask whether to send it to the Glossary again, with "Send it with the next batch" recommended, and "I don't know yet"
 
 Record each answer straight away, in the register and in the file, as section 12 of `data-model-design.md` says. A product-wide decision is things-author's to ask. Once it is settled, write its answer in place of each "? (DM-{n})" in this file, in a change.
@@ -93,28 +93,28 @@ Follow `data-model-design.md`, step 6: the picture, the Moves table and the "Wha
 
 ### 10. Check
 
-Run `node tools/check-data-model.cjs --project {project} --family {family}`. It runs checks 2 to 11 in `data-model-design.md`, step 7, on this file. It also runs the kit's checks: the opening, the sections, the placeholders, simple writing, one requirement per row and the retired Glossary words. It checks the decisions file too. Fix every finding, and run it again, until every check passes.
+Run `node tools/check-data-model.ts --project {project} --family {family}`. It runs checks 2 to 11 in `data-model-design.md`, step 7, on this file. It also runs the kit's checks: the opening, the sections, the placeholders, simple writing, one requirement per row and the retired Glossary words. It checks the decisions file too. Fix every finding, and run it again, until every check passes.
 
 It runs simple writing, so it counts as the quick check that `../_shared/simple-writing-rules.md` asks for. A Glossary word or definition is used as it is, so never change one to pass the check. The check never fails a definition. When it shows one to look at, that belongs to the Glossary. Send it where a Glossary change goes, as `data-model-design.md`, "Where each gap goes", says. Run the check again each time a file changes at the gate.
 
 ### 11. The gate
 
-Hold gate 2, as `data-model-design.md`, section 12, says. Show the person the whole file. Show the check's "For the person" block first. It holds what the check program shows for each file, such as "Simple writing, to look at: 4 places". First come the "one at a time" decisions, one per message, as multiple choice. Then come the "settled together" decisions, as one list with their recommended answers. The recommended answer always comes first, and "I don't know yet" is always one of the answers. Record each answer straight away, in the register and in the file.
+Hold gate 2, as `data-model-design.md`, section 12, says, with probing-questions-author asking each decision in its Ask mode. Show the person the whole file. Show the check's "For the person" block first. It holds what the check program shows for each file, such as "Simple writing, to look at: 4 places". First come the "one at a time" decisions, one per message, as multiple choice. Then come the "settled together" decisions, as one list with their recommended answers. The recommended answer always comes first, and "I don't know yet" is always one of the answers. Record each answer straight away, in the register and in the file.
 - "I don't know yet" keeps the decision open. Each cell it answers keeps its "? (DM-{n})", and its row stays in "Decisions to make". It is asked again first at the next run, in step 3.
 - An answer may add a word, a state, a value or an action big enough to be a feature. Then it is not a rule. It goes where "Where each gap goes" sends it. `data-model-design.md`, section 12, says what happens to the decision.
 - An answer may differ from the recommended one. Then update what that answer changes, before asking whether to accept the file. That can be the moves, a rule or an action. Then run the checks in step 10 again.
 
 Then ask **"Accept the {family name} data model?"** When the person accepts:
 1. Set the "Next step" line, as section 12 of `data-model-design.md` says.
-2. Run the check once more. Paste its "For the file" block into the Check record of the file, and into the Check record of the decisions file. Do this before `accept.cjs`, never after.
-3. Run `node tools/accept.cjs --project {project} --document data-model --family {family}`. It sets the status line of the file, and saves a copy of it in the Version log. It does the same for the decisions file.
-4. Close with `node tools/status.cjs --project {project}`.
+2. Run the check once more. Paste its "For the file" block into the Check record of the file, and into the Check record of the decisions file. Do this before `accept.ts`, never after.
+3. Run `node tools/accept.ts --project {project} --document data-model --family {family}`. It sets the status line of the file, and saves a copy of it in the Version log. It does the same for the decisions file.
+4. Close with `node tools/status.ts --project {project}`.
 
 ## In a change
 
 Inside a change you said yes to, `../_shared/decision-review-gates.md`, rule 12, says what to do in place of the gate: no gate question, and the skill asks you something only for the reasons it gives.
 
-When the Glossary changes a term after the file is accepted, or a thing, an action, a field or an answer changes, change only what the change names. Open a decision that starts "Replaces DM-{n}:" when an answer changes, and hold gate 2 again for what changed only. Step 4 of `data-model-workflow` is such a change: it names the Glossary changes the Glossary has settled, and each "? (GC-{n})" gets the Glossary's answer. Everything else stays as it is. While the skill changes the file, its status line reads "Status: drafted". When the person accepts it again, `accept.cjs` saves the new version, so the change can see what changed.
+When the Glossary changes a term after the file is accepted, or a thing, an action, a field or an answer changes, change only what the change names. Open a decision that starts "Replaces DM-{n}:" when an answer changes, and hold gate 2 again for what changed only. Step 4 of `data-model-workflow` is such a change: it names the Glossary changes the Glossary has settled, and each "? (GC-{n})" gets the Glossary's answer. Everything else stays as it is. While the skill changes the file, its status line reads "Status: drafted". When the person accepts it again, `accept.ts` saves the new version, so the change can see what changed.
 
 ## Rules
 
@@ -127,7 +127,7 @@ The most important few:
 - **Flow first.** Actions come before fields, and every Glossary flow row involving the family shows in the file.
 - **One action per row.** Each row of an Actions table holds one action, and each of its rules is one sentence, as `../_shared/atomic-rules.md` says.
 - **The whole file first, then one gate.** How a thing moves is written before the gate, following the recommended answer of each open decision. At the gate, the decisions come first, then "Accept the {family name} data model?".
-- **The status line is set by programs.** The skill writes "Status: drafted". `accept.cjs` sets it when the person accepts.
+- **The status line is set by programs.** The skill writes "Status: drafted". `accept.ts` sets it when the person accepts.
 - **Stay within the family's part of the PRD.** Later parts add to earlier things in their own files.
 - **No citations** in the file. The register keeps the reason for each decision, and where it lands. An answer not yet confirmed names only its question.
 - **Template only.** The saved file is exactly the template's sections. Narration stays in the conversation.

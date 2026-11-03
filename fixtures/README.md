@@ -23,7 +23,7 @@ A project folder called `mcp-slice`, laid out as `.claude/skills/_shared/project
 
 ### What the slice shows on purpose
 
-- **Gaps that name no question.** The PRD and the EPIC register were written before every gap had to name its question, so `grade-questions.cjs` reports their TBDs. The tests use this to check that a lost gap is found.
+- **Gaps that name no question.** The PRD and the EPIC register were written before every gap had to name its question, so `grade-questions.ts` reports their TBDs. The tests use this to check that a lost gap is found.
 - **An answer that starts with "No".** The FRD's Decision 5 was worded before answers had to be the real choices, so the grader reports question 4.
 
 ### What the slice doesn't have

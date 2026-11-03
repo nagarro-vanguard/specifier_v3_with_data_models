@@ -168,6 +168,79 @@ The team's edited issues no longer match the template, so `check-stories.cjs` an
 - **Touches:** `_shared/conventions.md` (part 5), `prd-author/SKILL.md`, `tools/check-prd.cjs`, `tools/tests/requirements.test.cjs`.
 - **Status:** done 2026-11-02, not committed.
 
+### 17. BRD: no citations, short marks, no Decision record, a one-line Check record
+
+- **Found (specifier, 2026-11-03):** enhancement 5 dropped citations only from the reader's copy. The BRD file itself still cited a file or decision on almost every line, and read as heavy.
+- **Verdict:** valid, for the BRD.
+  - Strip every citation: no "per …", no file name, no section or decision number, no Source column. The Discovery brief already lists the files, and the Question log keeps every question and answer.
+  - A gap reads `[TBD, Q7]`. The specifier picked the short number over a bare [TBD], so the programs can still link each gap to its question.
+  - A suggested value reads `value<sup>*Q4</sup>`. Its legend goes straight under each table or list that has one: `<sup>*</sup> Proposed: needs your confirmation. Qn is its question in the Question log.`
+  - No Decision record: each answer goes into the Question log only, and its "Decided in" names the BRD's gate.
+  - The Check record is one line: `Pass, 2026-11-03 14:05` or `Fail, …`.
+- **Done 2026-11-03, not committed:**
+  - `_shared/templates/brd.md`: Source columns gone, objectives a list, Decision record gone, a new "No citations, and two marks" part, and every label's example without citations
+  - `_shared/examples/brd.md`: rewritten in the new shape
+  - `brd-author/SKILL.md`: description, step 2, step 4, step 6 and Q9
+  - `brd-author/references/brd-checklist.md`: the KPI, risk and source lines
+  - `_shared/conventions.md`: parts 6, 8 (the reader's copy), 9 and 12
+  - `_shared/decision-review-gates.md`: rules 5 and 11
+  - `_shared/templates/question-log.md`: About this template, and section 8's Decided in
+- **Done 2026-11-03, the programs, not committed** (after the `.cjs` to `.ts` move):
+  - `lib/marks.ts`, new: the two marks, the legend line, and the checks every document that cites nothing shares: "No citations", "Legend" and "Check record". Item 18 uses the same checks for the PRD.
+  - `lib/md-lint.ts`, rule 2: `<sup>` and `</sup>` are allowed. They hide no text.
+  - `grade-questions.ts`, `gapsInFile`: reads `[TBD, Q{n}]` as a TBD and `<sup>*Q{n}</sup>` as a Proposed gap, each naming question n, and gives the mark as written. A label in backticks, such as `` `[TBD, Q{n}]` ``, is a form written out, never a gap.
+  - `check-brd.ts`: "Every line says where it came from" is gone. New checks: "No citations", "Legend", "Check record", and every KPI cell holds a value. The objectives are read from the list in section 3. "For the file" is one line, such as `Pass, 2026-11-03 14:05`. A `--time HH:MM` option is for tests.
+  - `lib/check-document.ts`:
+    - `report()`: the one-line "For the file", through `recordTime`
+    - `beyond()`: finds `<sup>*Q{n}</sup>`, and shows it to the person as "Proposed (needs confirmation), question n"
+    - `stillNeeded()`: reads the `Q{n}` marks
+    - for a document with no Decision record, the gate lists the answered questions whose "Decided in" names it
+  - `lib/types.ts`: `recordTime` in `ReportSpec`
+  - `insert-answer.ts`: in the BRD, `[TBD, Q7]` becomes the answer with no "per …", `<sup>*Q4</sup>` goes, and a legend line with no mark left above it goes too
+  - `check-prd.ts`: no change. It checks only that each business requirement's ID is in the BRD, not its words.
+  - tests:
+    - `requirements.test.ts`: the check-brd tests, rewritten for the new shape: 21 pass
+    - `requirement-update.test.ts`: insert-answer writes "10 working days"; a new test for a confirmed suggestion and its legend; change 001's closing entry lands in the Feature catalog's Decision record, because the BRD, the PRD and the data model files have none
+  - Every check-brd, insert-answer, track-change and grade-questions test passes. The 44 tests that still fail were failing before these program changes, and none is a BRD test: they are the PRD's, the FRD's and the Feature catalog's checks after item 18's example changes, and the folder layout test the `.ts` move is changing.
+- **Not changed:** continuum's BRD in `Output/` was written before this change, so its check will flag it once the programs change.
+
+### 18. PRD: no citations, as the BRD, and each kind of row in its own form
+
+- **Found (specifier, 2026-11-03):**
+  - The PRD cited a source on every row, as the BRD did.
+  - Its rows were written in many shapes. Titles used the client's images, such as "control plane".
+  - Purpose and Scope rows didn't say whether they were a problem or a value, or in or out.
+- **Verdict:** valid.
+  - No citations, the two marks, no Decision record and a one-line Check record, as item 17 says for the BRD.
+  - A Requirement reads "{Who} can {action}" or "The platform {does something}", and can be checked yes or no. Its title is a noun that names the capability, such as "Named approval of decisions".
+  - A new Label column, after Kind. A Purpose row has Problem or Value. A Scope row has In MVP or Out of MVP. Any other row has "—". The statement is one plain fact.
+  - No title holds an image, such as "thread", "edges", "waves", "north star" or "control plane".
+  - A row is split only when its parts are separate capabilities. Make, sign and approve a decision stay in one row.
+  - At the gate, the question "Are these rows not requirements?" first says what each kind means.
+- **Done 2026-11-03, not committed:**
+  - `_shared/templates/prd.md`: Source columns gone, Decision record gone, "No citations, and two marks", the Label column, and the Kind, Label and simple-words labels
+  - `_shared/examples/prd.md`: no citations, a new section 1 with a Purpose row and a Scope row, and every Requirement row in the new form
+  - `prd-author/SKILL.md`: step 2, with the kind table, each kind's form and the title rules, and the gate
+  - `prd-author/references/prd-checklist.md`: the source lines, the Label, the title and the form lines
+  - `_shared/atomic-rules.md`: part 2 keeps the steps of one capability together
+  - `_shared/simple-writing-rules.md`: "thread", "edges" and "waves" added to the figures of speech
+  - `_shared/conventions.md`, `decision-review-gates.md` and `templates/question-log.md`: item 17's rules now cover the PRD too
+- **To do, the programs.** Waits for the `.cjs` to `.ts` move, and goes with item 17's program work, since both change `lib/check-document.ts` and `grade-questions.ts`:
+  - `lib/check-document.ts`, `requirementsOf()`: read the Label column, and know when it is missing
+  - `check-prd.ts`:
+    - a missing Label column is a finding
+    - a Purpose row's Label is Problem or Value, a Scope row's In MVP or Out of MVP, and any other row's "—"
+    - every row's simple words start with a title in bold, not only a Requirement row's
+    - a Requirement's statement starts "The platform", or has "can" or "cannot" after who does it
+    - drop the Source and version check on each requirement, and the "where it came from" check on NFRs and transition requirements
+    - add "No citations", "Legend" and "Check record", as item 17 says for the BRD
+    - the word-for-word check of the client's words read the client's file from the Source column. With no Source column, it finds the file through the Discovery brief, or is dropped.
+  - tests:
+    - `requirements.test.ts`: the new checks
+    - `foundation.test.ts`: the template's section 4 columns
+    - `simple-writing.test.ts`: PRD rows with a Label column
+- **Left for later:** the PRD template and example still use the Expense claims product. Kit examples should use a made-up online shop.
+
 ## Kept as is
 
 The status block, Work Item ID, the Rules table, the sizing alert, Metrics, Design links, and the Given / When / Then scenarios.
@@ -181,4 +254,4 @@ The status block, Work Item ID, the Rules table, the sizing alert, Metrics, Desi
 
 ## Status
 
-Done 2026-11-02, not committed: 2, 6 to 14, 15 and 16. Enhancement 1 was done 2026-10-27 and then replaced by 2. Enhancement 3 is not needed, because 2 is done. Enhancement 5 was done the same day: the notes and italic guidance are out of every document, and the reader's copy drops the citations. Still proposed: 4, a report of when a feature is done. Issues 85-89 on GitHub and continuum's own stories are still in the old shape.
+Done 2026-11-02, not committed: 2, 6 to 14, 15 and 16. Enhancement 1 was done 2026-10-27 and then replaced by 2. Enhancement 3 is not needed, because 2 is done. Enhancement 5 was done the same day: the notes and italic guidance are out of every document, and the reader's copy drops the citations. Still proposed: 4, a report of when a feature is done. 17, the BRD with no citations, is done on 2026-11-03, in the documents, the skills and the programs. 18, the PRD with no citations and each kind of row in its own form, is done in the documents and skills on 2026-11-03. Its programs are still to do, with 17's. Issues 85-89 on GitHub and continuum's own stories are still in the old shape.

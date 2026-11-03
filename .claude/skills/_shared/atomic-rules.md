@@ -11,7 +11,7 @@
 - A skill points to this file, and says where it applies the rules. It never copies them.
 - The check lists each row that may hold two requirements. You see the list at the gate. Only a person can judge a row, so the list never fails a check.
 
-*Q1 in `quality-characteristics.md` points to this file. The check is `tools/lib/one-per-row.cjs`.*
+*Q1 in `quality-characteristics.md` points to this file. The check is `tools/lib/one-per-row.ts`.*
 
 ## 1. What one requirement is
 
@@ -25,7 +25,8 @@ The examples are for a made-up online shop. The Before column is the text as the
 
 | The text has | Do this | Before | After |
 |---|---|---|---|
-| two actions, joined by "and", "or", a semicolon or a comma | **Split.** Give each action its own row. | "A customer can add an item to the cart, or remove it." | • A customer can add an item to the cart.<br>• A customer can remove an item from the cart. |
+| two actions that are separate capabilities, joined by "and", "or", a semicolon or a comma | **Split.** Give each action its own row. | "A customer can add an item to the cart, or remove it." | • A customer can add an item to the cart.<br>• A customer can remove an item from the cart. |
+| the steps of one capability | **Keep together.** Split only when the parts are separate capabilities. | "A store manager can make, sign and approve a refund decision." | A store manager can make, sign and approve a refund decision. |
 | a rule, then a second rule about something else | **Split.** | "The cart keeps its items for 30 days; an empty cart shows a message." | • The cart keeps its items for 30 days.<br>• An empty cart shows a message. |
 | several things that are not allowed | **Split.** Give each one its own row. | "There is no guest checkout and no gift wrapping." | • There is no guest checkout.<br>• There is no gift wrapping. |
 | a "so that" part that the product must also do | **Split.** | "A customer signs in, so every order is linked to their name." | • A customer signs in.<br>• Every order is linked to the customer's name. |
@@ -57,7 +58,7 @@ The examples are for a made-up online shop. The Before column is the text as the
 
 ## 4. How the check works
 
-`tools/lib/one-per-row.cjs` reads the rows a check program gives it. It lists each row that may hold two requirements, to look at. It never fails a check, because only a person can judge a row.
+`tools/lib/one-per-row.ts` reads the rows a check program gives it. It lists each row that may hold two requirements, to look at. It never fails a check, because only a person can judge a row.
 
 | What it reads | When a row is listed |
 |---|---|
@@ -82,11 +83,11 @@ So "a street, a city and a postcode" is never listed. A "so that" part is not re
 - a second "cannot", as in "A guest cannot send the order and cannot pay it."
 
 **The check programs that run it:**
-- `check-brd.cjs`: the business requirements
-- `check-prd.cjs`: the Requirement rows. A Purpose, Scope or Way of working row is not read.
-- `check-features.cjs`: each feature's name, its description and each "Done when" piece
-- `check-frd.cjs`: the rules
-- `check-stories.cjs`: each story's title and its "I want", and each scenario's When
-- `check-data-model.cjs`: each action's name, and each sentence of its rules, in a data model file
+- `check-brd.ts`: the business requirements
+- `check-prd.ts`: the Requirement rows. A Purpose, Scope or Way of working row is not read.
+- `check-features.ts`: each feature's name, its description and each "Done when" piece
+- `check-frd.ts`: the rules
+- `check-stories.ts`: each story's title and its "I want", and each scenario's When
+- `check-data-model.ts`: each action's name, and each sentence of its rules, in a data model file
 
-**What to do with a listed row.** Read it against part 2. Split it when its parts can be built, changed or dropped on their own. Keep it when it is a list of details or of values, or an example.
+**What to do with a listed row.** Read it against part 2. Split it when its parts are separate capabilities, each one built, changed or dropped on its own. Keep it when it is the steps of one capability, a list of details or of values, or an example.

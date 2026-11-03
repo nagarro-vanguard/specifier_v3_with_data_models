@@ -4,8 +4,8 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 description: >-
   Writes the impact of one change in its Change impact report: where each ask
   lands, in the requirements, the features, the FRDs, the EPICs and the data
-  model, then everything linked to it, through find-linked.cjs, and how big the
-  change is, as a hint for priority, through size-rules.cjs. No gate: the
+  model, then everything linked to it, through find-linked.ts, and how big the
+  change is, as a hint for priority, through size-rules.ts. No gate: the
   specifier's yes comes at step 5 of change-request-workflow. Use when
   change-request-workflow reaches step 3, or on its own with a project and a
   change, for example "what does change 004 touch in city-library?". Not for
@@ -30,8 +30,8 @@ description: >-
 |---|---|---|---|
 | Ask | one thing a change asks for, in the Glossary's agreed words | section 5 | Ask 1 |
 | Data model row | one action, field or move of a thing, as its data model file names it | the things file, `{product}-glossary-things.md`, and the data model file it names for the thing | Loan, Extend |
-| Linked item | anything linked to where the change lands, through the Traceability map or a drafted document | section 12, by find-linked.cjs | F-05.4 |
-| Size | Small, Large or Not sized, against the work in progress. A hint for priority. | section 14, by size-rules.cjs | Small |
+| Linked item | anything linked to where the change lands, through the Traceability map or a drafted document | section 12, by find-linked.ts | F-05.4 |
+| Size | Small, Large or Not sized, against the work in progress. A hint for priority. | section 14, by size-rules.ts | Small |
 
 ## Invoke it with
 
@@ -40,7 +40,7 @@ description: >-
 | the **project** | `city-library` |
 | the **change**, by its number, once sections 5 and 7 are written | `004` |
 
-- It finds the report, the PRD, the FRDs, the Feature catalog, the EPIC register, the Glossary and the data model itself, through `tools/lib/run-paths.cjs`.
+- It finds the report, the PRD, the FRDs, the Feature catalog, the EPIC register, the Glossary and the data model itself, through `tools/lib/run-paths.ts`.
 - Use only these inputs. Never facts from chat or memory.
 
 ## Load first
@@ -58,8 +58,8 @@ For each ask, write every business requirement, requirement, feature, FRD and EP
 
 ## Step 2: What it touches, and how big
 
-1. Run `node tools/find-linked.cjs --project {project} --change {change}`, which writes section 12.
-2. Run `node tools/size-rules.cjs --project {project} --change {change}`, which writes section 14.
+1. Run `node tools/find-linked.ts --project {project} --change {change}`, which writes section 12.
+2. Run `node tools/size-rules.ts --project {project} --change {change}`, which writes section 14.
 
 ## Rules
 

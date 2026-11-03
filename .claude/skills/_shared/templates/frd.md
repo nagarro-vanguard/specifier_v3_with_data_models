@@ -121,7 +121,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** The always-true rules for one capability, each written as "The system shall", with the flow and the data they act on. Every "Done when" piece of its features is proved by at least one rule. So is every action, field and move of the data model that its features own.
 - **What it is not:** Stories, screens or delivery order. Stories are cut from these rules later, and the EPICs decide what ships when.
-- **Written by:** frd-author, from `templates/frd.md`, whole, at one gate. Checked by check-frd.cjs before its gate.
+- **Written by:** frd-author, from `templates/frd.md`, whole, at one gate. Checked by check-frd.ts before its gate.
 
 ### What each section holds
 
@@ -138,7 +138,7 @@ This part is never copied into a document. It says what the template is for, wha
 | Data | Each thing in the data model coverage table, with its rules table copied word for word from its data model file, under a link to that file. A later family can add fields to the thing. Then the rules table of its "Adds to" part follows, under a link to its own file. Data is never written fresh. The one exception is a cell that a decision at this FRD's gate changed. It holds the new answer, then the note "Updated from the data model on the basis of Decision" and its number, then what changed. The data model file stays as it is. |
 | Standard questions | The same seven questions are asked about every thing in Data, so none is skipped. The data model file is searched first, then the other files. Only when they are silent does the question come to you, as a question in the Question log, worded so its answers are the real choices: "Answered by" is one of these. The file and place, then the rules it gave. The data model file and place, then the feature in another FRD that owns the answer, or "waits on" and its ID while the answer is open. A decision, then the rules it gave, or "no rule". A question in the Question log, by its number, while it is open. Or "Does not apply", with the file that rules it out. |
 | Decision record | Every decision made at the FRD's gate, in the order made, in the shape of `templates/parts/decision-record.md`. |
-| Check record | The record of the last check, pasted exactly as check-frd.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-frd.ts printed it. |
 
 ### What to write for each label
 

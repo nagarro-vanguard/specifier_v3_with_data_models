@@ -125,7 +125,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** One change, from your requests to your one yes: what type of change each one is, where it lands, what it touches, how big it is, and which updates to make.
 - **What it is not:** The updates. After your yes, `change-orchestration-workflow` makes them.
-- **Written by:** `change-request-workflow`, from `templates/change-impact-report.md`. Each section has exactly one writer, named in the table below, and nobody else writes in it. Checked by check-change-report.cjs before your yes.
+- **Written by:** `change-request-workflow`, from `templates/change-impact-report.md`. Each section has exactly one writer, named in the table below, and nobody else writes in it. Checked by check-change-report.ts before your yes.
 
 ### What each section holds
 
@@ -134,22 +134,22 @@ This part is never copied into a document. It says what the template is for, wha
 | The top | A section that doesn't apply to this change says why, in one line. For example, section 3 says: No new version of a requirement file was brought. |
 | 1. The requests, as you stated them | Written by the workflow's step 1. Each request, numbered, with the name you called it by, and your words exactly as you gave them. Several requests go in one change, and close together. |
 | 2. Files you brought | Written by the workflow's step 1. Every file that came with the change, and what it is. |
-| 3. Other differences in a new version | Written by compare-versions.cjs. When you bring a new version of a requirement file, every other place it differs from the version the PRD was written from, so no quiet edit is missed. A line that moves between scope and requirement says so. |
+| 3. Other differences in a new version | Written by compare-versions.ts. When you bring a new version of a requirement file, every other place it differs from the version the PRD was written from, so no quiet edit is missed. A line that moves between scope and requirement says so. |
 | 4. Check findings on documents from outside | Written by glossary-check, then settled by glossary-disposition at the workflow's step 1, so the analysis works with agreed words. Each word in a document from outside that doesn't match the Glossary, and how it was settled at glossary-disposition's gate: the document fixed, the Glossary changed, or a new word added. When there is no document from outside, or nothing mismatches, the table says None. |
 | 5. Restated, and split if several asks | Written by change-request-disposition. The requests in the Glossary's agreed words. A request that asks for several things is split, one ask per row. |
-| Agreed words this change renames | Written by change-request-disposition. Every agreed word in the Glossary that this change renames, which recommend.cjs reads to put glossary-disposition first. When the change renames none, this says None. |
-| 6. Where it lands | Written by change-impact-author. For each ask, the requirement, feature, FRD and EPIC it touches. The Data model column names each thing the ask touches, and its action, field or move. The data model files cite no source, so this column is how a change reaches them. From each row it names, find-linked.cjs reaches the FRD rules whose source names the same thing and action, field or move. |
+| Agreed words this change renames | Written by change-request-disposition. Every agreed word in the Glossary that this change renames, which recommend.ts reads to put glossary-disposition first. When the change renames none, this says None. |
+| 6. Where it lands | Written by change-impact-author. For each ask, the requirement, feature, FRD and EPIC it touches. The Data model column names each thing the ask touches, and its action, field or move. The data model files cite no source, so this column is how a change reaches them. From each row it names, find-linked.ts reaches the FRD rules whose source names the same thing and action, field or move. |
 | 7. Its kind | Written by change-request-disposition. Each ask is one of five kinds, and the kind decides which step the change enters at:<br>• Net new: nothing in the documents covers it yet<br>• Extend or enhance: it adds to something that already exists<br>• Update or optimize: it changes how something that exists works<br>• Already covered: the documents already say it, so nothing needs to change<br>• Blocked: it can't be judged until a question is answered |
 | 8. The journey | Written by change-request-disposition. The steps of the product's journey the change touches, taken from the Glossary's Steps page. Each step is marked Reused when it stays as it is, New when the change adds it, or Decision when it needs your answer. |
 | 9. What's reused, and what's new | Written by change-request-disposition. What already exists and stays as it is, and what the change adds. |
 | 10. What blocks | Written by change-request-disposition. Anything that stops the change from being judged or applied, and what would unblock it. When an answer is needed, the blocker is a question in the Question log, asked in the shape `decision-review-gates.md` gives, and this section names its number. When nothing blocks, this says None. |
 | 11. The challenge's findings | Written by adversarial-check. A second reading that tries to find what sections 5 and 7 to 10 got wrong or missed. Each finding quotes the file it read, says what it would change and who can fix it, and has change-request-disposition's answer. Then the challenge's verdict, which follows a fixed rule. |
-| 12. Linked items | Written by find-linked.cjs, from the Traceability map and from every document drafted since it was last accepted. Everything linked to what the change touches, grouped by the document it is in, so nothing affected is missed. |
+| 12. Linked items | Written by find-linked.ts, from the Traceability map and from every document drafted since it was last accepted. Everything linked to what the change touches, grouped by the document it is in, so nothing affected is missed. |
 | 13. Each linked item's judgement | Written by feature-impact, which the workflow calls once for each linked item. Whether the item must change, and why. |
-| 14. The tentative size | Written by size-rules.cjs. How big the change is against whatever is in progress now, and the rule that decided it. A hint for priority. It pauses nothing. |
-| 15. The recommendation | Written by recommend.cjs. The updates to make, in order: each workflow, the step it enters at, and its items. Under the table, each one only when it applies: the steps it leaves out, and the steps it adds, each with why. A small update you can choose instead, with every place it would change. A flag when the change reaches most of the business requirements. Then your choices at "Make these updates?", and the one it recommends. |
+| 14. The tentative size | Written by size-rules.ts. How big the change is against whatever is in progress now, and the rule that decided it. A hint for priority. It pauses nothing. |
+| 15. The recommendation | Written by recommend.ts. The updates to make, in order: each workflow, the step it enters at, and its items. Under the table, each one only when it applies: the steps it leaves out, and the steps it adds, each with why. A small update you can choose instead, with every place it would change. A flag when the change reaches most of the business requirements. Then your choices at "Make these updates?", and the one it recommends. |
 | 16. Your decision | Written by the workflow, at "Make these updates?". This is the report's Decision record: every decision you made about this change, in the shape of `templates/parts/decision-record.md`. The answers are the choices in section 15, then "I don't know yet". The one you choose is what change-orchestration-workflow follows until the change closes. |
-| Check record | The record of the last check, pasted exactly as check-change-report.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-change-report.ts printed it. |
 
 ### What to write for each label
 
@@ -205,5 +205,5 @@ This part is never copied into a document. It says what the template is for, wha
 | {in progress} | the piece in progress, each one when there are several, or Nothing in progress | EPIC-002 Lending's stories |
 | {workflow} | the workflow the update enters | frd-workflow |
 | {start step} | the step it enters at | step 2, frd-author |
-| {choice} | a choice recommend.cjs offers: Run the path, Insert it, Copy the wording, Re-run the whole workflow, Close it, or Correct the analysis | Run the path |
+| {choice} | a choice recommend.ts offers: Run the path, Insert it, Copy the wording, Re-run the whole workflow, Close it, or Correct the analysis | Run the path |
 | {what the choice does} | what happens if you choose it | change-orchestration-workflow makes the updates above, in order |

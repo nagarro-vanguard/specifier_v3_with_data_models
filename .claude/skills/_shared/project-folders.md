@@ -4,7 +4,7 @@
 >
 > **What it is not:** What goes inside each document. Each document's shape is its template, in `templates/`.
 >
-> **Who uses it:** You, to find a file. Every skill and program, through `tools/lib/run-paths.cjs`. And `tools/scaffold-project.cjs`, to create the folders.
+> **Who uses it:** You, to find a file. Every skill and program, through `tools/lib/run-paths.ts`. And `tools/scaffold-project.ts`, to create the folders.
 
 ## 1. Where a project lives
 
@@ -16,7 +16,7 @@ Every project gets one folder, `Output/{project}/`, in the folder you work from.
 - the data model's things file
 - the data model's decisions
 
-**To set up a project, or to check one,** run the program `scaffold-project.cjs`, from the folder you work from, with your project's name: `node {path to the tools folder}/scaffold-project.cjs --project {project}`.
+**To set up a project, or to check one,** run the program `scaffold-project.ts`, from the folder you work from, with your project's name: `node {path to the tools folder}/scaffold-project.ts --project {project}`.
 
 It creates the folders every project needs, and never deletes, moves or overwrites anything. Every workflow's first step runs it too, and so does every skill run on its own. If the folder already holds work from an older way of working, it creates nothing and tells you so.
 
@@ -69,21 +69,21 @@ For a project called `expense-claims`:
 | Folder | What goes in it | Written by | Created |
 |---|---|---|---|
 | `sources/` | your requirement files, unchanged | you | when the project is set up |
-| the project folder | • the Discovery brief<br>• the BRD<br>• the PRD<br>• the Question log<br>• the Traceability map | • discovery-author<br>• brd-author<br>• prd-author<br>• probing-questions-author and grade-questions.cjs<br>• traceability-map.cjs | when the project is set up |
+| the project folder | • the Discovery brief<br>• the BRD<br>• the PRD<br>• the Question log<br>• the Traceability map | • discovery-author<br>• brd-author<br>• prd-author<br>• probing-questions-author and grade-questions.ts<br>• traceability-map.ts | when the project is set up |
 | `glossary/` | the Glossary's seven files | glossary-author | when the project is set up |
 | `glossary/deep-dives/` | • the gate log<br>• the assembly draft | glossary-author | when the project is set up |
 | `glossary/deep-dives/{section}/` | • the section's draft<br>• the section's decisions | glossary-author | when the Glossary reads that section |
 | `glossary/data-models/` | • the things file<br>• one data model file per family<br>• the data model's decisions | • things-author<br>• data-model-author | when the project is set up |
 | `frd/` | • the Feature catalog<br>• one FRD per capability | • feature-author<br>• frd-author | when the project is set up |
-| `epics/` | • the EPIC grouping<br>• the EPIC register<br>• the EPIC sequencing and mapping | • epic-grouping-author<br>• epic-author<br>• build-sequencing-mapping.cjs | when the project is set up |
+| `epics/` | • the EPIC grouping<br>• the EPIC register<br>• the EPIC sequencing and mapping | • epic-grouping-author<br>• epic-author<br>• build-sequencing-mapping.ts | when the project is set up |
 | `epics/{epic}/` | • the EPIC brief, if the EPIC has one<br>• the Story list<br>• one file per Story | • epic-author<br>• story-drafter<br>• story-groomer<br>• ac-author | when that EPIC's brief or stories start |
 | `design/` | design files | you, if there are any | by you, when you bring design files |
 | `changes/{change}/` | • the Change impact report<br>• the check findings<br>• the change's progress | • `change-request-workflow`<br>• its skills and programs | when the change is raised |
-| `version-log/` | • the log<br>• one folder of copies per document | version-log.cjs | at the first acceptance |
+| `version-log/` | • the log<br>• one folder of copies per document | version-log.ts | at the first acceptance |
 
 ## 3. Every document's path
 
-This part is for the programs. The JSON block below is the only copy of the layout. `tools/lib/run-paths.cjs` reads its paths, and every skill and program finds its files through that library. `tools/scaffold-project.cjs` reads which folders to create at setup. The table is a readable copy of the paths. If you change one, change both. `run-paths.cjs` checks they agree.
+This part is for the programs. The JSON block below is the only copy of the layout. `tools/lib/run-paths.ts` reads its paths, and every skill and program finds its files through that library. `tools/scaffold-project.ts` reads which folders to create at setup. The table is a readable copy of the paths. If you change one, change both. `run-paths.ts` checks they agree.
 
 Values in curly braces are filled in when a path is resolved:
 - `{product}`: the project's name, such as `expense-claims`

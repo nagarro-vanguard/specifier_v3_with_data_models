@@ -47,18 +47,18 @@ description: >-
 | Decision record | the FRD's section recording, for each decision:<br>• the question<br>• every option offered<br>• the choice<br>• who decided, and when | written by you at the gate | `Decision 1 — Can a rejected claim be sent again?` |
 | Last changed | the date and number of the latest decision, near the top of the FRD | the Decision record | 2026-10-14, Decision 2 |
 | Gates | a section inside the FRD, not the same as the gate:<br>• what must be true before<br>• what it makes possible<br>• what undoes it | the catalog, columns "Depends on" and "Done when" | In: the "Done when" of Send a claim |
-| The check | the checking program | `tools/check-frd.cjs` | 44 of 44 checks passed |
-| Check record | the FRD's last section: the program's record of the latest passing check | pasted by you from the program | check-frd.cjs, 2026-10-14: 44 of 44 checks passed |
+| The check | the checking program | `tools/check-frd.ts` | 44 of 44 checks passed |
+| Check record | the FRD's last section: the program's record of the latest passing check | pasted by you from the program | check-frd.ts, 2026-10-14: 44 of 44 checks passed |
 
 ## Invoke it with
 
 | You give | Example |
 |---|---|
 | the **project** | `expense-claims` |
-| the **capability**, as `route-next-capability.cjs` names it | `FRD-3a Claim approval` |
+| the **capability**, as `route-next-capability.ts` names it | `FRD-3a Claim approval` |
 
-- It finds the Feature catalog, the PRD, the Glossary and the data model files itself, through `tools/lib/run-paths.cjs`.
-- In file names and programs, the capability is `{capability}`. It is the capability's name without its number, in lowercase, with hyphens, as `tools/lib/run-paths.cjs` writes it. For `FRD-2a Book lending`, it is `book-lending`. The file is `frd/frd-book-lending.md`, `--frd` takes `frd-book-lending.md`, and `--capability` takes `book-lending`. The Capability section of the conventions has the whole rule.
+- It finds the Feature catalog, the PRD, the Glossary and the data model files itself, through `tools/lib/run-paths.ts`.
+- In file names and programs, the capability is `{capability}`. It is the capability's name without its number, in lowercase, with hyphens, as `tools/lib/run-paths.ts` writes it. For `FRD-2a Book lending`, it is `book-lending`. The file is `frd/frd-book-lending.md`, `--frd` takes `frd-book-lending.md`, and `--capability` takes `book-lending`. The Capability section of the conventions has the whole rule.
 - Use only these inputs. Never use facts from chat or memory.
 - If the capability isn't in the Feature catalog, or a data model file is missing, say so and stop. The specifiers, the BA and the PO, decide at the gate.
 
@@ -70,11 +70,11 @@ description: >-
 - `../_shared/simple-writing-rules.md` — how you write. **Every sentence of the FRD, and every message the specifier sees, follows it.** A rule has one action, in everyday words.
 - `../_shared/atomic-rules.md`: when to split, and when to keep together. **Every rule in the Rules table follows it.**
 - `../_shared/data-model-design.md`: how the data model is written. Its step 2 says where each standard question's answer is in a data model file.
-- `tools/check-frd.cjs` — the check you run before the gate and after every decision.
+- `tools/check-frd.ts` — the check you run before the gate and after every decision.
 
 ## Step 1 — Draft
 
-- Run `node tools/scaffold-project.cjs --project {project}`, then create the FRD file from the template, named per the conventions, with `Status: drafted`. The Decision record and the Check record start as `None yet.`, and so does Last changed.
+- Run `node tools/scaffold-project.ts --project {project}`, then create the FRD file from the template, named per the conventions, with `Status: drafted`. The Decision record and the Check record start as `None yet.`, and so does Last changed.
 - Fill every part. Everything except the rules is copying or derivation that the template and conventions already specify. **The rules are the work.** Per feature:
   1. Use the "Done when" pieces exactly as the catalog cuts them. Never change them. If one proves wrong, raise it as a question. The catalog is then changed through a change.
   2. Write one `The system shall…` rule per behaviour, as `../_shared/atomic-rules.md` says. A piece with two behaviours gets a rule for each. Tag each rule's source:
@@ -91,16 +91,16 @@ description: >-
 
 ## Step 2 — Questions and the check
 
-- Run probing-questions-author on the FRD, write each question's number where its gap is, then run `node tools/grade-questions.cjs --project {project}`.
-- Run `node tools/check-frd.cjs --project {project} --frd frd-{capability}.md`. One of its checks finds each word the Glossary retired, and names the agreed word to use instead. On any finding, fix the document by following `references/conventions.md`, then run it again. **Never show the specifier anything while a check fails.**
+- Run probing-questions-author on the FRD, write each question's number where its gap is, then run `node tools/grade-questions.ts --project {project}`.
+- Run `node tools/check-frd.ts --project {project} --frd frd-{capability}.md`. One of its checks finds each word the Glossary retired, and names the agreed word to use instead. On any finding, fix the document by following `references/conventions.md`, then run it again. **Never show the specifier anything while a check fails.**
 - Then read the document yourself for the things the program can't check. It lists them in its "For the person" block.
 
 ## Step 3 — The gate, changes and acceptance
 
-Hold the gate exactly as `../_shared/decision-review-gates.md` says, and follow the Changes and acceptance section of the conventions:
-- First, the two "For the person" blocks: the check's, then `grade-questions.cjs`'s.
+Hold the gate exactly as `../_shared/decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode, and follow the Changes and acceptance section of the conventions:
+- First, the two "For the person" blocks: the check's, then `grade-questions.ts`'s.
 - **The FRD guard:** the Must answer questions this FRD builds on come first, one at a time. While one is open, the FRD can't be accepted: the specifier answers it, or parks the FRD, and other work goes on.
-- Then the other questions the FRD raised or builds on, in the order `grade-questions.cjs` sets, and each suggested rule, as "keep or drop", one at a time. Record each answer as soon as it is given (rule 5).
+- Then the other questions the FRD raised or builds on, in the order `grade-questions.ts` sets, and each suggested rule, as "keep or drop", one at a time. Record each answer as soon as it is given (rule 5).
 - Apply every decision:
   - a kept suggested rule becomes `decided — see Decision n`, with its note
   - a dropped suggested rule is deleted from the Rules table and the From your decisions list
@@ -114,9 +114,9 @@ Hold the gate exactly as `../_shared/decision-review-gates.md` says, and follow 
 - Never decide a suggested rule or a question yourself.
 - Run the check again. Ask about each tension between decisions, one at a time.
 - Ask **Accept the FRD?** If the answer is **Change something first**, make the change, run the check, and show the review again.
-- After **Accept**, paste the check's "For the file" block into the Check record first. Then run `node tools/accept.cjs --project {project} --document frd --capability {capability}`, so the version it saves is the file as it stands. Close with `status.cjs`.
+- After **Accept**, paste the check's "For the file" block into the Check record first. Then run `node tools/accept.ts --project {project} --document frd --capability {capability}`, so the version it saves is the file as it stands. Close with `status.ts`.
 
-After a third "no", offer to park the FRD with `park.cjs`, to accept it as it is, or to run one more round (`../_shared/decision-review-gates.md`, rule 11).
+After a third "no", offer to park the FRD with `park.ts`, to accept it as it is, or to run one more round (`../_shared/decision-review-gates.md`, rule 11).
 
 ## In a change
 
@@ -126,10 +126,10 @@ When the recommendation in a Change impact report names this FRD, read the repor
 
 ## When an answer it waits on is settled
 
-An accepted FRD can wait on a data model answer that is still open. A row of its data model coverage table then reads "waits on DM-n" in Proved by, or a cell of Data shows "? (DM-n)". The Sources and Never invent sections of the conventions say how. Once DM-n is settled, the FRD takes the answer. This moves forward, from the data model to the later FRD, and nothing goes back. `status.cjs` lists each such FRD, and names frd-author for it under "Next:". A Glossary change, GC-n, counts once it is brought into the data model.
+An accepted FRD can wait on a data model answer that is still open. A row of its data model coverage table then reads "waits on DM-n" in Proved by, or a cell of Data shows "? (DM-n)". The Sources and Never invent sections of the conventions say how. Once DM-n is settled, the FRD takes the answer. This moves forward, from the data model to the later FRD, and nothing goes back. `status.ts` lists each such FRD, and names frd-author for it under "Next:". A Glossary change, GC-n, counts once it is brought into the data model.
 
 Run again for that FRD, and change only what the answer reaches:
-1. Check that the data model file now holds the answer in place of "? (DM-n)". If it doesn't, say so and stop. `status.cjs` names data-model-author to write it in first.
+1. Check that the data model file now holds the answer in place of "? (DM-n)". If it doesn't, say so and stop. `status.ts` names data-model-author to write it in first.
 2. Set the status line to "Status: drafted".
 3. Copy each cell the answer changed into Data, word for word.
 4. Write the rule from the settled answer, as Step 1 says, with its source `data model — {Thing}, {action, field or move}`. A new rule takes the next free number. Rule IDs already accepted never change. Put the rule in Proved by, in place of "waits on DM-n", and list it under **From the data model**.

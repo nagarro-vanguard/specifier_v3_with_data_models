@@ -27,9 +27,9 @@ This skill follows `../_shared/conventions.md`, `../_shared/simple-writing-rules
 - **Looks up:** the FRDs, the Feature catalog, the BRD, the EPIC brief and the Glossary.
 - **Writes:**
   - the grooming sections of each Story, from Dependencies to Design links, after its Description, and its status, groomed, in the Story and the list
-  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.cjs`
+  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.ts`
 - **Its gate:** "Accept the grooming?", for all the EPIC's stories together.
-- **Its check:** `check-stories.cjs`
+- **Its check:** `check-stories.ts`
 
 ## Steps
 
@@ -42,9 +42,9 @@ This skill follows `../_shared/conventions.md`, `../_shared/simple-writing-rules
    - **Metrics traceability:** the EPIC brief's success measures this story helps move, or None when the EPIC has no brief
    - **Design links:** when a design exists. Otherwise None.
    - **Sizing alert:** when a story may take more than two days, as the template sets out, at the top of Scope. The ways to split it become a question.
-3. **Raise the questions.** Run probing-questions-author on the Stories, write each question's number where its gap is, then run `node tools/grade-questions.cjs --project {project}`.
-4. **Check.** Run `node tools/check-stories.cjs --project {project} --epic {epic}`. Fix every finding and run it again.
-5. **The gate.** Hold it as `../_shared/decision-review-gates.md` says: the two "For the person" blocks, the questions in order, then **Accept the grooming?**, covering all the EPIC's stories together. Record each answer straight away. On acceptance, set each story's status to groomed, in the Story and the list. Run the check again, and paste its "For the file" block into the Story list's Check record. Then run `node tools/accept.cjs --project {project} --document story-list --epic {epic}`, which saves this version of the Story list, and close with `status.cjs`.
+3. **Raise the questions.** Run probing-questions-author on the Stories, write each question's number where its gap is, then run `node tools/grade-questions.ts --project {project}`.
+4. **Check.** Run `node tools/check-stories.ts --project {project} --epic {epic}`. Fix every finding and run it again.
+5. **The gate.** Hold it as `../_shared/decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode. The order: the two "For the person" blocks, the questions in order, then **Accept the grooming?**, covering all the EPIC's stories together. Record each answer straight away. On acceptance, set each story's status to groomed, in the Story and the list. Run the check again, and paste its "For the file" block into the Story list's Check record. Then run `node tools/accept.ts --project {project} --document story-list --epic {epic}`, which saves this version of the Story list, and close with `status.ts`.
 
 An EPIC's gates offer "park it" after a third "no", with "accept it as it is" and "one more round" (`../_shared/decision-review-gates.md`, rule 11).
 

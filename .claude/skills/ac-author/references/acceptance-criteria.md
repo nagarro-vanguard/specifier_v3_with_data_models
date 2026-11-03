@@ -15,7 +15,7 @@ How `ac-author` writes each story's scenarios. The shape is in `../../_shared/te
 
 ## Coverage checklist (as applicable)
 
-Every rule the story quotes is proved by at least one scenario. `coverage-check.cjs` checks it for the whole EPIC. Then, as applicable:
+Every rule the story quotes is proved by at least one scenario. `coverage-check.ts` checks it for the whole EPIC. Then, as applicable:
 
 | Coverage area | When to include | Skip if | Where to look |
 |---------------|-----------------|---------|---------------|
@@ -53,7 +53,7 @@ From the stories "Reject a Claim" and "Approve a Claim over 500", of the made-up
 
 *Why they're good:*
 - each has a bold title and bold Given, When and Then
-- each title ends with the FRD rules the scenario proves, which coverage-check.cjs reads
+- each title ends with the FRD rules the scenario proves, which coverage-check.ts reads
 - people are named by their role, and the rejection scenarios need no amount, because their rules don't depend on one
 - the over-500 scenario gives the amount, 640, because its rule depends on it: "a claim" alone couldn't be checked
 - specific outcomes an outside observer can check

@@ -129,7 +129,7 @@ The reader-facing entry shape is defined in `glossary-assembly-principles.md`, n
 
 Every gate decision is one row in a single `decision-register.md`, keyed by a global id `D-1`, `D-2`, ..., append-only. It records *what was settled*: why a term has the word it has, and *what overrode what*. It does **not** depend on feature numbers: the **Where** column holds the section the term was found in, plus its feature id only if the source has one. The **Gate row** column links to the gate-log row where the decision was taken, so a reader can follow it back to the evidence and the options.
 
-**Generated, never written by hand.** `build-glossary-records.cjs` writes the register from the gate log: one row for each resolved gate-log row, in the log's order, so the same log always gives the same register.
+**Generated, never written by hand.** `build-glossary-records.ts` writes the register from the gate log: one row for each resolved gate-log row, in the log's order, so the same log always gives the same register.
 
 **Example — `decision-register.md`:**
 
@@ -140,7 +140,7 @@ Every gate decision is one row in a single `decision-register.md`, keyed by a gl
 
 - **Timestamped** — every row carries its date.
 - **No feature number needed** — *Where* falls back to the section, which always exists. D-2 above comes from a source with no features and is filed the same way.
-- **A change** is a new row in the gate log's Change part. When `build-glossary-records.cjs` runs again, the register gains its row, whose **Retired / overrides** cell names the earlier word and the decision it reverses. The term's entry changes as "Changing a term" below sets out.
+- **A change** is a new row in the gate log's Change part. When `build-glossary-records.ts` runs again, the register gains its row, whose **Retired / overrides** cell names the earlier word and the decision it reverses. The term's entry changes as "Changing a term" below sets out.
 
 ## Where each decision is recorded — one home for each fact
 
@@ -149,10 +149,10 @@ A decision is written in **one place only: the gate log**. Every other place tha
 | File | Answers the question | Holds | Written by |
 |---|---|---|---|
 | `deep-dives/gate-log.md` | **How was it decided?** | every item raised at a gate — the evidence, the options, the recommendation, and the person's resolution, with its date. Nothing is ever deleted. | harvest at Gate 1 and Gate 2; disposition for later changes. The only place a decision is written. |
-| `decision-register.md` | **What was settled?** | one row per settled decision, `D-n`, with a link back to its gate-log row | `build-glossary-records.cjs`, from the gate log |
-| `deep-dives/{section}/{section}-decisions.md` | **What happened to this section's words?** | one row per candidate in that section's draft: kept, renamed, merged, dropped, or pending, with the word now used in the glossary and a link to the `D-n` row | `build-glossary-records.cjs`, from the gate log and the section's draft |
-| Gate 2's **Also written as**, in the gate log | **Which other words did the sources use for this term?** | the words Gate 1 merged into the term, or replaced with it | `fill-also-written-as.cjs`, from the settled Gate 1 rows, before Gate 2 is shown |
-| each kind page's **Terms replaced or retired over time** | **What should I use instead of this earlier word?** | every earlier word of that kind, with the term to use now ([G8](glossary-assembly-principles.md#g8)) | `build-retired-words-tables.cjs`, from the gate log |
+| `decision-register.md` | **What was settled?** | one row per settled decision, `D-n`, with a link back to its gate-log row | `build-glossary-records.ts`, from the gate log |
+| `deep-dives/{section}/{section}-decisions.md` | **What happened to this section's words?** | one row per candidate in that section's draft: kept, renamed, merged, dropped, or pending, with the word now used in the glossary and a link to the `D-n` row | `build-glossary-records.ts`, from the gate log and the section's draft |
+| Gate 2's **Also written as**, in the gate log | **Which other words did the sources use for this term?** | the words Gate 1 merged into the term, or replaced with it | `fill-also-written-as.ts`, from the settled Gate 1 rows, before Gate 2 is shown |
+| each kind page's **Terms replaced or retired over time** | **What should I use instead of this earlier word?** | every earlier word of that kind, with the term to use now ([G8](glossary-assembly-principles.md#g8)) | `build-retired-words-tables.ts`, from the gate log |
 
 Read it plainly: the gate log is the full story, the register is the verdict, and a section's decisions file translates that section's words into the glossary's words.
 
@@ -198,7 +198,7 @@ Example: `deep-dives/analysis/analysis-glossary.md`.
 
 ### What the section decisions file must contain
 
-`{section}-decisions.md` is written by `build-glossary-records.cjs` once the gates are passed, from the gate log and the section's draft; until then it holds its opening, one line - `None yet - written once the gates are passed.` - and its related pages. It has one table, with one row for **every** candidate in the section's draft, in the draft's order:
+`{section}-decisions.md` is written by `build-glossary-records.ts` once the gates are passed, from the gate log and the section's draft; until then it holds its opening, one line - `None yet - written once the gates are passed.` - and its related pages. It has one table, with one row for **every** candidate in the section's draft, in the draft's order:
 
 | Column | Holds |
 |---|---|
@@ -324,7 +324,7 @@ Every row starts `open`. The person's decisions fill Status, Resolution, and Dec
 
 ## How the gate is answered — section by section
 
-The gate blocks, but it must be easy to answer well. The person is taken **one item at a time, one section at a time** — never the whole gate at once, and never a bare "pick one". Presentation is a **fixed template**: every item shows all six fields, in this order, so a run cannot show less and every run reads the same.
+The gate blocks, but it must be easy to answer well. The person is taken **one item at a time, one section at a time** — never the whole gate at once, and never a bare "pick one". probing-questions-author asks each item, in its Ask mode (`../decision-review-gates.md`, rule 4). Every item has all six fields below. They are what probing-questions-author asks from: the evidence gives "What I found", and what changes gives "Why it matters" and each choice's outcome.
 
 | Field | What it gives the person | Fixed content |
 |---|---|---|

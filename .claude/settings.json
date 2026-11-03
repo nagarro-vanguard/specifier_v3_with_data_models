@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/check-question.ts\" --hook",
+            "timeout": 30,
+            "onFailure": "block",
+            "statusMessage": "Checking the question"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__ccd_turn__wrap_up",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/check-question.ts\" --hook",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

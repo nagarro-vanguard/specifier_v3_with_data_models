@@ -4,7 +4,7 @@
 >
 > **What it is not:** The Feature Fit verdict, which comes first and says whether the change's words exist in the Glossary. Feature Fit calls a change to an existing limit "Fits", because every word in it exists. This test finds that the limit itself changes.
 >
-> **Who uses it:** change-request-disposition, for each ask, after Feature Fit. adversarial-check opens each rule it compared, and check-change-report.cjs checks every rule compared has a result.
+> **Who uses it:** change-request-disposition, for each ask, after Feature Fit. adversarial-check opens each rule it compared, and check-change-report.ts checks every rule compared has a result.
 
 ## The steps
 
@@ -16,7 +16,7 @@
    - **changed value:** a different count, list or limit
    - **new:** the rule doesn't speak to what the change asks
 4. If any rule is opposite or changed value, the kind is **Update or optimize**.
-5. If the change only rewords a requirement, and no rule is touched, the kind is **Update or optimize**, and the requirement's result is **wording only**. Section 5 then reads `{ID} now reads: "{the new wording}"`, so copy-wording.cjs can offer to copy it.
+5. If the change only rewords a requirement, and no rule is touched, the kind is **Update or optimize**, and the requirement's result is **wording only**. Section 5 then reads `{ID} now reads: "{the new wording}"`, so copy-wording.ts can offer to copy it.
 6. Otherwise the kind is Feature Fit's:
    - Fits is Already covered when every rule is same, and Extend or enhance when a rule is new
    - Extend is Extend or enhance

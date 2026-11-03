@@ -1,4 +1,8 @@
-> **Example.** A worked example of a PRD, for a made-up product called Expense claims. It follows on from the example BRD, once that BRD was accepted. It shows the PRD at its gate, with one decision made and one question still open, question 4 from the Discovery brief. Its Check record is still empty: check-prd.cjs pastes its record into that section when the gate ends. Nothing in it is a real requirement.
+> **Example.** A worked example of a PRD, for a made-up product called Expense claims. It follows on from the example BRD, once that BRD was accepted. It shows the PRD at its gate, with one question still open, Q4. Its Check record is still empty. When the gate ends, check-prd.ts's one line is pasted into that section: Pass or Fail, with the date and time. Nothing in it is a real requirement.
+>
+> The PRD names no file, no version and no decision. Two marks name a question in the Question log:
+> - **Not known yet:** a value nothing gives yet reads `[TBD, Q{n}]`. This example has none.
+> - **Suggested by the skill:** the assumption "Every claim is made in euros<sup>*Q4</sup>", with the legend line straight under its list
 
 # PRD — Expense claims
 
@@ -19,11 +23,11 @@ Expense claims lets employees and contractors claim business expenses online, wi
 
 ### Personas
 
-| Persona | Who they are | Source |
-|---|---|---|
-| Claimant | an employee or contractor who has paid for something on the business's behalf | per expense-policy-2026.pdf, section 1.1 |
-| Line manager | the claimant's manager, who approves their claims | per claims-requirements-v2.docx, section 3.1 |
-| Finance approver | a member of the finance team, who also approves claims over the limit | per claims-requirements-v2.docx, section 3.2, and Decision 1 |
+| Persona | Who they are |
+|---|---|
+| Claimant | an employee or contractor who has paid for something on the business's behalf |
+| Line manager | the claimant's manager, who approves their claims |
+| Finance approver | a member of the finance team, who also approves claims over the limit |
 
 ### Roles and permissions
 
@@ -35,20 +39,27 @@ Expense claims lets employees and contractors claim business expenses online, wi
 
 ## 4. Requirements
 
+### 1. About this project
+
+| ID | Kind | Label | In simple words | The client's words | Traces to |
+|---|---|---|---|---|---|
+| REQ-1.1 | Purpose | Problem | **Slow paper claims** — Paper claims take 18 working days from sending to payment. | **Why we need it** — Paper claims take 18 working days to pay. | • PRD section 2 |
+| REQ-1.2 | Scope | Out of MVP | **Travel booking** — Booking travel is not part of the MVP. | **Not included** — Travel booking is not included. | • BRD section 4 |
+
 ### 2. Submitting claims
 
-| ID | Kind | In simple words | The client's words | Source | Traces to |
+| ID | Kind | Label | In simple words | The client's words | Traces to |
 |---|---|---|---|---|---|
-| REQ-2.1 | Requirement | **Send a claim** — An employee sends a claim with one or more expense lines. | **Send a claim** — An employee sends a claim with one or more expense lines. | claims-requirements-v2.docx, version 2, section 2.1 | • BR-01 |
-| REQ-2.2 | Requirement | **Receipts** — Every expense has a receipt attached. | **Receipts** — A receipt is attached for every expense. | claims-requirements-v2.docx, version 2, section 2.2 | • BR-04 |
-| REQ-2.3 | Requirement | **Claim stages** — A claim is in one of these stages: **Draft**, **Submitted**, **Approved**, **Rejected** or **Paid**. | **Claim stages** — A claim is Draft, Submitted, Approved, Rejected or Paid. | claims-requirements-v2.docx, version 2, section 2.4 | • BR-01 |
+| REQ-2.1 | Requirement | — | **Sending claims** — An employee can send a claim with one or more expense lines. | **Send a claim** — An employee sends a claim with one or more expense lines. | • BR-01 |
+| REQ-2.2 | Requirement | — | **Receipt for every expense** — The platform needs a receipt for every expense. | **Receipts** — A receipt is attached for every expense. | • BR-04 |
+| REQ-2.3 | Requirement | — | **Claim stages** — The platform keeps each claim in one of these stages: **Draft**, **Submitted**, **Approved**, **Rejected** or **Paid**. | **Claim stages** — A claim is Draft, Submitted, Approved, Rejected or Paid. | • BR-01 |
 
 ### 3. Approving claims
 
-| ID | Kind | In simple words | The client's words | Source | Traces to |
+| ID | Kind | Label | In simple words | The client's words | Traces to |
 |---|---|---|---|---|---|
-| REQ-3.1 | Requirement | **Line manager approval** — The claimant's line manager approves every claim. | **Line manager approval** — Every claim is approved by the claimant's line manager. | claims-requirements-v2.docx, version 2, section 3.1 | • BR-02 |
-| REQ-3.2 | Requirement | **Finance approval** — Claims over 500 need finance approval. | **Finance approval** — Claims over 500 need finance approval. | claims-requirements-v2.docx, version 2, section 3.2 | • BR-03 |
+| REQ-3.1 | Requirement | — | **Line manager approval** — The platform needs the claimant's line manager to approve every claim. | **Line manager approval** — Every claim is approved by the claimant's line manager. | • BR-02 |
+| REQ-3.2 | Requirement | — | **Finance approval** — The platform needs finance approval for each claim over 500. | **Finance approval** — Claims over 500 need finance approval. | • BR-03 |
 
 ## 5. The end-to-end journey
 
@@ -70,9 +81,9 @@ Expense claims lets employees and contractors claim business expenses online, wi
 
 ### Evidenced
 
-| NFR ID | NFR | Source | Confidence |
-|---|---|---|---|
-| NFR-1 | The product works at least during office hours. | per workshop-notes-2026-09-12.md, item 9 | TENTATIVE: office hours are not defined |
+| NFR ID | NFR | Confidence |
+|---|---|---|
+| NFR-1 | The product works at least during office hours. | TENTATIVE: office hours are not defined |
 
 ### Recommended
 
@@ -82,20 +93,22 @@ Expense claims lets employees and contractors claim business expenses online, wi
 
 ## 7. Transition requirements
 
-| ID | Requirement | Source | Needs building? |
-|---|---|---|---|
-| TR-1 | Paper claims still open on the go-live date are finished on paper | per workshop-notes-2026-09-12.md, item 11 | No |
+| ID | Requirement | Needs building? |
+|---|---|---|
+| TR-1 | Paper claims still open on the go-live date are finished on paper | No |
 
 ## 8. Dependencies and assumptions
 
 ### Dependencies
 
-- The monthly payroll run pays approved claims — per payroll-cutoff-2026-09-20.eml
-- Each claimant's line manager is known — per claims-requirements-v2.docx, section 3.1
+- The monthly payroll run pays approved claims
+- Each claimant's line manager is known
 
 ### Assumptions
 
-- Every claim is made in euros — Proposed (needs confirmation), question 4
+- Every claim is made in euros<sup>*Q4</sup>
+
+<sup>*</sup> Proposed: needs your confirmation. Qn is its question in the Question log.
 
 ## 9. Traceability matrix
 
@@ -105,19 +118,6 @@ Expense claims lets employees and contractors claim business expenses online, wi
 | BR-02 | Every claim is approved by someone other than the person who made it. | • REQ-3.1 | Covered |
 | BR-03 | Claims over 500 are also approved by the finance team. | • REQ-3.2 | Covered |
 | BR-04 | No claim is paid without its receipts. | • REQ-2.2 | Covered |
-
-## Decision record
-
-### Decision 1 — Who in the finance team may approve claims over 500?
-- **Question:** 9
-- **Asked at:** Accept the PRD?
-- **Options offered:**
-  - **Any member of the finance team** — Why: claims over the limit are never held up by one person being away. What happens next: Finance approver means any member of the finance team.
-  - **Only the finance manager** — Why: one person sees every large claim. What happens next: Finance approver means the finance manager alone.
-  - **I don't know yet** — What happens next: "Any member of the finance team" is used, marked Proposed (needs confirmation), and the finance team is asked before the FRD for approving a claim is accepted.
-- **Recommended:** Any member of the finance team
-- **Chosen:** Any member of the finance team
-- **Decided by:** PO, 2026-10-08
 
 ## Check record
 

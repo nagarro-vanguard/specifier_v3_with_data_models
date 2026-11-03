@@ -296,7 +296,7 @@ Run a casing and character sweep before finishing and fix any page that breaks a
 8. **Earlier word** - the word cased per [G6](#g6), as the source or the earlier glossary wrote it. It carries no anchor, because it is no longer a term.
 9. **Redefined terms are not listed:** the term keeps its name, so its row in the main table simply carries the new definition. The earlier wording is kept in the gate log's change row and in the register.
 
-**Deterministic output.** Every row comes from the gate log, through the decision register, and is written by `build-retired-words-tables.cjs`, never by hand. The four "What happened" words are a closed list, and the order is fixed by rule 6, so the same gate log always gives the same table.
+**Deterministic output.** Every row comes from the gate log, through the decision register, and is written by `build-retired-words-tables.ts`, never by hand. The four "What happened" words are a closed list, and the order is fixed by rule 6, so the same gate log always gives the same table.
 
 ---
 

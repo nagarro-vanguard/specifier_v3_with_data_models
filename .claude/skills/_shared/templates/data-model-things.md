@@ -42,7 +42,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** The things a product keeps information about, found from its Glossary. Each Glossary family gets one section, which names the family's data model file. While a decision every family shares is open, this file lists it too. So does each family's data model file, with "? ({ID})" in each cell the decision answers.
 - **What it is not:** The actions, fields and rules of each thing, which are in each family's data model file. The decisions themselves, which are in the data model's decisions file.
-- **Written by:** things-author, from `templates/data-model-things.md`, as `data-model-design.md`, step 1 and gate 1, say. Checked by check-data-model.cjs before its gate. When you accept the things, accept.cjs sets the status line. It also saves a copy of this file and of the decisions file.
+- **Written by:** things-author, from `templates/data-model-things.md`, as `data-model-design.md`, step 1 and gate 1, say. Checked by check-data-model.ts before its gate. When you accept the things, accept.ts sets the status line. It also saves a copy of this file and of the decisions file.
 - **File name:** `Output/{project}/glossary/data-models/{product}-glossary-things.md`, such as `city-library-glossary-things.md`.
 - **The Next step line:** what the person needs to do next. Before the gate, it says to settle the open decisions and accept the things. Once they are accepted, it reads "None: the things are accepted."
 
@@ -53,7 +53,7 @@ This part is never copied into a document. It says what the template is for, wha
 | {Family} | One section per Glossary family with at least one thing, in the Glossary's order. Its first line names the family's data model file, once. Then comes one row per thing in the family, in the Glossary's order, with its definition word for word. "Kind of" appears only when the Glossary makes a thing of the family one kind of another thing, on its kind page or in `terms-and-relationships.md`. It has one bullet per such thing. Each bullet names the other thing's family when it is another one. "Left out" appears only when the family has a word that becomes nothing. Words that become a field or a field's choices are not listed. data-model-author puts them on their thing. |
 | Decisions to make | Appears only when a product-wide decision is open: one that would be asked the same way in every family's file. One row per decision, in the order of the decisions file, with the recommended answer and why. A decision answered "I don't know yet" is still open, so it stays in the table. A settled decision leaves the table. |
 | Waiting on the Glossary | Appears only when a word can't be placed. The word is left out and raised as a Glossary change, in the decisions file. One row per change, until the Glossary settles it. |
-| Check record | The record of the last check, pasted exactly as check-data-model.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-data-model.ts printed it. |
 
 ### What to write for each label
 

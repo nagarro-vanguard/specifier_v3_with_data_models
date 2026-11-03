@@ -27,19 +27,19 @@ This skill follows `../_shared/conventions.md`, `../_shared/simple-writing-rules
 - **Reads:** every file in `Output/{project}/sources/`.
 - **Writes:**
   - `{product}-discovery-brief.md`
-  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.cjs`
+  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.ts`
 - **Its gate:** "Accept the Discovery brief?"
-- **Its check:** `check-discovery-brief.cjs`
+- **Its check:** `check-discovery-brief.ts`
 
 ## Steps
 
 ### 1. Set up
 
-Run `node tools/scaffold-project.cjs --project {project}`. If `sources/` is empty or missing, say so and stop: the files go in `sources/` first.
+Run `node tools/scaffold-project.ts --project {project}`. If `sources/` is empty or missing, say so and stop: the files go in `sources/` first.
 
 ### 2. List every file
 
-Run `node tools/list-sources.cjs --project {project}`. It prints two blocks:
+Run `node tools/list-sources.ts --project {project}`. It prints two blocks:
 - **"For the brief":** paste it into section 1 as it is. Every file, its folder and the "same as" and "older version" marks come from it, so no file is missed or counted twice. Then read each file and fill the columns only a reader can fill: kind of document, version or date, owner and standing, each as the file itself states it, or [Not specified in provided sources].
 - **"For discovery-author":** each set of files whose names differ only by a date. Read each set. If one replaces another, mark the earlier one "No: older version of" the later one. If they are a series, such as notes from different meetings, use them all.
 
@@ -74,23 +74,23 @@ List what could go wrong, and each unhappy path the files don't cover, with what
 
 ### 7. Raise the questions
 
-Run probing-questions-author on the brief. It drafts and rates a question for every Silent topic, every clash the order of authority can't settle, and every assumption, and hands back each gap's place and its question's number. Write each number in, such as "Silent, question 2". Then run `node tools/grade-questions.cjs --project {project}`, which places each question in its group and sets the order.
+Run probing-questions-author on the brief. It drafts and rates a question for every Silent topic, every clash the order of authority can't settle, and every assumption, and hands back each gap's place and its question's number. Write each number in, such as "Silent, question 2". Then run `node tools/grade-questions.ts --project {project}`, which places each question in its group and sets the order.
 
 ### 8. Check
 
-Run `node tools/check-discovery-brief.cjs --project {project}`. Fix every finding and run it again, until every check passes.
+Run `node tools/check-discovery-brief.ts --project {project}`. Fix every finding and run it again, until every check passes.
 
 ### 9. The gate
 
-Hold the gate exactly as `decision-review-gates.md` says:
-- first, the two "For the person" blocks: the check program's, then `grade-questions.cjs`'s
-- then the questions this brief raised, one at a time, in the order `grade-questions.cjs` sets, and the Can move ahead list
+Hold the gate exactly as `decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode. The order:
+- first, the two "For the person" blocks: the check program's, then `grade-questions.ts`'s
+- then the questions this brief raised, one at a time, in the order `grade-questions.ts` sets, and the Can move ahead list
 - then the decisions about the brief itself, each with "Question: None":
   - the order of authority
   - each file proposed as out of scope
 - then the gate's own question, **Accept the Discovery brief?**
 
-Record each answer straight away, in the Decision record and the Question log. When the specifier accepts, run `node tools/accept.cjs --project {project} --document discovery-brief`, then close with `status.cjs`.
+Record each answer straight away, in the Decision record and the Question log. When the specifier accepts, run `node tools/accept.ts --project {project} --document discovery-brief`, then close with `status.ts`.
 
 The Discovery brief covers the whole product, so after a third "no" the skill offers only "accept it as it is" and "one more round" (`decision-review-gates.md`, rule 11).
 

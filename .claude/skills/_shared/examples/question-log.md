@@ -194,4 +194,4 @@
 
 ## Check record
 
-grade-questions.cjs, 2026-10-06: 4 open questions (1 must answer, 1 should answer, 2 can move ahead), 4 answered, 0 findings.
+grade-questions.ts, 2026-10-06: 4 open questions (1 must answer, 1 should answer, 2 can move ahead), 4 answered, 0 findings.

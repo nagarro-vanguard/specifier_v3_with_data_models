@@ -71,7 +71,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** The requirements turned into features, in the Glossary's agreed words. Each feature has a priority, the FRD it belongs to, and a "Done when" line cut into pieces that the FRD's rules must prove. Every action and every move in the data model is given to one feature, or waits on the change that adds its feature. Until the gate settles a row, it shows "?".
 - **What it is not:** The grouping into EPICs, which is the EPIC grouping, or the detailed rules, which are in the FRDs.
-- **Written by:** feature-author, from `templates/feature-catalog.md`. Checked by check-features.cjs before its gate.
+- **Written by:** feature-author, from `templates/feature-catalog.md`. Checked by check-features.ts before its gate.
 
 ### What each section holds
 
@@ -84,7 +84,7 @@ This part is never copied into a document. It says what the template is for, wha
 | 4. Coverage check | Every Requirement row in the PRD, one row each, and the features that cover it, grouped like the PRD. A row of any other kind, such as Scope, has no row in the coverage check. A requirement no feature covers is a Gap, and its row names its question in the Question log. |
 | 5. Data model coverage | Every action and every move in the data model files, one row each, in the files' order, and the one feature it belongs to. That feature's FRD turns it into rules. A move is written as its From, then →, then its To. Feature is the ID of one feature in section 2.<br>• A row that no feature names shows "?" in Feature, until the gate settles it. "To settle at the gate" lists each such row, with the recommendation for the gate. Its two answers say whether the PRD says the action or the move, and whether it is big enough to be a feature. When the gate settles the row, Feature gets the answer, and the row leaves "To settle at the gate". When no row shows "?", "To settle at the gate" is left out. The catalog can't be accepted while a row shows "?".<br>• The PRD may not say an action or a move that is big enough to be a feature. Then its row needs a new requirement first. At the gate, the change that adds the requirement is opened, and it gets its number. Its analysis and its own gate come after the catalog's gate. Until that change is done, Feature reads "waits on change" and the change's 3-digit number. The change is in the project's changes/ folder. A waiting row is not a finding. The gate shows each one. When the change is done, the row gets its feature. A row that still waits once its change is closed is a finding. |
 | Decision record | Every decision made at the Feature catalog's gate, in the order made, in the shape of `templates/parts/decision-record.md`. |
-| Check record | The record of the last check, pasted exactly as check-features.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-features.ts printed it. |
 
 ### What to write for each label
 

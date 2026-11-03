@@ -70,12 +70,12 @@ Use only the report, the files the request brought, the Glossary, the FRDs and t
 2. **A late answer is recorded first,** as `../_shared/decision-review-gates.md` rule 5 says for every answer:
    - write it as Decision 1 in section 16, with its question's number, the answer, and who decided
    - move the question under Answered in the Question log, with its Answer and its "Decided in"
-   - run `node tools/grade-questions.cjs --project {project}`
+   - run `node tools/grade-questions.ts --project {project}`
 3. **List the agreed words the request renames,** under "Agreed words this change renames", each with the word it becomes, or None.
 4. **Find its type,** in section 7: Feature Fit first, then the update test, written as the update test says.
 5. **Draw the journey,** in section 8, from the Glossary's Steps page, and place the request on the PRD's journey and the FRD's flow it touches.
 6. **List what's reused and what's new,** in section 9. Each word the Glossary doesn't have is written `New word: {the word}`.
-7. **List what blocks,** in section 10. When an answer is needed, run probing-questions-author to raise it in the Question log, then `node tools/grade-questions.cjs --project {project}`, and name its number. A blocked request goes no further: the workflow asks its question first, at step 5.
+7. **List what blocks,** in section 10. When an answer is needed, run probing-questions-author to raise it in the Question log, then `node tools/grade-questions.ts --project {project}`, and name its number. A blocked request goes no further: the workflow asks its question first, at step 5.
 8. **The name it was called by.** When the type differs from the name in section 1, say so in one line in section 7. For example: "Called a new request. Already covered: rule F-03.2 says it."
 9. **A requirement whose kind changes.** Each changed requirement in section 3 says the kind the PRD gives it. Read its new words against that kind, as prd-author's kind table does:
    - a Purpose, Scope or Way of working row whose new words now ask for something to be built: an ask of its own, Net new. For example, "The library may later support reserving books" becomes "Members must be able to reserve a book".
@@ -85,18 +85,18 @@ Use only the report, the files the request brought, the Glossary, the FRDs and t
 ## Step 2: The challenge
 
 Call `adversarial-check` with the project and the change. It writes its findings into section 11. Each finding has:
-- a quote from the file it read, and the file. `check-change-report.cjs` finds the quote word for word in that file.
+- a quote from the file it read, and the file. `check-change-report.ts` finds the quote word for word in that file.
 - what it would change: the type, what's new, what blocks, or none of these
 - who can fix it: "the files settle it" or "needs your answer"
 
-The verdict follows a fixed rule, and `check-change-report.cjs` works it out again from what each finding would change. A finding that would change the type, what's new or what blocks gives FAIL. Any other finding gives PASS_WITH_FINDINGS. No finding gives PASS.
+The verdict follows a fixed rule, and `check-change-report.ts` works it out again from what each finding would change. A finding that would change the type, what's new or what blocks gives FAIL. Any other finding gives PASS_WITH_FINDINGS. No finding gives PASS.
 
 Write your answer to each finding in its row. Then:
 - **A finding the files settle:** redo the part of step 1 it names, and call `adversarial-check` again.
-- **A finding that needs your answer:** never redo it. Run probing-questions-author to raise it in the Question log, then `node tools/grade-questions.cjs --project {project}`, and name its number in the finding's Answer. It is asked at step 5 of the workflow.
+- **A finding that needs your answer:** never redo it. Run probing-questions-author to raise it in the Question log, then `node tools/grade-questions.ts --project {project}`, and name its number in the finding's Answer. It is asked at step 5 of the workflow.
 - After a second FAIL in a row, stop redoing. Write the verdict line as "**Verdict:** FAIL, taken to your gate". Its findings come first at step 5 of the workflow.
 
-Then run the quick check on the report, `node tools/check-simple-writing.cjs --project {project} --file Output/{project}/changes/{change}/impact-report.md --skip-column Before --skip-column After --skip-column "Your words" --skip-column Quote`, and fix what it lists to fix in your sections.
+Then run the quick check on the report, `node tools/check-simple-writing.ts --project {project} --file Output/{project}/changes/{change}/impact-report.md --skip-column Before --skip-column After --skip-column "Your words" --skip-column Quote`, and fix what it lists to fix in your sections.
 
 ## Rules
 

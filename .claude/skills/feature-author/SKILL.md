@@ -31,15 +31,15 @@ A **unit of capability** that holds together and means something to a user. A st
 - **Looks up:** the Glossary, for the agreed words, and the BRD, by its IDs.
 - **Writes:**
   - `frd/feature-catalog.md`
-  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.cjs`
+  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.ts`
 - **Its gate:** "Accept the Feature catalog?"
-- **Its check:** `check-features.cjs`
+- **Its check:** `check-features.ts`
 
 ## Steps
 
 ### 1. Set up
 
-Run `node tools/scaffold-project.cjs --project {project}`. If the PRD isn't accepted, there is no Glossary, or a data model file the things file names isn't accepted, say so and stop.
+Run `node tools/scaffold-project.ts --project {project}`. If the PRD isn't accepted, there is no Glossary, or a data model file the things file names isn't accepted, say so and stop.
 
 ### 2. Derive and name
 
@@ -86,17 +86,17 @@ Work through `references/feature-catalog.md`, section 3, and fix anything that f
 
 ### 8. Raise the questions
 
-Run probing-questions-author on the catalog, write each question's number at its gap, then run `node tools/grade-questions.cjs --project {project}`.
+Run probing-questions-author on the catalog, write each question's number at its gap, then run `node tools/grade-questions.ts --project {project}`.
 
 ### 9. Check
 
-Run `node tools/check-features.cjs --project {project}`. Fix every finding and run it again, until every check passes.
+Run `node tools/check-features.ts --project {project}`. Fix every finding and run it again, until every check passes.
 
 ### 10. The gate
 
-Hold the gate exactly as `decision-review-gates.md` says:
-- first, the two "For the person" blocks: the check program's, then `grade-questions.cjs`'s. The check program's block lists each row that shows "?", with its recommendation. It also lists each row that waits on a change, with the change's number.
-- then the questions the catalog raised or builds on, one at a time, in the order `grade-questions.cjs` sets, and the Can move ahead list
+Hold the gate exactly as `decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode. The order:
+- first, the two "For the person" blocks: the check program's, then `grade-questions.ts`'s. The check program's block lists each row that shows "?", with its recommendation. It also lists each row that waits on a change, with the change's number.
+- then the questions the catalog raised or builds on, one at a time, in the order `grade-questions.ts` sets, and the Can move ahead list
 - then the decisions about capabilities and pieces, where a feature could reasonably go in another FRD, or its Done when could be cut another way
 - then each row that shows "?", with the recommendation step 6 gave it, one at a time. Write the answer in the row's Feature cell, and take the row out of "To settle at the gate". For "I don't know yet", the recommendation is used, as `decision-review-gates.md`, rule 9, says. The row gets the recommended answer, and its Decision record entry marks it Proposed. A later change can still move it.
 - when the specifier picks "a new requirement first" for a row, run only step 1 of `change-request-workflow`. It writes the change's statement, and gives the change its number. Then write "waits on change" and the change's number in the row's Feature cell. The rest of the change runs after this gate: its analysis, then its own gate.
@@ -105,7 +105,7 @@ Hold the gate exactly as `decision-review-gates.md` says:
 
 **The catalog's guard.** While a row of section 5 shows "?", the catalog can't be accepted. Ask the gate's own question only once every "?" is settled. Until then, the check program's block says the catalog can't be accepted yet.
 
-Record each answer straight away, in the Decision record and the Question log. When the specifier accepts, run `node tools/accept.cjs --project {project} --document feature-catalog`, then close with `status.cjs`.
+Record each answer straight away, in the Decision record and the Question log. When the specifier accepts, run `node tools/accept.ts --project {project} --document feature-catalog`, then close with `status.ts`.
 
 The Feature catalog covers the whole product, so after a third "no" the skill offers only "accept it as it is" and "one more round" (`decision-review-gates.md`, rule 11). It offers "accept it as it is" only when no row shows "?".
 

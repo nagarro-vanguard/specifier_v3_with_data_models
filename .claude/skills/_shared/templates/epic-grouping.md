@@ -120,7 +120,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** The record of how the features were grouped into EPICs: the options offered, the one you chose, the clashes you settled, and which EPICs get an EPIC brief. It is only ever added to.
 - **What it is not:** The list of EPICs itself. The EPIC register is a checked copy of the chosen grouping.
-- **Written by:** epic-grouping-author, from `templates/epic-grouping.md`. Checked by check-epic-grouping.cjs before its gate.
+- **Written by:** epic-grouping-author, from `templates/epic-grouping.md`. Checked by check-epic-grouping.ts before its gate.
 
 ### What each section holds
 
@@ -138,7 +138,7 @@ This part is never copied into a document. It says what the template is for, wha
 | EPIC brief list, in run order | For each EPIC, in the order it is worked, whether it gets an EPIC brief, and why. An EPIC without one goes straight to its stories. |
 | 4. Placements from changes | Each feature added later through a change, and the EPIC it was placed in. Entries are only ever added. When there are none, this says None yet. |
 | Decision record | Every decision made at the EPIC grouping's gate, in the order made, in the shape of `templates/parts/decision-record.md`. |
-| Check record | The record of the last check, pasted exactly as check-epic-grouping.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-epic-grouping.ts printed it. |
 
 ### What to write for each label
 

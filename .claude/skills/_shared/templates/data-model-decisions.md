@@ -50,9 +50,9 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** Every decision the data model asks you, open or settled. It also holds every Glossary change the data model needs.
 - **What it is not:** The Question log. The data model's decisions stay with the specifier. None of them goes into the Question log, or onto the list for the client. The client sees each one later, only as an FRD rule. It never holds a change to the requirements either. The data model works from the Glossary, and never comments on the requirements.
-- **Written by:** things-author and data-model-author, from `templates/data-model-decisions.md`. `data-model-design.md` opens the decisions in steps 1, 5 and 6, and settles them at gates 1 and 2. It opens the Glossary changes in steps 1 and 5. It sends them to the Glossary together in step 8, and brings their answers into the data model in step 9. "Where each gap goes", in the design's section 2, says which gap goes where. Checked by check-data-model.cjs, with the things file or a data model file, before each gate.
+- **Written by:** things-author and data-model-author, from `templates/data-model-decisions.md`. `data-model-design.md` opens the decisions in steps 1, 5 and 6, and settles them at gates 1 and 2. It opens the Glossary changes in steps 1 and 5. It sends them to the Glossary together in step 8, and brings their answers into the data model in step 9. "Where each gap goes", in the design's section 2, says which gap goes where. Checked by check-data-model.ts, with the things file or a data model file, before each gate.
 - **File name:** `Output/{project}/glossary/data-models/{product}-data-model-decisions.md`. There is one per product.
-- **The status line:** a skill sets it to "drafted" when it adds an entry or settles one. You accept the things file or a data model file. Then accept.cjs saves a copy of this file too, and sets its status line. A mark on a Glossary change, such as "Raised" or "Settled in the Glossary", leaves the status line as it is. The next acceptance saves the mark.
+- **The status line:** a skill sets it to "drafted" when it adds an entry or settles one. You accept the things file or a data model file. Then accept.ts saves a copy of this file too, and sets its status line. A mark on a Glossary change, such as "Raised" or "Settled in the Glossary", leaves the status line as it is. The next acceptance saves the mark.
 
 ### What each section holds
 
@@ -61,14 +61,14 @@ This part is never copied into a document. It says what the template is for, wha
 | Open | Every decision still open, in the order it was opened. A decision answered "I don't know yet" stays open, with "Proposed: {answer}" under "Chosen". When there is none, the section says "None yet." |
 | Settled | Every decision you settled, in the order you settled it. A settled decision is never edited. When there is none, the section says "None yet." |
 | Glossary changes | Every Glossary change the data model needs, in the order it was opened, with its status. The Glossary settles it, never this file. When there is none, the section says "None yet." |
-| Check record | The record of the last check, pasted exactly as check-data-model.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-data-model.ts printed it. |
 
 ### The rules
 
 - IDs run DM-1, DM-2 and so on across the whole product, in the order the decisions are opened, with no gaps.
 - An open decision moves to "Settled" once you choose.
 - "I don't know yet" keeps it under "Open", with "Proposed: {answer}" under "Chosen". {answer} is the recommended one. Each cell it answers still shows "? ({ID})". It is never forgotten:
-  - `status.cjs` lists it, under "Data model, still open".
+  - `status.ts` lists it, under "Data model, still open".
   - The skill that owns it asks it again first, at its next run. That is things-author for a product-wide decision, and data-model-author for the decision of one file.
 - When two requirements disagree, or the BRD and the PRD do, that is a decision too. Its options are the answers they give. You pick which one the data model uses.
 - A settled decision is never edited. A later change adds a new entry, with the next ID, whose question starts "Replaces DM-{n}:". Each ID has one entry only.

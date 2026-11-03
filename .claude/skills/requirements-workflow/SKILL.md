@@ -37,13 +37,13 @@ This workflow follows `../_shared/conventions.md`, `../_shared/simple-writing-ru
 
 | Step | Done by | Previous step | Reads | Looks up by ID | Writes | Check before the gate | Gate | Next step |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `discovery-author`, which runs `list-sources.cjs` first | start: the specifier brings the sources | Sources | none | • Discovery brief<br>• Question log | `check-discovery-brief.cjs` | Accept the Discovery brief? | 2 |
-| 2 | `brd-author` | 1 | • Sources<br>• Discovery brief | none | • BRD<br>• Question log | `check-brd.cjs` | Accept the BRD? | 3 |
-| 3 | `prd-author` | 2 | • Sources<br>• Discovery brief<br>• BRD | none | • PRD<br>• Question log | `check-prd.cjs` | Accept the PRD? | run `glossary-author` |
+| 1 | `discovery-author`, which runs `list-sources.ts` first | start: the specifier brings the sources | Sources | none | • Discovery brief<br>• Question log | `check-discovery-brief.ts` | Accept the Discovery brief? | 2 |
+| 2 | `brd-author` | 1 | • Sources<br>• Discovery brief | none | • BRD<br>• Question log | `check-brd.ts` | Accept the BRD? | 3 |
+| 3 | `prd-author` | 2 | • Sources<br>• Discovery brief<br>• BRD | none | • PRD<br>• Question log | `check-prd.ts` | Accept the PRD? | run `glossary-author` |
 
 ## How it runs
 
-1. Run `node tools/scaffold-project.cjs --project {project}`.
+1. Run `node tools/scaffold-project.ts --project {project}`.
 2. Find the starting step. Say it in one sentence, first.
    - **Picking up is the normal mode.** Start at the first step whose document isn't accepted yet, as `data-model-workflow` does. On a new project, that is step 1. When all three documents are accepted, there is nothing to do: say so, and print the last line of step 5.
    - **A named step:** when the specifier names a step, such as "from prd-author", start at that step. The skill at that step checks its own inputs, and stops if one is missing or not accepted. Step 1, named once the Discovery brief exists, starts the project again from nothing. So it follows "Starting again from nothing", below, and waits for its yes.
@@ -52,7 +52,7 @@ This workflow follows `../_shared/conventions.md`, `../_shared/simple-writing-ru
 3. Call the step's skill with the project's name, and wait for its gate to end:
    - **Accepted:** go on to the next step.
    - **Anything else,** such as "one more round": the skill handles it inside its own gate. The workflow waits.
-4. Add nothing between the steps. Each skill runs probing-questions-author and `grade-questions.cjs` inside itself, before its check and its gate, so the workflow has no steps of its own.
+4. Add nothing between the steps. Each skill runs probing-questions-author and `grade-questions.ts` inside itself, before its check and its gate, so the workflow has no steps of its own.
 5. After step 3 is accepted, print exactly: **Next: run glossary-author.** In a change, print the next row of the change's path instead.
 
 ## How it goes back
@@ -65,13 +65,13 @@ This workflow follows `../_shared/conventions.md`, `../_shared/simple-writing-ru
 When a change is so large that most of the work would change, the specifier can start the project again from nothing. It takes the place of a change (`conventions.md`, "Ask, don't assume"). It happens only when the specifier asks for it in words, such as "start the project again from nothing". Then, before step 1:
 
 1. **Show what will move.** List every file and folder in `Output/{project}/` except `sources/`, one per line. Say where they move to: `_archive/Output-{date}/{project}/`, at the top of the kit, beside `Output/`. {date} is today, as YYYY-MM-DD. Say that `sources/` stays where it is, with the requirement files. If `_archive/Output-{date}/{project}/` already exists, say so, and stop.
-2. **Ask for a yes,** as multiple choice, with the client's control for picking one answer, as `decision-review-gates.md`, rule 4, says:
+2. **Ask for a yes,** through probing-questions-author, as multiple choice, with the client's control for picking one answer, as `decision-review-gates.md`, rule 4, says:
    - **Move them, and start again from nothing.** Why you'd pick it: most of the work would change. What happens next: every file and folder listed moves, and step 1 runs fresh.
    - **Keep the project as it is.** Why you'd pick it: the work is worth keeping. What happens next: nothing moves. The workflow picks up where the project stopped, or you raise the change through `change-request-workflow`.
    - **I don't know yet.** What happens next: nothing moves, and nothing runs.
 
    Recommend the first, because the specifier asked for it. Any answer but the first moves nothing.
-3. **Move them, by hand.** No program does this move yet, so the workflow does it, by these words. Move every file and folder listed to `_archive/Output-{date}/{project}/`, each one to the same place under that folder. Delete nothing. Then check that `Output/{project}/` holds only `sources/`, and show what moved. The archive is outside the project's layout, so `scaffold-project.cjs` still passes.
+3. **Move them, by hand.** No program does this move yet, so the workflow does it, by these words. Move every file and folder listed to `_archive/Output-{date}/{project}/`, each one to the same place under that folder. Delete nothing. Then check that `Output/{project}/` holds only `sources/`, and show what moved. The archive is outside the project's layout, so `scaffold-project.ts` still passes.
 4. **Start fresh.** Go on with step 1 of "How it runs", as for a new project:
    - Every step runs fresh, from the Discovery brief on. The Discovery brief runs once for each start of a project, and never in a change.
    - It doesn't ask each earlier question again. Each step raises its questions fresh, from the requirement files.

@@ -28,22 +28,22 @@ This skill follows `../_shared/conventions.md`, `../_shared/simple-writing-rules
 - **Writes:**
   - the Acceptance criteria section of each Story, after Design links
   - the ready marks: each story's status, ready, in the Story and the list
-  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.cjs`
+  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.ts`
 - **Its gate:** "Accept the criteria? This marks the stories ready."
-- **Its checks:** `check-stories.cjs`, then `coverage-check.cjs`.
+- **Its checks:** `check-stories.ts`, then `coverage-check.ts`.
 
 ## Steps
 
 1. **Set up.** If the EPIC's grooming isn't accepted, say so and stop.
 2. **Write each story's scenarios,** three to seven, under the one heading, Behaviour, each as Given, When and Then, with a bold title and bold keywords, one per line. Each title ends with the FRD rules the scenario proves, in brackets, such as "(F-04.4)". Name people by their role, use a plain description for anything the rule doesn't depend on, and a real value for anything it does, as `references/acceptance-criteria.md` shows. Work through the coverage checklist. If a story needs eight or more, recommend splitting it before listing them.
-3. **Raise the questions.** Run probing-questions-author on the Stories, write each question's number where its gap is, then run `node tools/grade-questions.cjs --project {project}`.
-4. **Check.** Run `node tools/check-stories.cjs --project {project} --epic {epic}`, then `node tools/coverage-check.cjs --project {project} --epic {epic}`, which lists every rule of the EPIC's features that no scenario proves. Fix every finding and run them again.
-5. **The gate.** Hold it as `../_shared/decision-review-gates.md` says:
+3. **Raise the questions.** Run probing-questions-author on the Stories, write each question's number where its gap is, then run `node tools/grade-questions.ts --project {project}`.
+4. **Check.** Run `node tools/check-stories.ts --project {project} --epic {epic}`, then `node tools/coverage-check.ts --project {project} --epic {epic}`, which lists every rule of the EPIC's features that no scenario proves. Fix every finding and run them again.
+5. **The gate.** Hold it as `../_shared/decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode. The order:
    - first, the two "For the person" blocks
-   - **the ready guard:** each Must answer question raised in these stories comes first, one at a time. While one is open, the stories can't be marked ready. `check-stories.cjs` fails until it is answered.
+   - **the ready guard:** each Must answer question raised in these stories comes first, one at a time. While one is open, the stories can't be marked ready. `check-stories.ts` fails until it is answered.
    - then the other questions, in order
    - then **Accept the criteria? This marks the stories ready.**
-   Record each answer straight away. On acceptance, set each story's status to ready, in the Story and the list, then run `node tools/accept.cjs --project {project} --document story-list --epic {epic}`, and close with `status.cjs`.
+   Record each answer straight away. On acceptance, set each story's status to ready, in the Story and the list, then run `node tools/accept.ts --project {project} --document story-list --epic {epic}`, and close with `status.ts`.
 
 An EPIC's gates offer "park it" after a third "no", with "accept it as it is" and "one more round" (`../_shared/decision-review-gates.md`, rule 11).
 

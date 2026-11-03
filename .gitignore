@@ -4,3 +4,6 @@ fixtures/mcp-slice/
 _archive/Output-2026-10-23/control-plane/
 _archive/Output-2026-10-23/mcp-slice/
 _data_model/_data_model_archive/continuum-run-1/
+
+# Installed by npm install, for the type check only.
+node_modules/

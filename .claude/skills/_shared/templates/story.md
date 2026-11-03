@@ -64,7 +64,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** One story, built up in this one file: its description, then its grooming, then its acceptance criteria, each scenario naming the FRD rules it proves.
 - **What it is not:** A place for new rules. Every rule a story uses is quoted from an FRD.
-- **Written by:** story-drafter writes the description, story-groomer the sections from Dependencies to Design links, and ac-author the acceptance criteria, from `templates/story.md`. Checked by check-stories.cjs.
+- **Written by:** story-drafter writes the description, story-groomer the sections from Dependencies to Design links, and ac-author the acceptance criteria, from `templates/story.md`. Checked by check-stories.ts.
 
 ### What each section holds
 

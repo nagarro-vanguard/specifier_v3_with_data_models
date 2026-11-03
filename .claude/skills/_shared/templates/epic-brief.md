@@ -81,7 +81,7 @@ This part is never copied into a document. It says what the template is for, wha
 
 - **What this is:** One EPIC described in full: its hypothesis, its business value, how its success is measured, its scope, features and dependencies, and the NFRs that apply.
 - **What it is not:** Its stories or their acceptance criteria. Those sit beside it, in the EPIC's own folder.
-- **Written by:** epic-author, from `templates/epic-brief.md`, only for the EPICs the EPIC grouping's brief list marks Yes. Checked by check-epic-brief.cjs before its gate.
+- **Written by:** epic-author, from `templates/epic-brief.md`, only for the EPICs the EPIC grouping's brief list marks Yes. Checked by check-epic-brief.ts before its gate.
 
 ### What each section holds
 
@@ -96,7 +96,7 @@ This part is never copied into a document. It says what the template is for, wha
 | 7. NFRs that apply | The IDs of the PRD's NFRs that apply to this EPIC. Their wording is written only in the PRD. |
 | 8. References | Where to find what this EPIC is built from. A link to something that doesn't exist yet is written Does not exist. |
 | Decision record | Every decision made at the EPIC brief's gate, in the order made, in the shape of `templates/parts/decision-record.md`. |
-| Check record | The record of the last check, pasted exactly as check-epic-brief.cjs printed it. |
+| Check record | The record of the last check, pasted exactly as check-epic-brief.ts printed it. |
 
 ### What to write for each label
 

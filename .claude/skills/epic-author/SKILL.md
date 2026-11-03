@@ -26,14 +26,14 @@ This skill follows `../_shared/conventions.md`, `../_shared/simple-writing-rules
 
 - **Reads:** the accepted EPIC grouping. **Looks up:** the Feature catalog.
 - **Writes:** `epics/register.md`.
-- **Its gate:** none. **Its check:** `check-register.cjs`, and a pass is the acceptance.
+- **Its gate:** none. **Its check:** `check-register.ts`, and a pass is the acceptance.
 
-1. Run `node tools/scaffold-project.cjs --project {project}`. If the EPIC grouping isn't accepted, say so and stop.
+1. Run `node tools/scaffold-project.ts --project {project}`. If the EPIC grouping isn't accepted, say so and stop.
 2. Copy the chosen grouping into the register, each field as the template's "What each section holds" says: **transcribe, enum or derive, never compose**. Nothing is written fresh, so two runs over the same grouping give the same register. Write "Copy checked on: not yet": the check writes the date.
-3. Run `node tools/check-register.cjs --project {project}`. On a mismatch, correct the copy, never the grouping, and run it again.
+3. Run `node tools/check-register.ts --project {project}`. On a mismatch, correct the copy, never the grouping, and run it again.
    - The check also checks the register's simple writing. It prints one line for it, such as "Simple writing: 0 to fix, 1 to look at." Show that line when the check passes.
    - Fix anything it lists to fix in the register's own words, and run it again. A finding in a copied field belongs to the grouping. Say so, and stop. The grouping changes only through a change (`conventions.md`, "A mistake found later").
-4. When it passes, run `node tools/accept.cjs --project {project} --document epic-register`. The workflow's next step builds the EPIC sequencing and mapping from it.
+4. When it passes, run `node tools/accept.ts --project {project} --document epic-register`. The workflow's next step builds the EPIC sequencing and mapping from it.
 
 Register mode only copies, so it raises no questions.
 
@@ -42,14 +42,14 @@ Register mode only copies, so it raises no questions.
 - **Reads:** the EPIC register. **Looks up:** the BRD, the PRD and the Feature catalog.
 - **Writes:**
   - `epics/{epic}/brief.md`
-  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.cjs`
-- **Its gate:** "Accept the EPIC brief?" **Its check:** `check-epic-brief.cjs`.
+  - its questions, in `{product}-question-log.md`, through probing-questions-author and `grade-questions.ts`
+- **Its gate:** "Accept the EPIC brief?" **Its check:** `check-epic-brief.ts`.
 
-1. Run `node tools/scaffold-project.cjs --project {project} --epic {epic}`. Run only for an EPIC the EPIC grouping's brief list marks "yes". For any other, say so and stop.
+1. Run `node tools/scaffold-project.ts --project {project} --epic {epic}`. Run only for an EPIC the EPIC grouping's brief list marks "yes". For any other, say so and stop.
 2. Write each section of the template as `references/epic-generation.md` says. Section 7 lists only the IDs of the PRD's NFRs that apply.
-3. Run probing-questions-author on the brief, write each question's number at its gap, then run `node tools/grade-questions.cjs --project {project}`.
-4. Run `node tools/check-epic-brief.cjs --project {project} --epic {epic}`. Fix every finding and run it again, until every check passes.
-5. Hold the gate exactly as `decision-review-gates.md` says: the two "For the person" blocks, then the questions the brief raised or builds on, then each AI-RECOMMENDED measure, then **Accept the EPIC brief?** Record each answer straight away. When the specifier accepts, run `node tools/accept.cjs --project {project} --document epic-brief --epic {epic}`.
+3. Run probing-questions-author on the brief, write each question's number at its gap, then run `node tools/grade-questions.ts --project {project}`.
+4. Run `node tools/check-epic-brief.ts --project {project} --epic {epic}`. Fix every finding and run it again, until every check passes.
+5. Hold the gate exactly as `decision-review-gates.md` says, with probing-questions-author asking each decision in its Ask mode. The order: the two "For the person" blocks, then the questions the brief raised or builds on, then each AI-RECOMMENDED measure, then **Accept the EPIC brief?** Record each answer straight away. When the specifier accepts, run `node tools/accept.ts --project {project} --document epic-brief --epic {epic}`.
 
 An EPIC's gates offer "park it" after a third "no", with "accept it as it is" and "one more round" (`decision-review-gates.md`, rule 11).
 
@@ -69,4 +69,4 @@ Inside a change you said yes to, `../_shared/decision-review-gates.md`, rule 12,
 
 ## Handoff
 
-The register feeds `build-sequencing-mapping.cjs`, then `frd-workflow`. An EPIC brief opens that EPIC's stories, in `stories-workflow`.
+The register feeds `build-sequencing-mapping.ts`, then `frd-workflow`. An EPIC brief opens that EPIC's stories, in `stories-workflow`.

@@ -1,5 +1,5 @@
 <!-- Assembled per glossary-assembly-principles.md - Part B: decision-register. Copy every heading and column heading exactly as written here - never retype, rename, or recase them (glossary-assembly-principles.md, "How templates use this doc", rule 3). Words: method-words.md. -->
-Generated from the gate log by build-glossary-records.cjs. Never edit by hand.
+Generated from the gate log by build-glossary-records.ts. Never edit by hand.
 
 # Decisions
 

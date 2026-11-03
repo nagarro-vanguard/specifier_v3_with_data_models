@@ -4,7 +4,7 @@
 >
 > **What it is not:** The questions themselves. Every question, open or answered, is kept in the Question log, with its ratings and its answers. Each entry records what the specifier decided, and names its question.
 >
-> **Who uses it:** Every skill that has a gate, and `close-change.cjs`.
+> **Who uses it:** Every skill that has a gate, and `close-change.ts`.
 
 ## 1. Where it goes
 
@@ -56,7 +56,7 @@ Had the specifier chosen "I don't know yet", the entry would end like this inste
 
 ## 5. The closing entry of a change
 
-When a change is complete, `close-change.cjs` adds one more entry to the Decision record of the first document the change touched. It takes that record's next decision number.
+When a change is complete, `close-change.ts` adds one more entry to the Decision record of the first document the change touched. It takes that record's next decision number.
 
 | Part | What it holds |
 |---|---|
