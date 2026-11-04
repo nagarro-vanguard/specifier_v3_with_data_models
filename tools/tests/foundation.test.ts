@@ -1157,7 +1157,8 @@ test('every file and folder in the kit has its place in the master plan\'s folde
   // anything in the kit's folder it doesn't name: at the top, in .claude/, in the shared rules, in tools/, in the tests
   // and in fixtures/. Programs, tests and skill folders are named by pattern, so only something else is checked there.
   // Git's own folder, .git/, and its .gitignore belong to the repository, not to the kit, so the plan never names them.
-  const notTheKits = ['.git', '.gitignore'];
+  // node_modules/ is what `npm install` writes for the type check. Git never saves it, so the plan never names it either.
+  const notTheKits = ['.git', '.gitignore', 'node_modules'];
   const plan = readText(path.join(KIT, 'master-plan.md'));
   const tree = plan.slice(plan.indexOf('**The specifier itself.**'), plan.indexOf('**When the build ends**')).split('\n').filter((l) => /^\s*- `/.test(l));
   assert.ok(tree.length > 10, 'the folder layout in master-plan.md section 2 is missing');
